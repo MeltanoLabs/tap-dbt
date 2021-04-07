@@ -1,5 +1,7 @@
 # tap-dbt
 
+[![Super-Linter](https://github.com/edgarrmondragon/tap-dbt/actions/workflows/superlinter.yml/badge.svg)](https://github.com/edgarrmondragon/tap-dbt/actions/workflows/superlinter.yml)
+
 This Singer tap was created using the [Singer SDK](https://gitlab.com/meltano/singer-sdk).
 
 ## Getting Started
