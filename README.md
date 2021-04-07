@@ -4,24 +4,8 @@
 
 This Singer tap was created using the [Singer SDK](https://gitlab.com/meltano/singer-sdk).
 
-## Getting Started
-
-- [ ] As a first step, you will want to scan the entire project for the text "`TODO:`" and complete any recommended steps.
-- [ ] `TODO:` Once you have a boilerplate prepped, you'll want to setup Poetry and create the virtual environment for your project:
-
-    ```bash
-    pipx install poetry
-    poetry install
-    ```
-
-- [ ] `TODO:` You can test out your new CLI directly with:
-
-    ```bash
-    poetry run tap-dbt --help
-    ```
 
 
-_`TODO: Remove the above section once complete.`_
 
 ## Testing Guide
 
