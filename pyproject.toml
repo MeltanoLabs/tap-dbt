@@ -1,0 +1,29 @@
+[tool.poetry]
+name = "tap-dbt"
+version = "0.0.1"
+description = "`tap-dbt` is Singer tap for dbt, built with the Singer SDK."
+authors = ["Edgar Ramírez Mondragón <edgarrm358@sample.com>"]
+license = "Apache 2.0"
+
+[tool.poetry.dependencies]
+python = "<3.9,>=3.6"
+requests = "^2.25.1"
+singer-sdk = "^0.1.0"
+
+[tool.poetry.dev-dependencies]
+pytest = "^6.1.2"
+
+[tool.black]
+line-length = 88
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3 # Vertical Hanging Indent
+src_paths = "tap_dbt"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+tap-dbt = 'tap_dbt.tap:cli'

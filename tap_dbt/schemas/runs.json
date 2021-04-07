@@ -1,0 +1,190 @@
+{
+  "$schema": "https://json-schema.org/draft-04/schema",
+  "$id": "/projects.json",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer"
+    },
+    "trigger_id": {
+      "type": "integer"
+    },
+    "account_id": {
+      "type": "integer"
+    },
+    "project_id": {
+      "type": "integer"
+    },
+    "job_definition_id": {
+      "type": "integer"
+    },
+    "status": {
+      "type": "integer"
+    },
+    "git_branch": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "git_sha": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "status_message": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "dbt_version": {
+      "type": "string"
+    },
+    "created_at": {
+      "type": "string"
+    },
+    "updated_at": {
+      "type": "string"
+    },
+    "dequeued_at": {
+      "type": "string"
+    },
+    "started_at": {
+      "type": "string"
+    },
+    "finished_at": {
+      "type": "string"
+    },
+    "last_checked_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "last_heartbeat_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "owner_thread_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "executed_by_thread_id": {
+      "type": "string"
+    },
+    "artifacts_saved": {
+      "type": "boolean"
+    },
+    "artifacts_s3_path": {
+      "type": "string"
+    },
+    "has_docs_generated": {
+      "type": "boolean"
+    },
+    "trigger": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "job": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "duration": {
+      "type": "string"
+    },
+    "queued_duration": {
+      "type": "string"
+    },
+    "run_duration": {
+      "type": "string"
+    },
+    "duration_humanized": {
+      "type": "string"
+    },
+    "queued_duration_humanized": {
+      "type": "string"
+    },
+    "run_duration_humanized": {
+      "type": "string"
+    },
+    "status_humanized": {
+      "type": "string"
+    },
+    "created_at_humanized": {
+      "type": "string"
+    },
+    "environment_id": {
+      "type": "integer"
+    },
+    "deferring_run_id": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "artifact_s3_path": {
+      "type": "string"
+    },
+    "has_sources_generated": {
+      "type": "boolean"
+    },
+    "notifications_sent": {
+      "type": "boolean"
+    },
+    "blocked_by": {
+      "type": "array",
+      "items": {
+        "type": "integer"
+      }
+    },
+    "scribe_enabled": {
+      "type": "boolean"
+    },
+    "environment": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "run_steps": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "in_progress": {
+      "type": "boolean"
+    },
+    "is_complete": {
+      "type": "boolean"
+    },
+    "is_success": {
+      "type": "boolean"
+    },
+    "is_error": {
+      "type": "boolean"
+    },
+    "is_cancelled": {
+      "type": "boolean"
+    },
+    "href": {
+      "type": "string"
+    },
+    "finished_at_humanized": {
+      "type": "string"
+    },
+    "job_id": {
+      "type": "integer"
+    }
+  }
+}

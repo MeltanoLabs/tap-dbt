@@ -1,0 +1,122 @@
+{
+  "$schema": "https://json-schema.org/draft-04/schema",
+  "$id": "/jobs.json",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer"
+    },
+    "account_id": {
+      "type": "integer"
+    },
+    "project_id": {
+      "type": "integer"
+    },
+    "environment_id": {
+      "type": "integer"
+    },
+    "name": {
+      "type": "string"
+    },
+    "dbt_version": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "triggers": {
+      "type": "object",
+      "properties": {
+        "github_webhook": {
+          "type": "boolean"
+        },
+        "schedule": {
+          "type": "boolean"
+        },
+        "custom_branch_only": {
+          "type": "boolean"
+        }
+      }
+    },
+    "execute_steps": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "settings": {
+      "type": "object",
+      "properties": {
+        "threads": {
+          "type": "integer"
+        },
+        "target_name": {
+          "type": "string"
+        }
+      }
+    },
+    "state": {
+      "type": "integer"
+    },
+    "generate_docs": {
+      "type": "boolean"
+    },
+    "schedule": {
+      "type": "object",
+      "properties": {
+        "cron": {
+          "type": "string"
+        },
+        "date": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string"
+            }
+          }
+        },
+        "time": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "execution": {
+      "type": "object"
+    },
+    "created_at": {
+      "type": "string"
+    },
+    "updated_at": {
+      "type": "string"
+    },
+    "deferring_job_definition_id": {
+      "type": ["integer", "null"]
+    },
+    "lifecycle_webhooks": {
+      "type": "boolean"
+    },
+    "lifecycle_webhooks_url": {
+      "type": ["string", "null"]
+    },
+    "is_deferrable": {
+      "type": "boolean"
+    },
+    "generate_sources": {
+      "type": "boolean"
+    },
+    "cron_humanized": {
+      "type": "string"
+    },
+    "next_run": {
+      "type": ["string", "null"]
+    },
+    "next_run_humanized": {
+      "type": ["string", "null"]
+    }
+  }
+}
