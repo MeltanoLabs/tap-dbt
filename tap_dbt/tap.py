@@ -14,7 +14,7 @@ STREAM_TYPES = [
 ]
 
 
-class Tapdbt(Tap):
+class TapDBT(Tap):
     """dbt tap class."""
 
     name = "tap-dbt"
@@ -29,4 +29,4 @@ class Tapdbt(Tap):
         return [stream_class(tap=self) for stream_class in STREAM_TYPES]
 
 
-cli = Tapdbt.cli
+cli = TapDBT.cli
