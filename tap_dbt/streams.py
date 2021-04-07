@@ -14,6 +14,8 @@ class DBTStream(RESTStream):
     """dbt stream class."""
 
     url_base = "https://cloud.getdbt.com/api/v2"
+    primary_keys = ["id"]
+    replication_key = None
 
     @property
     def http_headers(self) -> dict:
@@ -37,9 +39,6 @@ class DBTStream(RESTStream):
 
 class JobsStream(DBTStream):
     name = "jobs"
-    primary_keys = ["id"]
-    replication_key = None
-
     schema_filepath = SCHEMAS_DIR / "jobs.json"
 
     @property
@@ -49,9 +48,6 @@ class JobsStream(DBTStream):
 
 class ProjectsStream(DBTStream):
     name = "projects"
-    primary_keys = ["id"]
-    replication_key = None
-
     schema_filepath = SCHEMAS_DIR / "projects.json"
 
     @property
@@ -61,11 +57,8 @@ class ProjectsStream(DBTStream):
 
 class RunsStream(DBTStream):
     name = "runs"
-    primary_keys = ["id"]
-    replication_key = None
-    page_size = 100
-
     schema_filepath = SCHEMAS_DIR / "runs.json"
+    page_size = 100
 
     @property
     def path(self):
