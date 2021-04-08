@@ -3,33 +3,63 @@
 [![Super-Linter](https://github.com/edgarrmondragon/tap-dbt/actions/workflows/superlinter.yml/badge.svg)](https://github.com/edgarrmondragon/tap-dbt/actions/workflows/superlinter.yml)
 [![TestPyPI](https://github.com/edgarrmondragon/tap-dbt/actions/workflows/test-pypi.yml/badge.svg)](https://github.com/edgarrmondragon/tap-dbt/actions/workflows/test-pypi.yml)
 
-This Singer tap was created using the [Singer SDK](https://gitlab.com/meltano/singer-sdk).
+`tap-dbt` is a Singer tap for the [dbt Cloud API][dbtcloud].
 
+Built with the [Singer SDK][sdk].
 
+- [Installation](#Installation)
+- [Autocompletion](#Autocompletion)
+- [Configuration](#Configuration)
+  - [Inputs](#Inputs)
 
+## Installation
 
-## Testing Guide
-
-Create tests within the `tap_dbt/tests` subfolder and
-  then run:
-
-```bash
-poetry run pytest
+```shell
+pip install tap-dbt
 ```
 
-## Singer SDK Dev Guide
+## Configuration
 
-See the [dev guide](../../docs/dev_guide.md) for more instructions on how to use the Singer SDK to
-develop your own taps and targets.
+Visit the [API docs][apidocs] for instructions on how to get your API key.
 
-## Config Guide
+### Inputs
 
-_`TODO:` Provide instructions here for users of the tap:_
+| Field        | Description                      | Type     | Required | Default |
+|--------------|----------------------------------|----------|----------|---------|
+| `api_key`    | API key for the dbt Cloud API    | `string` | yes      |         |
+| `account_id` | Numeric ID of the account        | `string` | yes      |         |
+| `user_agent` | User-Agent to make requests with | `string` | no       | `null`  |
 
-### Accepted Config Options
+A full list of supported settings and capabilities for this
+tap is available by running:
 
-- [ ] `TODO:` Provide a list of config options accepted by the tap.
+```shell
+tap-dbt --about --format json
+```
 
-### Source Authentication and Authorization
+## Usage
 
-- [ ] `TODO:` If your tap requires special access on the source system, or any special authentication requirements, provide those here.
+You can easily run `tap-dbt` by itself or in a pipeline using [Meltano][meltano].
+
+### Executing the Tap Directly
+
+```shell
+tap-dbt --version
+tap-dbt --help
+tap-dbt --config .secrets/example.json --discover > ./catalog/json
+```
+
+### Autocompletion
+
+By leveraging [click], packages built with the Singer SDK come with shell
+autocompletion. Substitute `<shell>` for `bash`, `zsh` or `fish`:
+
+```shell
+eval "$(_TAP_DBT_COMPLETE=source_<shell> tap-dbt)"
+```
+
+[dbtcloud]: https://cloud.getdbt.com
+[sdk]: https://gitlab.com/meltano/singer-sdk
+[apidocs]: https://docs.getdbt.com/dbt-cloud/api#section/Authentication
+[meltano]: https://gitlab.com/meltano/singer-sdk/-/blob/main/www.meltano.com
+[click]: click.palletsprojects.com/
