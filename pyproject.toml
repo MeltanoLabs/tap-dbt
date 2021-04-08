@@ -1,9 +1,22 @@
 [tool.poetry]
 name = "tap-dbt"
 version = "0.0.0"
-description = "`tap-dbt` is Singer tap for dbt, built with the Singer SDK."
-authors = ["Edgar Ramírez Mondragón <edgarrm358@sample.com>"]
-license = "Apache 2.0"
+description = "Singer tap for dbt, built with the Singer SDK."
+license = "Apache-2.0"
+authors = [
+    "Edgar Ramírez Mondragón <edgarrm358@sample.com>",
+]
+maintainers = [
+    "Edgar Ramírez Mondragón <edgarrm358@sample.com>",
+]
+readme = "README.md"
+repository = "https://github.com/edgarrmondragon/tap-dbt"
+keywords = [
+    "singer.io",
+    "elt",
+    "dbt",
+    "singer-sdk",
+]
 
 [tool.poetry.dependencies]
 python = "<3.9,>=3.6"
