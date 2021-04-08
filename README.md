@@ -3,7 +3,7 @@
 [![Super-Linter](https://github.com/edgarrmondragon/tap-dbt/actions/workflows/superlinter.yml/badge.svg)](https://github.com/edgarrmondragon/tap-dbt/actions/workflows/superlinter.yml)
 [![TestPyPI](https://github.com/edgarrmondragon/tap-dbt/actions/workflows/test-pypi.yml/badge.svg)](https://github.com/edgarrmondragon/tap-dbt/actions/workflows/test-pypi.yml)
 
-`tap-dbt` is a Singer tap for the [dbt Cloud API][dbtcloud].
+`tap-dbt` is a Singer tap for the [dbt Cloud API v2][dbtcloud].
 
 Built with the [Singer SDK][sdk].
 
@@ -24,11 +24,11 @@ Visit the [API docs][apidocs] for instructions on how to get your API key.
 
 ### Inputs
 
-| Field        | Description                      | Type     | Required | Default |
-|--------------|----------------------------------|----------|----------|---------|
-| `api_key`    | API key for the dbt Cloud API    | `string` | yes      |         |
-| `account_id` | Numeric ID of the account        | `string` | yes      |         |
-| `user_agent` | User-Agent to make requests with | `string` | no       | `null`  |
+| Field        | Description                      | Type      | Required | Default |
+|--------------|----------------------------------|-----------|----------|---------|
+| `api_key`    | API key for the dbt Cloud API    | `string`  | yes      |         |
+| `account_id` | Numeric ID of the account        | `integer` | yes      |         |
+| `user_agent` | User-Agent to make requests with | `string`  | no       | `null`  |
 
 A full list of supported settings and capabilities for this
 tap is available by running:
