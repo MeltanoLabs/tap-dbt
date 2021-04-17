@@ -5,9 +5,10 @@ from typing import List
 from singer_sdk import Stream, Tap
 from singer_sdk.typing import ArrayType, PropertiesList, Property, StringType
 
-from tap_dbt.streams import JobsStream, ProjectsStream, RunsStream
+from tap_dbt.streams import AccountsStream, JobsStream, ProjectsStream, RunsStream
 
 STREAM_TYPES = [
+    AccountsStream,
     JobsStream,
     ProjectsStream,
     RunsStream,

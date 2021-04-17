@@ -51,6 +51,15 @@ class AccountBasedStream(DBTStream):
         )
 
 
+class AccountsStream(AccountBasedStream):
+    name = "accounts"
+    path = "/accounts/{account_id}"
+    schema_filepath = SCHEMAS_DIR / "accounts.json"
+
+    def parse_response(self, response: requests.Response) -> Iterable[dict]:
+        yield response.json()["data"]
+
+
 class JobsStream(AccountBasedStream):
     name = "jobs"
     path = "/accounts/{account_id}/jobs"
