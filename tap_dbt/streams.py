@@ -1,7 +1,7 @@
 """Stream class for tap-dbt."""
 
 from pathlib import Path
-from typing import Any, Dict, Iterable, Optional
+from typing import Any, Dict, Iterable, List, Optional, cast
 
 import requests
 from singer_sdk.authenticators import APIAuthenticatorBase, SimpleAuthenticator
@@ -37,32 +37,37 @@ class DBTStream(RESTStream):
         yield from data["data"]
 
 
-class JobsStream(DBTStream):
+class AccountBasedStream(DBTStream):
+    @property
+    def partitions(self) -> List[dict]:
+        """Return a list of partition key dicts (if applicable), otherwise None."""
+
+        if "{account_id}" in self.path:
+            return [{"account_id": id} for id in cast(list, self.config["account_ids"])]
+        raise ValueError(
+            "Could not detect partition type for dbt stream "
+            f"'{self.name}' ({self.path}). "
+            "Expected a URL path containing '{account_id}'. "
+        )
+
+
+class JobsStream(AccountBasedStream):
     name = "jobs"
+    path = "/accounts/{account_id}/jobs"
     schema_filepath = SCHEMAS_DIR / "jobs.json"
 
-    @property
-    def path(self):
-        return f"/accounts/{self.config['account_id']}/jobs"
 
-
-class ProjectsStream(DBTStream):
+class ProjectsStream(AccountBasedStream):
     name = "projects"
+    path = "/accounts/{account_id}/projects"
     schema_filepath = SCHEMAS_DIR / "projects.json"
 
-    @property
-    def path(self):
-        return f"/accounts/{self.config['account_id']}/projects"
 
-
-class RunsStream(DBTStream):
+class RunsStream(AccountBasedStream):
     name = "runs"
+    path = "/accounts/{account_id}/runs"
     schema_filepath = SCHEMAS_DIR / "runs.json"
     page_size = 100
-
-    @property
-    def path(self):
-        return f"/accounts/{self.config['account_id']}/runs"
 
     def get_url_params(
         self,
