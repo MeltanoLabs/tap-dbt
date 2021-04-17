@@ -49,15 +49,6 @@ tap-dbt --help
 tap-dbt --config .secrets/example.json --discover > ./catalog/json
 ```
 
-### Autocompletion
-
-By leveraging [click], packages built with the Singer SDK come with shell
-autocompletion. Substitute `<shell>` for `bash`, `zsh` or `fish`:
-
-```shell
-eval "$(_TAP_DBT_COMPLETE=source_<shell> tap-dbt)"
-```
-
 [dbtcloud]: https://cloud.getdbt.com
 [sdk]: https://gitlab.com/meltano/singer-sdk
 [apidocs]: https://docs.getdbt.com/dbt-cloud/api#section/Authentication
