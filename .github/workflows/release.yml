@@ -25,7 +25,7 @@ jobs:
       - name: Check version
         run: |
           version=$(poetry version | awk '{print $2}')
-          tag=${{ github.ref }}
+          tag=$(echo "${{ github.ref }}" | awk '{split($0,p,"/"); print p[3]}')
           if [ $version != $tag ]; then echo "Release tag and package version do not match!"; exit 1; fi;
 
       - name: Build
