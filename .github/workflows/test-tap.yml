@@ -3,8 +3,8 @@ name: Test Tap
 on: push
 
 jobs:
-  test_pypi:
-      name: Test Tap connectivity and Configuration
+  test_tap:
+    name: Test Tap connectivity and Configuration
     runs-on: ubuntu-latest
     strategy:
       fail-fast: true
