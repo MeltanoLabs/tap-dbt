@@ -9,7 +9,6 @@
 Built with the [Singer SDK][sdk].
 
 - [Installation](#Installation)
-- [Autocompletion](#Autocompletion)
 - [Configuration](#Configuration)
   - [Inputs](#Inputs)
 
