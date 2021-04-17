@@ -1,0 +1,92 @@
+{
+  "$schema": "https://json-schema.org/draft-04/schema",
+  "$id": "/accounts.json",
+  "type": "object",
+  "properties": {
+    "docs_job_id": {
+      "type": ["integer", "null"]
+    },
+    "freshness_job_id": {
+      "type": ["integer", "null"]
+    },
+    "lock_reason": {
+      "type": ["string", "null"]
+    },
+    "unlock_if_subscription_renewed": {
+      "type": "boolean"
+    },
+    "read_only_seats": {
+      "type": "number"
+    },
+    "id": {
+      "type": "number"
+    },
+    "name": {
+      "type": "string"
+    },
+    "state": {
+      "type": "number"
+    },
+    "plan": {
+      "type": "string"
+    },
+    "pending_cancel": {
+      "type": "boolean"
+    },
+    "run_slots": {
+      "type": "number"
+    },
+    "developer_seats": {
+      "type": "number"
+    },
+    "queue_limit": {
+      "type": "number"
+    },
+    "pod_memory_request_mebibytes": {
+      "type": "number"
+    },
+    "enterprise_authentication_method": {
+      "type": ["string", "null"]
+    },
+    "enterprise_login_slug": {
+      "type": ["string", "null"]
+    },
+    "enterprise_unique_identifier": {
+      "type": ["string", "null"]
+    },
+    "billing_email_address": {
+      "type": "string"
+    },
+    "locked": {
+      "type": "boolean"
+    },
+    "develop_file_system": {
+      "type": "boolean"
+    },
+    "unlocked_at": {
+      "type": "string"
+    },
+    "created_at": {
+      "type": "string"
+    },
+    "updated_at": {
+      "type": "string"
+    },
+    "starter_repo_url": {
+      "type": ["string", "null"]
+    },
+    "sso_reauth": {
+      "type": "boolean"
+    },
+    "docs_job": {
+      "type": ["integer", "null"]
+    },
+    "freshness_job": {
+      "type": ["integer", "null"]
+    },
+    "enterprise_login_url": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false
+}
