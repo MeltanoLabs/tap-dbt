@@ -26,7 +26,7 @@ jobs:
       - name: Test tap
         env:
           TAP_DBT_API_KEY: ${{ secrets.DBT_API_KEY }}
-          TAP_DBT_ACCOUNT_ID: ${{ secrets.DBT_ACCOUNT_ID }}
+          TAP_DBT_ACCOUNT_IDS: ${{ secrets.DBT_ACCOUNT_ID }}
         run: |
           poetry install
           poetry run tap-dbt --test --config=ENV
