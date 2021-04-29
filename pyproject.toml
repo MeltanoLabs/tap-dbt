@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "tap-dbt"
-version = "0.0.1rc1"
+version = "0.0.1rc2"
 description = "Singer tap for dbt, built with the Singer SDK."
 license = "Apache-2.0"
 authors = [
