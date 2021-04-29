@@ -49,10 +49,13 @@
       "type": "string"
     },
     "dequeued_at": {
-      "type": "string"
+      "type": ["string", "null"]
+    },
+    "should_start_at": {
+      "type": ["string", "null"]
     },
     "started_at": {
-      "type": "string"
+      "type": ["string", "null"]
     },
     "finished_at": {
       "type": "string"
@@ -76,13 +79,13 @@
       ]
     },
     "executed_by_thread_id": {
-      "type": "string"
+      "type": ["string", "null"]
     },
     "artifacts_saved": {
       "type": "boolean"
     },
     "artifacts_s3_path": {
-      "type": "string"
+      "type": ["string", "null"]
     },
     "has_docs_generated": {
       "type": "boolean"
@@ -133,7 +136,7 @@
       ]
     },
     "artifact_s3_path": {
-      "type": "string"
+      "type": ["string", "null"]
     },
     "has_sources_generated": {
       "type": "boolean"
