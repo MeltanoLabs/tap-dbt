@@ -73,7 +73,7 @@ tap-dbt --about --format json
 
 ```dotenv
 TAP_DBT_API_KEY=da39a3ee5e6b4b0d3255bfef95601890afd80709
-TAP_DBT_ACCOUNT_IDS=[51341]
+TAP_DBT_ACCOUNT_IDS=51341
 TAP_DBT_USER_AGENT='tap-dbt/0.1.0 Singer Tap for the dbt Cloud API'
 TAP_DBT_BASE_URL=https://my-dbt-cloud-api.com"
 ```
