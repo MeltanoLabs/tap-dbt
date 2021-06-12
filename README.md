@@ -6,7 +6,7 @@
 [![TestPyPI](https://github.com/edgarrmondragon/tap-dbt/actions/workflows/test-pypi.yml/badge.svg)](https://github.com/edgarrmondragon/tap-dbt/actions/workflows/test-pypi.yml)
 [![Test Tap](https://github.com/edgarrmondragon/tap-dbt/actions/workflows/test-tap.yml/badge.svg)](https://github.com/edgarrmondragon/tap-dbt/actions/workflows/test-tap.yml)
 
-`tap-dbt` is a Singer tap for the [dbt Cloud API][dbtcloud].
+`tap-dbt` is a Singer tap for the [dbt Cloud API v2][dbtcloud].
 
 Built with the [Singer SDK][sdk].
 
@@ -15,7 +15,10 @@ Built with the [Singer SDK][sdk].
   - [Inputs](#Inputs)
   - [JSON example](#JSON-example)
   - [Environment variables example](#Environment-variables-example)
+  - [Meltano Example](#Meltano-Example)
 - [Usage](#Usage)
+  - [Executing the Tap Directly](#Executing-the-Tap-Directly)
+  - [With Meltano](#With-Meltano)
 
 ## Installation
 
@@ -48,6 +51,12 @@ tap-dbt --config=config.json
 | `user_agent`  | User-Agent to make requests with | `string`       | no       | `tap-dbt/0.1.0 Singer Tap for the dbt Cloud API` |
 | `base_url`    | Base URL for the dbt Cloud API   | `string`       | no       | `https://cloud.getdbt.com/api/v2`                |
 
+A full list of supported settings and capabilities for this tap is available by running:
+
+```shell
+tap-dbt --about --format json
+```
+
 ### JSON example
 
 ```json
@@ -68,15 +77,41 @@ TAP_DBT_USER_AGENT='tap-dbt/0.1.0 Singer Tap for the dbt Cloud API'
 TAP_DBT_BASE_URL=https://my-dbt-cloud-api.com"
 ```
 
-A full list of supported settings and capabilities for this tap is available by running:
+### Meltano Example
 
-```shell
-tap-dbt --about --format json
+```yaml
+plugins:
+  extractors:
+    - name: tap-dbt
+      logo_url: https://hub.meltano.com/assets/logos/taps/dbt.png
+      label: dbt Cloud
+      docs: https://hub.meltano.com/taps/dbt
+      repo: https://github.com/edgarrmondragon/tap-dbt
+      namespace: dbt
+      pip_url: tap-dbt
+      executable: tap-dbt
+      capabilities:
+        - catalog
+        - discover
+      settings:
+        - name: base_url
+          label: dbt Cloud URL
+          placeholder: "https://cloud.getdbt.com/api/v2"
+        - name: api_key
+          kind: password
+          label: API Key
+          docs: "https://docs.getdbt.com/dbt-cloud/api#section/Authentication"
+        - name: account_ids
+          kind: array
+          label: Account IDs
+        - name: user_agent
+          label: User-Agent
+		  placeholder: "tap-dbt/0.1.0 Singer Tap for the dbt Cloud API"
 ```
 
 ## Usage
 
-You can easily run `tap-dbt` by itself or in a pipeline using [Meltano][meltano].
+You can easily run `tap-dbt` with the CLI or using [Meltano][meltano].
 
 ### Executing the Tap Directly
 
@@ -86,8 +121,13 @@ tap-dbt --help
 tap-dbt --config .secrets/example.json --discover > ./catalog/json
 ```
 
+### With Meltano
+
+```shell
+meltano elt tap-dbt target-snowflake --job_id dbt_snowflake
+```
+
 [dbtcloud]: https://cloud.getdbt.com
 [sdk]: https://gitlab.com/meltano/singer-sdk
 [apidocs]: https://docs.getdbt.com/dbt-cloud/api#section/Authentication
-[meltano]: https://gitlab.com/meltano/singer-sdk/-/blob/main/www.meltano.com
-[click]: click.palletsprojects.com/
+[meltano]: https://www.meltano.com
