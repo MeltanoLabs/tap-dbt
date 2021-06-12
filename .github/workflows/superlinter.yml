@@ -19,7 +19,7 @@ jobs:
 
       # Runs the Super-Linter action
       - name: Run Super-Linter
-        uses: github/super-linter@v3.15.2
+        uses: github/super-linter@v4
         env:
           DEFAULT_BRANCH: master
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -27,3 +27,9 @@ jobs:
           LINTER_RULES_PATH: /
           PYTHON_BLACK_CONFIG_FILE: pyproject.toml
           PYTHON_ISORT_CONFIG_FILE: pyproject.toml
+          VALIDATE_PYTHON: 'true'
+          VALIDATE_JSCPD: 'true'
+          VALIDATE_JSON: 'true'
+          VALIDATE_JSCPD: 'true'
+          VALIDATE_PYTHON_BLACK: 'true'
+          VALIDATE_PYTHON_ISORT: 'true'

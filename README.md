@@ -106,7 +106,7 @@ plugins:
           label: Account IDs
         - name: user_agent
           label: User-Agent
-		  placeholder: "tap-dbt/0.1.0 Singer Tap for the dbt Cloud API"
+          placeholder: "tap-dbt/0.1.0 Singer Tap for the dbt Cloud API"
 ```
 
 ## Usage
