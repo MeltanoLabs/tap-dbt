@@ -12,6 +12,7 @@
 Built with the [Singer SDK][sdk].
 
 - [Installation](#Installation)
+- [Features](#Features)
 - [Configuration](#Configuration)
   - [Inputs](#Inputs)
   - [JSON example](#JSON-example)
@@ -26,6 +27,14 @@ Built with the [Singer SDK][sdk].
 ```shell
 pip install tap-dbt
 ```
+
+## Features
+
+- [x] Stream: accounts
+- [x] Stream: projects
+- [x] Stream: jobs
+- [x] Stream: runs
+- [ ] Incremental streams
 
 ## Configuration
 
