@@ -9,7 +9,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        python-version: ['3.6', '3.7', '3.8']
+        python-version: ['3.7', '3.8']
 
     steps:
       - name: Checkout code
@@ -27,7 +27,7 @@ jobs:
       - name: Test tap
         env:
           TAP_DBT_API_KEY: ${{ secrets.DBT_API_KEY }}
-          TAP_DBT_ACCOUNT_IDS: ${{ secrets.DBT_ACCOUNT_ID }}
+          TAP_DBT_ACCOUNT_IDS: ${{ secrets.DBT_ACCOUNT_IDS }}
         run: |
           poetry install
           poetry run tap-dbt --test --config=ENV
