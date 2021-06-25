@@ -86,7 +86,8 @@
       }
     },
     "execution": {
-      "type": "object"
+      "type": "object",
+      "properties": {}
     },
     "created_at": {
       "type": "string"

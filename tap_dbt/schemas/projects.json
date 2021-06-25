@@ -10,7 +10,8 @@
       "type": "integer"
     },
     "connection": {
-      "type": "object"
+      "type": "object",
+      "properties": {}
     },
     "connection_id": {
       "type": "integer"

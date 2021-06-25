@@ -94,13 +94,15 @@
       "type": [
         "object",
         "null"
-      ]
+      ],
+      "properties": {}
     },
     "job": {
       "type": [
         "object",
         "null"
-      ]
+      ],
+      "properties": {}
     },
     "duration": {
       "type": "string"
