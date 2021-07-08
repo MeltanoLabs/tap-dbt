@@ -58,7 +58,7 @@
       "type": ["string", "null"]
     },
     "finished_at": {
-      "type": "string"
+      "type": ["string", "null"]
     },
     "last_checked_at": {
       "type": [
