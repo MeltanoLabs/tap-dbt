@@ -10,7 +10,7 @@
       "type": "integer"
     },
     "account_id": {
-      "type": "integer"
+      "type": "string"
     },
     "project_id": {
       "type": "integer"
@@ -19,7 +19,8 @@
       "type": "integer"
     },
     "status": {
-      "type": "integer"
+      "type": "object",
+      "properties": {}
     },
     "git_branch": {
       "type": [
