@@ -16,6 +16,7 @@ class DBTStream(RESTStream):
     url_base = "https://cloud.getdbt.com/api/v2"
     primary_keys = ["id"]
     replication_key = None
+    response_jsonpath = "$.data[*]"
 
     @property
     def http_headers(self) -> dict:
@@ -31,10 +32,6 @@ class DBTStream(RESTStream):
                 "Authorization": f"Token {self.config.get('api_key')}",
             },
         )
-
-    def parse_response(self, response: requests.Response) -> Iterable[dict]:
-        data = response.json()
-        yield from data["data"]
 
 
 class AccountBasedStream(DBTStream):
