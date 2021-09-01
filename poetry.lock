@@ -100,17 +100,21 @@ python-versions = "*"
 
 [[package]]
 name = "click"
-version = "7.1.2"
+version = "8.0.1"
 description = "Composable command line interface toolkit"
 category = "main"
 optional = false
-python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
+python-versions = ">=3.6"
+
+[package.dependencies]
+colorama = {version = "*", markers = "platform_system == \"Windows\""}
+importlib-metadata = {version = "*", markers = "python_version < \"3.8\""}
 
 [[package]]
 name = "colorama"
 version = "0.4.4"
 description = "Cross-platform colored terminal text."
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 
@@ -479,15 +483,15 @@ python-versions = "*"
 
 [[package]]
 name = "singer-sdk"
-version = "0.3.5"
+version = "0.3.6"
 description = "A framework for building Singer taps"
 category = "main"
 optional = false
-python-versions = ">=3.6.1,<3.9"
+python-versions = ">=3.6.1,<3.10"
 
 [package.dependencies]
 backoff = ">=1.8.0,<2.0"
-click = ">=7.1.2,<8.0.0"
+click = ">=8.0,<9.0"
 cryptography = ">=3.4.6,<4.0.0"
 importlib-metadata = {version = "*", markers = "python_version < \"3.8\""}
 inflection = ">=0.5.1,<0.6.0"
@@ -653,8 +657,8 @@ ciso8601 = [
     {file = "ciso8601-2.1.3.tar.gz", hash = "sha256:bdbb5b366058b1c87735603b23060962c439ac9be66f1ae91e8c7dbd7d59e262"},
 ]
 click = [
-    {file = "click-7.1.2-py2.py3-none-any.whl", hash = "sha256:dacca89f4bfadd5de3d7489b7c8a566eee0d3676333fbb50030263894c38c0dc"},
-    {file = "click-7.1.2.tar.gz", hash = "sha256:d2b5255c7c6349bc1bd1e59e08cd12acbbd63ce649f2588755783aa94dfb6b1a"},
+    {file = "click-8.0.1-py3-none-any.whl", hash = "sha256:fba402a4a47334742d782209a7c79bc448911afe1149d07bdabdf480b3e2f4b6"},
+    {file = "click-8.0.1.tar.gz", hash = "sha256:8c04c11192119b1ef78ea049e0a6f0463e4c48ef00a30160c704337586f3ad7a"},
 ]
 colorama = [
     {file = "colorama-0.4.4-py2.py3-none-any.whl", hash = "sha256:9f47eda37229f68eee03b24b9748937c7dc3868f906e8ba69fbcbdd3bc5dc3e2"},
@@ -930,8 +934,8 @@ simplejson = [
     {file = "simplejson-3.11.1.win32-py3.5.exe", hash = "sha256:c76d55d78dc8b06c96fd08c6cc5e2b0b650799627d3f9ca4ad23f40db72d5f6d"},
 ]
 singer-sdk = [
-    {file = "singer-sdk-0.3.5.tar.gz", hash = "sha256:7f255915f33f546545387f675bab013669f004fac432a16ee50b3ebce7b88303"},
-    {file = "singer_sdk-0.3.5-py3-none-any.whl", hash = "sha256:ecd32a7fa6cba5a1b8d6c751b6d59dd67b9bb49174d3228fcde7b8bf22521c89"},
+    {file = "singer-sdk-0.3.6.tar.gz", hash = "sha256:5a137cb46c68130ff42ddc1119bee058ea0fc9140424b5c484de7d5a6ebb9dd5"},
+    {file = "singer_sdk-0.3.6-py3-none-any.whl", hash = "sha256:268838a88ae59d51afe8e39cf50c1d0cd62e2b3e29f3331f2141af45f7836975"},
 ]
 six = [
     {file = "six-1.16.0-py2.py3-none-any.whl", hash = "sha256:8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254"},
