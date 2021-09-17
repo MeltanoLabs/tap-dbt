@@ -471,14 +471,6 @@ socks = ["PySocks (>=1.5.6,!=1.5.7)", "win-inet-pton"]
 use_chardet_on_py3 = ["chardet (>=3.0.2,<5)"]
 
 [[package]]
-name = "simpleeval"
-version = "0.9.10"
-description = "A simple, safe single expression evaluator library."
-category = "main"
-optional = false
-python-versions = "*"
-
-[[package]]
 name = "simplejson"
 version = "3.11.1"
 description = "Simple, fast, extensible JSON encoder/decoder for Python"
@@ -488,7 +480,7 @@ python-versions = "*"
 
 [[package]]
 name = "singer-sdk"
-version = "0.3.7"
+version = "0.3.8"
 description = "A framework for building Singer taps"
 category = "main"
 optional = false
@@ -507,7 +499,6 @@ pendulum = ">=2.1.0,<3.0.0"
 pipelinewise-singer-python = "1.2.0"
 PyJWT = "1.7.1"
 requests = ">=2.25.1,<3.0.0"
-simpleeval = ">=0.9.10,<0.10.0"
 
 [package.extras]
 docs = ["sphinx (>=3.5.4,<4.0.0)", "sphinx-rtd-theme (>=0.5.2,<0.6.0)", "sphinx-copybutton (>=0.3.1,<0.4.0)", "myst-parser (>=0.14.0,<0.15.0)"]
@@ -916,9 +907,6 @@ requests = [
     {file = "requests-2.26.0-py2.py3-none-any.whl", hash = "sha256:6c1246513ecd5ecd4528a0906f910e8f0f9c6b8ec72030dc9fd154dc1a6efd24"},
     {file = "requests-2.26.0.tar.gz", hash = "sha256:b8aa58f8cf793ffd8782d3d8cb19e66ef36f7aba4353eec859e74678b01b07a7"},
 ]
-simpleeval = [
-    {file = "simpleeval-0.9.10.tar.gz", hash = "sha256:692055488c2864637f6c2edb5fa48175978a2a07318009e7cf03c9790ca17bea"},
-]
 simplejson = [
     {file = "simplejson-3.11.1-cp27-cp27m-win32.whl", hash = "sha256:38c2b563cd03363e7cb2bbba6c20ae4eaafd853a83954c8c8dd345ee391787bf"},
     {file = "simplejson-3.11.1-cp27-cp27m-win_amd64.whl", hash = "sha256:8d73b96a6ee7c81fd49dac7225e3846fd60b54a0b5b93a0aaea04c5a5d2e7bf2"},
@@ -939,8 +927,8 @@ simplejson = [
     {file = "simplejson-3.11.1.win32-py3.5.exe", hash = "sha256:c76d55d78dc8b06c96fd08c6cc5e2b0b650799627d3f9ca4ad23f40db72d5f6d"},
 ]
 singer-sdk = [
-    {file = "singer-sdk-0.3.7.tar.gz", hash = "sha256:db6f0703648b47e8cc950d05737daff8cacd7ed8cd7708d0d8c08553a7efddaa"},
-    {file = "singer_sdk-0.3.7-py3-none-any.whl", hash = "sha256:3b63e6a351bea969d59fcb2def4249b8a25e0e98d4fa9ca35885ae9ce4572ec1"},
+    {file = "singer-sdk-0.3.8.tar.gz", hash = "sha256:a4ed182f37bc92169e5f126b9423abf2b44768c4e51a925fc16c0e56d7a82250"},
+    {file = "singer_sdk-0.3.8-py3-none-any.whl", hash = "sha256:01ec84fd760db2b0e0eb9c88cf32ca925c81f2b00ca5f689e899d64fd92f55d6"},
 ]
 six = [
     {file = "six-1.16.0-py2.py3-none-any.whl", hash = "sha256:8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254"},
