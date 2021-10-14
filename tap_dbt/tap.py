@@ -3,6 +3,7 @@
 from typing import List
 
 from singer_sdk import Stream, Tap
+from singer_sdk.helpers._classproperty import classproperty
 from singer_sdk.typing import ArrayType, PropertiesList, Property, StringType
 
 from tap_dbt.streams import AccountsStream, JobsStream, ProjectsStream, RunsStream
@@ -17,12 +18,12 @@ STREAM_TYPES = [
 
 
 class TapDBT(Tap):
-    """dbt tap class."""
+    """Singer tap for the dbt Cloud API."""
 
     name = TAP_NAME
 
-    @property
-    def config_jsonschema(self):
+    @classproperty
+    def config_jsonschema(cls):
         return PropertiesList(
             Property("api_key", StringType, required=True),
             Property("account_ids", ArrayType(StringType), required=True),
@@ -30,7 +31,7 @@ class TapDBT(Tap):
             Property(
                 "user_agent",
                 StringType,
-                default=f"{cls.name}/{cls.plugin_version}",
+                default=f"{cls.name}/{cls.plugin_version} {cls.__doc__}",
                 description="User-Agent header",
             ),
         ).to_dict()
