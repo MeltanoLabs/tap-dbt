@@ -21,11 +21,19 @@ class TapDBT(Tap):
 
     name = TAP_NAME
 
-    config_jsonschema = PropertiesList(
-        Property("api_key", StringType, required=True),
-        Property("account_ids", ArrayType(StringType), required=True),
-        Property("base_url", StringType, default="https://cloud.getdbt.com/api/v2"),
-    ).to_dict()
+    @property
+    def config_jsonschema(self):
+        return PropertiesList(
+            Property("api_key", StringType, required=True),
+            Property("account_ids", ArrayType(StringType), required=True),
+            Property("base_url", StringType, default="https://cloud.getdbt.com/api/v2"),
+            Property(
+                "user_agent",
+                StringType,
+                default=f"{cls.name}/{cls.plugin_version}",
+                description="User-Agent header",
+            ),
+        ).to_dict()
 
     def discover_streams(self) -> List[Stream]:
         """Return a list of discovered streams."""
