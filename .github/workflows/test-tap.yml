@@ -9,7 +9,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        python-version: ['3.7', '3.8']
+        python-version: ['3.7', '3.8', '3.9']
 
     steps:
       - name: Checkout code
@@ -22,7 +22,7 @@ jobs:
           architecture: x64
 
       - name: Install Dependencies
-        run: pip install poetry==1.1.5
+        run: pip install poetry==1.1.11
 
       - name: Test tap
         env:
