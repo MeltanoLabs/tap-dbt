@@ -73,7 +73,7 @@ tap-dbt --about --format json
 ```json
 {
   "api_key": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
-  "account_ids": [51341],
+  "account_ids": ["51341"],
   "user_agent": "tap-dbt/0.1.0 Singer Tap for the dbt Cloud API",
   "base_url": "https://my-dbt-cloud-api.com"
 }
