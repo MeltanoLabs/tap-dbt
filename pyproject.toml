@@ -19,7 +19,7 @@ keywords = [
 ]
 
 [tool.poetry.dependencies]
-python = "<3.10,>=3.7"
+python = "<3.11,>=3.7"
 singer-sdk = "==0.3.17"
 
 [tool.poetry.dev-dependencies]
