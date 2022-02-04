@@ -20,7 +20,7 @@ keywords = [
 
 [tool.poetry.dependencies]
 python = "<3.11,>=3.7"
-singer-sdk = "==0.4.1"
+singer-sdk = "==0.4.2"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.5"
