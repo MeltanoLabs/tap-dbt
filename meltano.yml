@@ -1,0 +1,19 @@
+version: 1
+project_id: 5300fed0-e42d-4bfd-85c1-ae89f0686fd3
+plugins:
+  extractors:
+  - name: tap-dbt
+    namespace: tap_dbt
+    pip_url: -e .
+    executable: tap-dbt
+    capabilities:
+    - catalog
+    - discover
+    - state
+    settings:
+    - name: api_key
+      kind: password
+    - name: account_ids
+      kind: array
+    - name: user_agent
+    - name: base_url
