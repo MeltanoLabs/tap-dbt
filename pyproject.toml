@@ -26,7 +26,7 @@ singer-sdk = "==0.5.0"
 pytest = "^7.1.2"
 isort = "^5.10.1"
 black = "^22.3"
-mypy = "^0.960"
+mypy = "^0.961"
 
 [tool.black]
 line-length = 88
