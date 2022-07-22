@@ -498,7 +498,7 @@ python-versions = "*"
 
 [[package]]
 name = "singer-sdk"
-version = "0.5.0"
+version = "0.7.0"
 description = "A framework for building Singer taps"
 category = "main"
 optional = false
@@ -507,21 +507,22 @@ python-versions = ">=3.7.1,<3.11"
 [package.dependencies]
 backoff = ">=1.8.0,<2.0"
 click = ">=8.0,<9.0"
-cryptography = ">=3.4.6,<4.0.0"
+cryptography = ">=3.4.6,<38.0.0"
 importlib-metadata = {version = "*", markers = "python_version < \"3.8\""}
 inflection = ">=0.5.1,<0.6.0"
 joblib = ">=1.0.1,<2.0.0"
 jsonpath-ng = ">=1.5.3,<2.0.0"
-memoization = ">=0.3.2,<0.4.0"
+memoization = ">=0.3.2,<0.5.0"
 pendulum = ">=2.1.0,<3.0.0"
 pipelinewise-singer-python = "1.2.0"
-PyJWT = ">=2.3,<3.0"
+PyJWT = ">=2.4,<3.0"
 python-dotenv = ">=0.20.0,<0.21.0"
 requests = ">=2.25.1,<3.0.0"
 sqlalchemy = ">=1.4,<2.0"
+typing-extensions = ">=4.2.0,<5.0.0"
 
 [package.extras]
-docs = ["sphinx (>=4.5.0,<5.0.0)", "sphinx-rtd-theme (>=0.5.2,<0.6.0)", "sphinx-copybutton (>=0.3.1,<0.4.0)", "myst-parser (>=0.17.2,<0.18.0)"]
+docs = ["myst-parser (>=0.17.2,<0.19.0)", "sphinx (>=4.5,<6.0)", "sphinx-copybutton (>=0.3.1,<0.6.0)", "sphinx-rtd-theme (>=0.5.2,<1.1.0)"]
 
 [[package]]
 name = "six"
@@ -616,7 +617,7 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-
 [metadata]
 lock-version = "1.1"
 python-versions = "<3.11,>=3.7.1"
-content-hash = "5b34393b18698ece8dbac17ec84b4518aad9639d6d8c17c3ed30fc2a69064f57"
+content-hash = "7c48e000951a140bafd14f80c5bb08aaac2b2f601bf46592550f3b66649fb137"
 
 [metadata.files]
 atomicwrites = [
@@ -1005,8 +1006,8 @@ simplejson = [
     {file = "simplejson-3.11.1.win32-py3.5.exe", hash = "sha256:c76d55d78dc8b06c96fd08c6cc5e2b0b650799627d3f9ca4ad23f40db72d5f6d"},
 ]
 singer-sdk = [
-    {file = "singer-sdk-0.5.0.tar.gz", hash = "sha256:95ba892fb6e7b8c7598f72f5452dfab5f863fca4588686c4d0eebe701cc34499"},
-    {file = "singer_sdk-0.5.0-py3-none-any.whl", hash = "sha256:322b900a15ccf0ef55c887fdd8e4617e33166739ac68041765f965249a2b84d6"},
+    {file = "singer-sdk-0.7.0.tar.gz", hash = "sha256:f30e7197f03b915b147b67cb637f386189d46f7fb07b2b642051bdb4a009325c"},
+    {file = "singer_sdk-0.7.0-py3-none-any.whl", hash = "sha256:59ac4cdd68ae211fbb2ebd52b710e5685b783f549f2329a1f39dc1dca198b776"},
 ]
 six = [
     {file = "six-1.16.0-py2.py3-none-any.whl", hash = "sha256:8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254"},
