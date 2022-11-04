@@ -25,14 +25,29 @@ class TapDBT(Tap):
     @classproperty
     def config_jsonschema(cls):
         return PropertiesList(
-            Property("api_key", StringType, required=True),
-            Property("account_ids", ArrayType(StringType), required=True),
-            Property("base_url", StringType, default="https://cloud.getdbt.com/api/v2"),
+            Property(
+                "api_key",
+                StringType,
+                description="API key for the dbt Cloud API",
+                required=True,
+            ),
+            Property(
+                "account_ids",
+                ArrayType(StringType),
+                description="dbt Cloud account IDs",
+                required=True,
+            ),
+            Property(
+                "base_url",
+                StringType,
+                description="Base URL for the dbt Cloud API",
+                default="https://cloud.getdbt.com/api/v2",
+            ),
             Property(
                 "user_agent",
                 StringType,
                 default=f"{cls.name}/{cls.plugin_version} {cls.__doc__}",
-                description="User-Agent header",
+                description="User-Agent to make requests with",
             ),
         ).to_dict()
 
