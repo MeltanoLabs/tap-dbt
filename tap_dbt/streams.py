@@ -19,7 +19,7 @@ class DBTStream(RESTStream):
 
     @property
     def url_base(self):
-        return self.config.get('base_url', 'https://cloud.getdbt.com/api/v2')
+        return self.config.get("base_url", "https://cloud.getdbt.com/api/v2")
 
     @property
     def http_headers(self) -> dict:
