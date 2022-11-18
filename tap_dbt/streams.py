@@ -13,10 +13,13 @@ SCHEMAS_DIR = Path(__file__).parent / Path("./schemas")
 class DBTStream(RESTStream):
     """dbt stream class."""
 
-    url_base = "https://cloud.getdbt.com/api/v2"
     primary_keys = ["id"]
     replication_key = None
     response_jsonpath = "$.data[*]"
+
+    @property
+    def url_base(self):
+        return self.config.get('base_url', 'https://cloud.getdbt.com/api/v2')
 
     @property
     def http_headers(self) -> dict:
