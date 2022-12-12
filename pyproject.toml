@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "tap-dbt"
-version = "0.3.0"
+version = "0.0.0"
 description = "Singer tap for dbt, built with the Singer SDK."
 license = "Apache-2.0"
 authors = [
@@ -37,8 +37,13 @@ multi_line_output = 3 # Vertical Hanging Indent
 src_paths = "tap_dbt"
 
 [build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+requires = ["poetry-core>=1.0.8", "poetry-dynamic-versioning"]
+build-backend = "poetry_dynamic_versioning.backend"
 
 [tool.poetry.scripts]
 tap-dbt = 'tap_dbt.tap:cli'
+
+[tool.poetry-dynamic-versioning]
+enable = true
+vcs = "git"
+style = "semver"
