@@ -15,7 +15,7 @@ class DBTStream(RESTStream):
 
     primary_keys = ["id"]
     replication_key = None
-    response_jsonpath = "$.data[*]"
+    records_jsonpath = "$.data[*]"
 
     @property
     def url_base(self):
