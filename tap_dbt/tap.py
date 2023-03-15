@@ -23,7 +23,12 @@ class TapDBT(Tap):
     name = TAP_NAME
 
     @classproperty
-    def config_jsonschema(cls):
+    def config_jsonschema(cls) -> dict:  # noqa: N805
+        """Return JSON schema definition for the config.
+
+        Returns:
+            A JSON schema dictionary.
+        """
         return PropertiesList(
             Property(
                 "api_key",

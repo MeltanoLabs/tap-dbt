@@ -1,0 +1,120 @@
+{
+    "status": {
+        "code": 200,
+        "is_success": true,
+        "user_message": "Success!",
+        "developer_message": ""
+    },
+    "data": [
+        {
+            "execution": {
+                "timeout_seconds": 0
+            },
+            "generate_docs": true,
+            "run_generate_sources": false,
+            "id": 1,
+            "account_id": 1001,
+            "project_id": 1,
+            "environment_id": 1,
+            "name": "Yay dbt Job!",
+            "dbt_version": null,
+            "created_at": "2022-08-15T15:15:15.000000+00:00",
+            "updated_at": "2022-08-15T15:15:16.000001+00:00",
+            "execute_steps": [
+                "dbt build"
+            ],
+            "state": 1,
+            "deactivated": false,
+            "run_failure_count": 0,
+            "deferring_job_definition_id": null,
+            "lifecycle_webhooks": false,
+            "lifecycle_webhooks_url": null,
+            "triggers": {
+                "github_webhook": false,
+                "git_provider_webhook": false,
+                "custom_branch_only": false,
+                "schedule": false
+            },
+            "settings": {
+                "threads": 4,
+                "target_name": "default"
+            },
+            "schedule": {
+                "cron": "0 * * * *",
+                "date": {
+                    "type": "every_day"
+                },
+                "time": {
+                    "type": "every_hour",
+                    "interval": 1
+                }
+            },
+            "is_deferrable": false,
+            "generate_sources": false,
+            "cron_humanized": "Every hour",
+            "next_run": null,
+            "next_run_humanized": null
+        },
+        {
+            "execution": {
+                "timeout_seconds": 0
+            },
+            "generate_docs": false,
+            "run_generate_sources": false,
+            "id": 2,
+            "account_id": 1001,
+            "project_id": 1,
+            "environment_id": 1,
+            "name": "My second dbt Job",
+            "dbt_version": null,
+            "created_at": "2022-07-31T11:01:30.000000+00:00",
+            "updated_at": "2022-08-31T12:01:30.000000+00:00",
+            "execute_steps": [
+                "dbt run"
+            ],
+            "state": 1,
+            "deactivated": false,
+            "run_failure_count": 0,
+            "deferring_job_definition_id": null,
+            "lifecycle_webhooks": false,
+            "lifecycle_webhooks_url": null,
+            "triggers": {
+                "github_webhook": true,
+                "git_provider_webhook": false,
+                "custom_branch_only": false,
+                "schedule": false
+            },
+            "settings": {
+                "threads": 4,
+                "target_name": "default"
+            },
+            "schedule": {
+                "cron": "0 * * * *",
+                "date": {
+                    "type": "every_day"
+                },
+                "time": {
+                    "type": "every_hour",
+                    "interval": 1
+                }
+            },
+            "is_deferrable": false,
+            "generate_sources": false,
+            "cron_humanized": "Every hour",
+            "next_run": null,
+            "next_run_humanized": null
+        }
+    ],
+    "extra": {
+        "filters": {
+            "limit": 100,
+            "offset": 0,
+            "account_id": 1001
+        },
+        "order_by": "id",
+        "pagination": {
+            "count": 1,
+            "total_count": 2
+        }
+    }
+}

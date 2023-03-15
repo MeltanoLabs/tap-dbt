@@ -1,0 +1,42 @@
+{
+    "status": {
+        "code": 200,
+        "is_success": true,
+        "user_message": "Success!",
+        "developer_message": ""
+    },
+    "data": {
+        "docs_job_id": null,
+        "freshness_job_id": null,
+        "lock_reason": null,
+        "unlock_if_subscription_renewed": false,
+        "read_only_seats": 3,
+        "id": 1001,
+        "name": "Corp",
+        "state": 42,
+        "plan": "enterprise",
+        "pending_cancel": false,
+        "run_slots": 3,
+        "developer_seats": 3,
+        "queue_limit": 50,
+        "pod_memory_request_mebibytes": 600,
+        "run_duration_limit_seconds": 900,
+        "enterprise_authentication_method": null,
+        "enterprise_login_slug": null,
+        "enterprise_unique_identifier": null,
+        "billing_email_address": null,
+        "locked": false,
+        "develop_file_system": true,
+        "unlocked_at": null,
+        "created_at": "2022-01-01T00:42:00.000000+00:00",
+        "updated_at": "2022-01-31T23:59:42.000000+00:00",
+        "starter_repo_url": null,
+        "sso_reauth": false,
+        "force_sso": true,
+        "git_auth_level": "personal",
+        "identifier": "act_xyzwq",
+        "docs_job": null,
+        "freshness_job": null,
+        "enterprise_login_url": "https://cloud.corp.getdbt.com/enterprise-login/None/"
+    }
+}

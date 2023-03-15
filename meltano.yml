@@ -1,5 +1,6 @@
 version: 1
 project_id: 5300fed0-e42d-4bfd-85c1-ae89f0686fd3
+default_environment: dev
 plugins:
   extractors:
   - name: tap-dbt
@@ -17,3 +18,5 @@ plugins:
       kind: array
     - name: user_agent
     - name: base_url
+environments:
+- name: dev
