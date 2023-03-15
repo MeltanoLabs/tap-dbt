@@ -64,13 +64,29 @@ class JobsStream(AccountBasedStream):
     name = "jobs"
     path = "/accounts/{account_id}/jobs"
     schema_filepath = SCHEMAS_DIR / "jobs.json"
+    page_size = 100
 
     def get_url_params(
         self,
         partition: Optional[dict],
         next_page_token: int,
     ) -> Dict[str, Any]:
-        return {"order_by": "updated_at"}
+        return {
+            "order_by": "updated_at",
+            "limit": self.page_size,
+            "offset": next_page_token,
+        }
+
+    def get_next_page_token(
+        self, response: requests.Response, previous_token: Optional[Any]
+    ) -> Any:
+        previous_token = previous_token or 0
+        data = response.json()
+
+        if len(data["data"]):
+            return previous_token + self.page_size
+
+        return None
 
 
 class ProjectsStream(AccountBasedStream):
