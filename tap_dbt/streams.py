@@ -64,10 +64,11 @@ class AccountBasedStream(DBTStream):
         return DbtPaginator(start_value=0, page_size=100)
 
     def get_url_params(
-        self, context: dict, next_page_token: int  # pylint: disable=unused-argument
+        self, context: dict, next_page_token: int,
     ) -> dict:
         """Return offset as the next page token."""
         params = {}
+        _ = context
 
         # Next page token is an offset
         if next_page_token:
