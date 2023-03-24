@@ -20,24 +20,25 @@ class DbtPaginator(BaseOffsetPaginator):
 
     def has_more(self, response: requests.Response) -> bool:
         """Returns True until there are no more pages to retrieve.
-        
+
         The API returns an 'extra' key with information about pagination:
-        "extra":{"filters":{"limit":100,"offset":2,"account_id":1},"order_by":"id","pagination":{"count":100,"total_count":209}}} 
+        "extra":{"filters":{"limit":100,"offset":2,"account_id":1},"order_by":"id","pagination":{"count":100,"total_count":209}}}
         """
         data = response.json()
         extra = data.get("extra")
         filters = extra.get("filters")
         pagination = extra.get("pagination")
-        
-        offset = filters.get("offset",0)
+
+        offset = filters.get("offset", 0)
         total_count = pagination.get("total_count")
         count = pagination.get("count")
-        
+
         """
         The pagination has more records when:
         total_count is still greater than count and offset combined
         """
-        return (count + offset < total_count)
+        return count + offset < total_count
+
 
 class AccountBasedStream(DBTStream):
     """A stream that requires an account ID."""
@@ -57,15 +58,13 @@ class AccountBasedStream(DBTStream):
             "Expected a URL path containing '{account_id}'. "
         )
         raise ValueError(errmsg)
-      
+
     def get_new_paginator(self) -> DbtPaginator:
         """Return a new paginator instance for this stream."""
         return DbtPaginator(start_value=0, page_size=100)
 
     def get_url_params(
-            self, 
-            context: dict, # pylint: disable=unused-argument
-            next_page_token: int
+        self, context: dict, next_page_token: int  # pylint: disable=unused-argument
     ) -> dict:
         """Return offset as the next page token."""
         params = {}
@@ -86,12 +85,14 @@ class AccountsStream(DBTStream):
     records_jsonpath = "$.data"
     openapi_ref = "Account"
 
+
 class JobsStream(AccountBasedStream):
     """A stream for the jobs endpoint."""
 
     name = "jobs"
     path = "/accounts/{account_id}/jobs"
     openapi_ref = "Job"
+
 
 class ProjectsStream(AccountBasedStream):
     """A stream for the projects endpoint."""
