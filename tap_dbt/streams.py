@@ -18,9 +18,8 @@ SCHEMAS_DIR = Path(__file__).parent / Path("./schemas")
 class DbtPaginator(BaseOffsetPaginator):
     """dbt API paginator."""
 
-    def has_more(self, response) -> bool:
-        """
-        Returns True until there are no more pages to retrieve
+    def has_more(self, response: requests.Response) -> bool:
+        """ Returns True until there are no more pages to retrieve.
         
         The API returns an 'extra' key with information about pagination:
         "extra":{"filters":{"limit":100,"offset":2,"account_id":1},"order_by":"id","pagination":{"count":100,"total_count":209}}} 
@@ -64,7 +63,7 @@ class AccountBasedStream(DBTStream):
         return DbtPaginator(start_value=0, page_size=100)
 
     def get_url_params(self, context: dict, next_page_token: int) -> dict:
-        """Return offset as the next page token"""
+        """Return offset as the next page token."""
         params = {}
 
         # Next page token is an offset
