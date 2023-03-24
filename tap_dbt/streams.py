@@ -63,7 +63,7 @@ class AccountBasedStream(DBTStream):
         """Return a new paginator instance for this stream."""
         return DbtPaginator(start_value=0, page_size=100)
 
-    def get_url_params(self, context, next_page_token: int) -> dict:
+    def get_url_params(self, context: dict, next_page_token: int) -> dict:
         """Return offset as the next page token"""
         params = {}
 
