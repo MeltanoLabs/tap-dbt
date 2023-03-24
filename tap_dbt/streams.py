@@ -6,9 +6,27 @@ from typing import Any, Dict, Iterable, List, Optional, cast
 import requests
 from singer_sdk.authenticators import APIAuthenticatorBase, SimpleAuthenticator
 from singer_sdk.streams import RESTStream
+from singer_sdk.pagination import BaseOffsetPaginator
 
 SCHEMAS_DIR = Path(__file__).parent / Path("./schemas")
 
+class DBTPaginator(BaseOffsetPaginator):
+    """
+    The API returns a 
+    "extra":{"filters":{"limit":100,"offset":2,"account_id":1},"order_by":"id","pagination":{"count":100,"total_count":209}}}
+    """
+    def has_more(self, response):
+        data = response.json()
+        extra = data.get("extra")
+        filters = extra.get("filters")
+        pagination = extra.get("pagination")
+        
+        limit = filters.get("limit")
+        offset = filters.get("offset",0)
+        total_count = pagination.get("total_count")
+        count = pagination.get("count")
+        
+        return (count + offset < total_count)
 
 class DBTStream(RESTStream):
     """dbt stream class."""
@@ -35,7 +53,23 @@ class DBTStream(RESTStream):
                 "Authorization": f"Token {self.config.get('api_key')}",
             },
         )
+        
+    def get_new_paginator(self):
+        return DBTPaginator(start_value=0, page_size=100)
 
+    def get_url_params(self, context, next_page_token):
+        params = {}
+
+        # Next page token is an offset
+        if next_page_token:
+            params["offset"] = next_page_token
+
+        return params
+
+class AccountsStream(DBTStream):
+    name = "accounts"
+    path = "/accounts"
+    schema_filepath = SCHEMAS_DIR / "accounts.json"
 
 class AccountBasedStream(DBTStream):
     @property
@@ -50,75 +84,17 @@ class AccountBasedStream(DBTStream):
             "Expected a URL path containing '{account_id}'. "
         )
 
-
-class AccountsStream(AccountBasedStream):
-    name = "accounts"
-    path = "/accounts/{account_id}"
-    schema_filepath = SCHEMAS_DIR / "accounts.json"
-
-    def parse_response(self, response: requests.Response) -> Iterable[dict]:
-        yield response.json()["data"]
-
-
 class JobsStream(AccountBasedStream):
     name = "jobs"
     path = "/accounts/{account_id}/jobs"
     schema_filepath = SCHEMAS_DIR / "jobs.json"
-    page_size = 100
-
-    def get_url_params(
-        self,
-        partition: Optional[dict],
-        next_page_token: int,
-    ) -> Dict[str, Any]:
-        return {
-            "order_by": "updated_at",
-            "limit": self.page_size,
-            "offset": next_page_token,
-        }
-
-    def get_next_page_token(
-        self, response: requests.Response, previous_token: Optional[Any]
-    ) -> Any:
-        previous_token = previous_token or 0
-        data = response.json()
-
-        if len(data["data"]):
-            return previous_token + self.page_size
-
-        return None
-
 
 class ProjectsStream(AccountBasedStream):
     name = "projects"
     path = "/accounts/{account_id}/projects"
     schema_filepath = SCHEMAS_DIR / "projects.json"
 
-
 class RunsStream(AccountBasedStream):
     name = "runs"
     path = "/accounts/{account_id}/runs"
     schema_filepath = SCHEMAS_DIR / "runs.json"
-    page_size = 100
-
-    def get_url_params(
-        self,
-        partition: Optional[dict],
-        next_page_token: int,
-    ) -> Dict[str, Any]:
-        return {
-            "order_by": "updated_at",
-            "limit": self.page_size,
-            "offset": next_page_token,
-        }
-
-    def get_next_page_token(
-        self, response: requests.Response, previous_token: Optional[Any]
-    ) -> Any:
-        previous_token = previous_token or 0
-        data = response.json()
-
-        if len(data["data"]):
-            return previous_token + self.page_size
-
-        return None
