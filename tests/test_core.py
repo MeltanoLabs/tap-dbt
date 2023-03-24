@@ -32,88 +32,89 @@ def accounts_response(fake: Faker):
             "code": 200,
             "is_success": True,
         },
-        "data": {
-            "id": 1000,
-            "name": fake.company(),
-        },
+        "data": [
+            {
+                "id": 1000,
+                "name": fake.company(),
+            },
+        ],
+        "extra": {},
     }
 
 
 @pytest.fixture()
 def projects_response():
     """Return a sample response for the projects stream."""
-    return [
-        {
-            "status": {
-                "code": 200,
-                "is_success": True,
-            },
-            "data": [
-                {
-                    "id": 1000 + i,
-                    "account_id": 1000,
-                }
-                for i in range(10)
-            ],
+    return {
+        "status": {
+            "code": 200,
+            "is_success": True,
         },
-    ]
+        "data": [
+            {
+                "id": 1000 + i,
+                "account_id": 1000,
+            }
+            for i in range(10)
+        ],
+        "extra": {},
+    }
 
 
 @pytest.fixture()
 def jobs_response(fake: Faker):
     """Return a sample response for the jobs stream."""
-    return [
-        {
-            "status": {
-                "code": 200,
-                "is_success": True,
-            },
-            "data": [
-                {
-                    "id": 1000 + i,
-                    "account_id": 1000,
-                    "project_id": 1000 + i % 3,
-                    "environment_id": 1000,
-                    "dbt_version": "1.4.0",
-                    "name": fake.bs(),
-                    "execute_steps": [
-                        "dbt deps",
-                        "dbt seed",
-                        "dbt run",
-                    ],
-                    "state": fake.random_element([1, 2]),
-                    "triggers": {
-                        "github_webhook": True,
-                        "schedule": False,
-                    },
-                    "settings": {
-                        "threads": 5,
-                        "target_name": "prod",
-                    },
-                    "schedule": {
-                        "date": {
-                            "type": fake.random_element(
-                                [
-                                    "every_day",
-                                    "days_of_week",
-                                    "custom_cron",
-                                ],
-                            ),
-                        },
-                        "time": {
-                            "type": fake.random_element(
-                                [
-                                    "every_hour",
-                                    "at_exact_hours",
-                                ],
-                            ),
-                        },
-                    },
-                }
-                for i in range(10)
-            ],
+    return {
+        "status": {
+            "code": 200,
+            "is_success": True,
         },
-    ]
+        "extra": {},
+        "data": [
+            {
+                "id": 1000 + i,
+                "account_id": 1000,
+                "project_id": 1000 + i % 3,
+                "environment_id": 1000,
+                "dbt_version": "1.4.0",
+                "name": fake.bs(),
+                "execute_steps": [
+                    "dbt deps",
+                    "dbt seed",
+                    "dbt run",
+                ],
+                "state": fake.random_element([1, 2]),
+                "triggers": {
+                    "github_webhook": True,
+                    "schedule": False,
+                },
+                "settings": {
+                    "threads": 5,
+                    "target_name": "prod",
+                },
+                "schedule": {
+                    "date": {
+                        "type": fake.random_element(
+                            [
+                                "every_day",
+                                "days_of_week",
+                                "custom_cron",
+                            ],
+                        ),
+                    },
+                    "time": {
+                        "type": fake.random_element(
+                            [
+                                "every_hour",
+                                "at_exact_hours",
+                            ],
+                        ),
+                    },
+                },
+            }
+            for i in range(10)
+        ],
+    }
 
 
 @pytest.fixture()
@@ -124,6 +125,7 @@ def runs_response():
             "code": 200,
             "is_success": True,
         },
+        "extra": {},
         "data": [
             {
                 "id": 1000 + i,
@@ -148,7 +150,7 @@ def test_standard_tap_tests(
 
     responses.add(
         responses.GET,
-        "https://cloud.getdbt.com/api/v2/accounts/1000",
+        "https://cloud.getdbt.com/api/v2/accounts",
         json=accounts_response,
         status=200,
     )

@@ -25,18 +25,16 @@ class DbtPaginator(BaseOffsetPaginator):
         "extra":{"filters":{"limit":100,"offset":2,"account_id":1},"order_by":"id","pagination":{"count":100,"total_count":209}}}
         """
         data = response.json()
-        extra = data.get("extra")
-        filters = extra.get("filters")
-        pagination = extra.get("pagination")
+        extra = data.get("extra", {})
+        filters = extra.get("filters", {})
+        pagination = extra.get("pagination", {})
 
         offset = filters.get("offset", 0)
         total_count = pagination.get("total_count")
         count = pagination.get("count")
 
-        """
-        The pagination has more records when:
-        total_count is still greater than count and offset combined
-        """
+        # The pagination has more records when:
+        # total_count is still greater than count and offset combined
         return count + offset < total_count
 
 
@@ -85,7 +83,6 @@ class AccountsStream(DBTStream):
     name = "accounts"
     path = "/accounts"
     schema_filepath = SCHEMAS_DIR / "accounts.json"
-    records_jsonpath = "$.data"
     openapi_ref = "Account"
 
 
