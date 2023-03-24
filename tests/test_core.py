@@ -42,9 +42,9 @@ def accounts_response(fake: Faker):
         "filters": {
           "pk__in": [
             1,
-          ]
+          ],
         },
-        "order_by": null,
+        "order_by": None,
         "pagination": {
           "count": 1,
           "total_count": 1,
