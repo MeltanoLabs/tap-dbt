@@ -19,7 +19,7 @@ class DbtPaginator(BaseOffsetPaginator):
     """dbt API paginator."""
 
     def has_more(self, response: requests.Response) -> bool:
-        """ Returns True until there are no more pages to retrieve.
+        """Returns True until there are no more pages to retrieve.
         
         The API returns an 'extra' key with information about pagination:
         "extra":{"filters":{"limit":100,"offset":2,"account_id":1},"order_by":"id","pagination":{"count":100,"total_count":209}}} 
