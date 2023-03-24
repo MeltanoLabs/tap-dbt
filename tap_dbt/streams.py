@@ -17,22 +17,27 @@ SCHEMAS_DIR = Path(__file__).parent / Path("./schemas")
 
 class DbtPaginator(BaseOffsetPaginator):
     """dbt API paginator."""
-    """
-    The API returns an 'extra' key with information about pagination:
-    "extra":{"filters":{"limit":100,"offset":2,"account_id":1},"order_by":"id","pagination":{"count":100,"total_count":209}}}
-    """
-    def has_more(self, response):
+
+    def has_more(self, response) -> bool:
+        """
+        Returns True until there are no more pages to retrieve
+        
+        The API returns an 'extra' key with information about pagination:
+        "extra":{"filters":{"limit":100,"offset":2,"account_id":1},"order_by":"id","pagination":{"count":100,"total_count":209}}} 
+        """
         data = response.json()
         extra = data.get("extra")
         filters = extra.get("filters")
         pagination = extra.get("pagination")
         
-        limit = filters.get("limit")
         offset = filters.get("offset",0)
         total_count = pagination.get("total_count")
         count = pagination.get("count")
         
-        """The pagination has more records when total_count is still greater than count and offset combined"""
+        """
+        The pagination has more records when:
+        total_count is still greater than count and offset combined
+        """
         return (count + offset < total_count)
 
 class AccountBasedStream(DBTStream):
@@ -58,7 +63,8 @@ class AccountBasedStream(DBTStream):
         """Return a new paginator instance for this stream."""
         return DbtPaginator(start_value=0, page_size=100)
 
-    def get_url_params(self, context, next_page_token):
+    def get_url_params(self, next_page_token: int) -> dict:
+        """Return offset as the next page token"""
         params = {}
 
         # Next page token is an offset
