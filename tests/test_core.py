@@ -41,15 +41,15 @@ def accounts_response(fake: Faker):
       "extra": {
         "filters": {
           "pk__in": [
-            1
+            1,
           ]
         },
         "order_by": null,
         "pagination": {
           "count": 1,
-          "total_count": 1
-        }
-      }
+          "total_count": 1,
+        },
+      },
     }
 
 
@@ -72,14 +72,14 @@ def projects_response():
         "filters": {
           "account_id": 1,
           "limit": 1,
-          "offset": 0
+          "offset": 0,
         },
         "order_by": "id",
         "pagination": {
           "count": 1,
-          "total_count": 2
-        }
-      }
+          "total_count": 2,
+        },
+      },
     }
 
 
@@ -95,14 +95,14 @@ def jobs_response(fake: Faker):
             "filters": {
               "limit": 1,
               "offset": 0,
-              "account_id": 1
+              "account_id": 1,
             },
             "order_by": "id",
             "pagination": {
               "count": 1,
-              "total_count": 300
-            }
-          }
+              "total_count": 300,
+            },
+          },
         "data": [
             {
                 "id": 1000 + i,
@@ -162,14 +162,14 @@ def runs_response():
             "filters": {
               "account_id": 1,
               "limit": 1,
-              "offset": 0
+              "offset": 0,
             },
             "order_by": "id",
             "pagination": {
               "count": 1,
-              "total_count": 500000
-            }
-          }
+              "total_count": 500000,
+            },
+          },
         "data": [
             {
                 "id": 1000 + i,
