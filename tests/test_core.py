@@ -32,9 +32,23 @@ def accounts_response(fake: Faker):
             "code": 200,
             "is_success": True,
         },
-        "data": {
-            "id": 1000,
-            "name": fake.company(),
+        "data": [
+            {
+                "id": 1000,
+                "name": fake.company(),
+            },
+        ],
+        "extra": {
+            "filters": {
+                "pk__in": [
+                    1,
+                ],
+            },
+            "order_by": None,
+            "pagination": {
+                "count": 1,
+                "total_count": 1,
+            },
         },
     }
 
@@ -42,78 +56,98 @@ def accounts_response(fake: Faker):
 @pytest.fixture()
 def projects_response():
     """Return a sample response for the projects stream."""
-    return [
-        {
-            "status": {
-                "code": 200,
-                "is_success": True,
-            },
-            "data": [
-                {
-                    "id": 1000 + i,
-                    "account_id": 1000,
-                }
-                for i in range(10)
-            ],
+    return {
+        "status": {
+            "code": 200,
+            "is_success": True,
         },
-    ]
+        "data": [
+            {
+                "id": 1000 + i,
+                "account_id": 1000,
+            }
+            for i in range(10)
+        ],
+        "extra": {
+            "filters": {
+                "account_id": 1,
+                "limit": 1,
+                "offset": 0,
+            },
+            "order_by": "id",
+            "pagination": {
+                "count": 1,
+                "total_count": 2,
+            },
+        },
+    }
 
 
 @pytest.fixture()
 def jobs_response(fake: Faker):
     """Return a sample response for the jobs stream."""
-    return [
-        {
-            "status": {
-                "code": 200,
-                "is_success": True,
-            },
-            "data": [
-                {
-                    "id": 1000 + i,
-                    "account_id": 1000,
-                    "project_id": 1000 + i % 3,
-                    "environment_id": 1000,
-                    "dbt_version": "1.4.0",
-                    "name": fake.bs(),
-                    "execute_steps": [
-                        "dbt deps",
-                        "dbt seed",
-                        "dbt run",
-                    ],
-                    "state": fake.random_element([1, 2]),
-                    "triggers": {
-                        "github_webhook": True,
-                        "schedule": False,
-                    },
-                    "settings": {
-                        "threads": 5,
-                        "target_name": "prod",
-                    },
-                    "schedule": {
-                        "date": {
-                            "type": fake.random_element(
-                                [
-                                    "every_day",
-                                    "days_of_week",
-                                    "custom_cron",
-                                ],
-                            ),
-                        },
-                        "time": {
-                            "type": fake.random_element(
-                                [
-                                    "every_hour",
-                                    "at_exact_hours",
-                                ],
-                            ),
-                        },
-                    },
-                }
-                for i in range(10)
-            ],
+    return {
+        "status": {
+            "code": 200,
+            "is_success": True,
         },
-    ]
+        "extra": {
+            "filters": {
+                "limit": 1,
+                "offset": 0,
+                "account_id": 1,
+            },
+            "order_by": "id",
+            "pagination": {
+                "count": 1,
+                "total_count": 300,
+            },
+        },
+        "data": [
+            {
+                "id": 1000 + i,
+                "account_id": 1000,
+                "project_id": 1000 + i % 3,
+                "environment_id": 1000,
+                "dbt_version": "1.4.0",
+                "name": fake.bs(),
+                "execute_steps": [
+                    "dbt deps",
+                    "dbt seed",
+                    "dbt run",
+                ],
+                "state": fake.random_element([1, 2]),
+                "triggers": {
+                    "github_webhook": True,
+                    "schedule": False,
+                },
+                "settings": {
+                    "threads": 5,
+                    "target_name": "prod",
+                },
+                "schedule": {
+                    "date": {
+                        "type": fake.random_element(
+                            [
+                                "every_day",
+                                "days_of_week",
+                                "custom_cron",
+                            ],
+                        ),
+                    },
+                    "time": {
+                        "type": fake.random_element(
+                            [
+                                "every_hour",
+                                "at_exact_hours",
+                            ],
+                        ),
+                    },
+                },
+            }
+            for i in range(10)
+        ],
+    }
 
 
 @pytest.fixture()
@@ -123,6 +157,18 @@ def runs_response():
         "status": {
             "code": 200,
             "is_success": True,
+        },
+        "extra": {
+            "filters": {
+                "account_id": 1,
+                "limit": 1,
+                "offset": 0,
+            },
+            "order_by": "id",
+            "pagination": {
+                "count": 1,
+                "total_count": 500000,
+            },
         },
         "data": [
             {
@@ -148,7 +194,7 @@ def test_standard_tap_tests(
 
     responses.add(
         responses.GET,
-        "https://cloud.getdbt.com/api/v2/accounts/1000",
+        "https://cloud.getdbt.com/api/v2/accounts",
         json=accounts_response,
         status=200,
     )
