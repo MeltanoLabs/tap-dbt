@@ -3,11 +3,14 @@ name: Release
 on:
   release:
     types: [published]
+  workflow_dispatch:
 
 jobs:
   release:
     name: Publish to PyPI
     runs-on: ubuntu-latest
+    env:
+      PIP_CONSTRAINT: .github/workflows/constraints.txt
 
     steps:
       - name: Checkout code
@@ -20,9 +23,10 @@ jobs:
           architecture: x64
 
       - name: Install Dependencies
-        run: pip install poetry==1.1.11
+        run: pipx install poetry
 
       - name: Check version
+        if: github.event_name == 'release'
         run: |
           version=$(poetry version | awk '{print $2}')
           tag=$(echo "${{ github.ref }}" | awk '{split($0,p,"/"); print p[3]}')
