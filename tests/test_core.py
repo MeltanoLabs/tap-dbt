@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import re
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import pytest
 import responses
@@ -12,6 +12,9 @@ from singer_sdk.testing import get_standard_tap_tests
 
 from tap_dbt.tap import TapDBT
 
+if TYPE_CHECKING:
+    from faker import Faker
+
 SAMPLE_CONFIG: dict[str, Any] = {
     "api_key": "abc123",
     "account_ids": ["1000"],
@@ -19,13 +22,7 @@ SAMPLE_CONFIG: dict[str, Any] = {
 
 
 @pytest.fixture()
-def fake() -> Faker:
-    """Return a Faker instance."""
-    return Faker()
-
-
-@pytest.fixture()
-def accounts_response(fake: Faker):
+def accounts_response(faker: Faker):
     """Return a sample response for the accounts stream."""
     return {
         "status": {
@@ -35,7 +32,7 @@ def accounts_response(fake: Faker):
         "data": [
             {
                 "id": 1000,
-                "name": fake.company(),
+                "name": faker.company(),
             },
         ],
         "extra": {
@@ -84,7 +81,7 @@ def projects_response():
 
 
 @pytest.fixture()
-def jobs_response(fake: Faker):
+def jobs_response(faker: Faker):
     """Return a sample response for the jobs stream."""
     return {
         "status": {
@@ -110,13 +107,13 @@ def jobs_response(fake: Faker):
                 "project_id": 1000 + i % 3,
                 "environment_id": 1000,
                 "dbt_version": "1.4.0",
-                "name": fake.bs(),
+                "name": faker.bs(),
                 "execute_steps": [
                     "dbt deps",
                     "dbt seed",
                     "dbt run",
                 ],
-                "state": fake.random_element([1, 2]),
+                "state": faker.random_element([1, 2]),
                 "triggers": {
                     "github_webhook": True,
                     "schedule": False,
@@ -127,7 +124,7 @@ def jobs_response(fake: Faker):
                 },
                 "schedule": {
                     "date": {
-                        "type": fake.random_element(
+                        "type": faker.random_element(
                             [
                                 "every_day",
                                 "days_of_week",
@@ -136,7 +133,7 @@ def jobs_response(fake: Faker):
                         ),
                     },
                     "time": {
-                        "type": fake.random_element(
+                        "type": faker.random_element(
                             [
                                 "every_hour",
                                 "at_exact_hours",
