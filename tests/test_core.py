@@ -7,7 +7,6 @@ from typing import TYPE_CHECKING, Any
 
 import pytest
 import responses
-from faker import Faker
 from singer_sdk.testing import get_standard_tap_tests
 
 from tap_dbt.tap import TapDBT
