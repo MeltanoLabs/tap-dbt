@@ -4,13 +4,7 @@ from typing import List
 
 from singer_sdk import Stream, Tap
 from singer_sdk.helpers._classproperty import classproperty
-from singer_sdk.typing import (
-    ArrayType,
-    IntegerType,
-    PropertiesList,
-    Property,
-    StringType,
-)
+from singer_sdk.typing import ArrayType, PropertiesList, Property, StringType, IntegerType
 
 from tap_dbt.streams import AccountsStream, JobsStream, ProjectsStream, RunsStream
 
@@ -63,9 +57,8 @@ class TapDBT(Tap):
             Property(
                 "page_size",
                 IntegerType,
-                default=5000,
+                default=100,
                 description="Page size to use in limit= url parameter",
-                required=True,
             ),
         ).to_dict()
 
