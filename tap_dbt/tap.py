@@ -1,6 +1,9 @@
 """dbt tap class."""
 
-from singer_sdk import Stream, Tap
+from singer_sdk import (
+  Stream, 
+  Tap,
+  )
 from singer_sdk.helpers._classproperty import classproperty
 from singer_sdk.typing import (
   ArrayType,
