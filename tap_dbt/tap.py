@@ -1,12 +1,23 @@
 """dbt tap class."""
 
-from typing import List
-
 from singer_sdk import Stream, Tap
 from singer_sdk.helpers._classproperty import classproperty
-from singer_sdk.typing import ArrayType, PropertiesList, Property, StringType, IntegerType
+from singer_sdk.typing import (
+  ArrayType,
+  IntegerType, 
+  PropertiesList,
+  Property,
+  StringType,
+  )
 
-from tap_dbt.streams import AccountsStream, JobsStream, ProjectsStream, RunsStream
+from tap_dbt.streams import (
+  AccountsStream,
+  JobsStream,
+  ProjectsStream,
+  RunsStream,
+  )
+
+from typing import List
 
 TAP_NAME = "tap-dbt"
 STREAM_TYPES = [
