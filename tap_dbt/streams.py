@@ -59,7 +59,10 @@ class AccountBasedStream(DBTStream):
 
     def get_new_paginator(self) -> DbtPaginator:
         """Return a new paginator instance for this stream."""
-        return DbtPaginator(start_value=0, page_size=100)
+        page_size = 100
+        if page_size := self.config.get('page_size'):
+          self.logger.info(f"Page size of {page_size} set from config")
+        return DbtPaginator(start_value=0, page_size=page_size)
 
     def get_url_params(
         self,
@@ -69,10 +72,14 @@ class AccountBasedStream(DBTStream):
         """Return offset as the next page token."""
         params = {}
         _ = context
+        params["limit"] = self.config.get('page_size',100)
 
         # Next page token is an offset
         if next_page_token:
             params["offset"] = next_page_token
+
+        self.logger.info(f"{context=}")
+        self.logger.info(f"{params=}")
 
         return params
 
@@ -108,4 +115,5 @@ class RunsStream(AccountBasedStream):
     name = "runs"
     path = "/accounts/{account_id}/runs"
     openapi_ref = "Run"
-    page_size = 100
+      
+
