@@ -78,8 +78,8 @@ class AccountBasedStream(DBTStream):
         if next_page_token:
             params["offset"] = next_page_token
 
-        self.logger.info(f"{context=}")
-        self.logger.info(f"{params=}")
+        self.logger.debug(f"{context=}")
+        self.logger.debug(f"{params=}")
 
         return params
 
