@@ -6,19 +6,19 @@ from singer_sdk import (
   )
 from singer_sdk.helpers._classproperty import classproperty
 from singer_sdk.typing import (
-  ArrayType,
-  IntegerType, 
-  PropertiesList,
-  Property,
-  StringType,
-  )
+    ArrayType,
+    IntegerType,
+    PropertiesList,
+    Property,
+    StringType,
+)
 
 from tap_dbt.streams import (
-  AccountsStream,
-  JobsStream,
-  ProjectsStream,
-  RunsStream,
-  )
+    AccountsStream,
+    JobsStream,
+    ProjectsStream,
+    RunsStream,
+)
 
 from typing import List
 
