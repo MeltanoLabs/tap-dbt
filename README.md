@@ -58,7 +58,7 @@ tap-dbt --config=config.json
 | `account_ids` | dbt Cloud account IDs                                           | `list(string)` | yes      |                                                  |
 | `user_agent`  | User-Agent to make requests with                                | `string`       | no       | `tap-dbt/0.1.0 Singer Tap for the dbt Cloud API` |
 | `base_url`    | Base URL for the dbt Cloud API                                  | `string`       | no       | `https://cloud.getdbt.com/api/v2`                |
-| `page_size`   | Number of records per API call, sets the `limit=` url parameter | `integer`      | no       | 5000                                             |
+| `page_size`   | Number of records per API call, sets the `limit=` url parameter | `integer`      | no       | 100                                              |
 
 A full list of supported settings and capabilities for this tap is available by running:
 
@@ -121,7 +121,7 @@ plugins:
         - name: page_size
           kind: integer
           label: Page Size
-
+          
 ```
 
 ## Usage
