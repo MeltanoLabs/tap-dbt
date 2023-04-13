@@ -124,7 +124,7 @@ plugins:
         - name: page_size
           kind: integer
           label: Page Size
-          
+
 ```
 
 ## Usage
