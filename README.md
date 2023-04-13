@@ -55,12 +55,13 @@ tap-dbt --config=config.json
 
 ### Inputs
 
-| Field         | Description                      | Type           | Required | Default                                          |
-|---------------|----------------------------------|----------------|----------|--------------------------------------------------|
-| `api_key`     | API key for the dbt Cloud API    | `string`       | yes      |                                                  |
-| `account_ids` | dbt Cloud account IDs            | `list(string)` | yes      |                                                  |
-| `user_agent`  | User-Agent to make requests with | `string`       | no       | `tap-dbt/0.1.0 Singer Tap for the dbt Cloud API` |
-| `base_url`    | Base URL for the dbt Cloud API   | `string`       | no       | `https://cloud.getdbt.com/api/v2`                |
+| Field         | Description                                                     | Type           | Required | Default                                          |
+|---------------|-----------------------------------------------------------------|----------------|----------|--------------------------------------------------|
+| `api_key`     | API key for the dbt Cloud API                                   | `string`       | yes      |                                                  |
+| `account_ids` | dbt Cloud account IDs                                           | `list(string)` | yes      |                                                  |
+| `user_agent`  | User-Agent to make requests with                                | `string`       | no       | `tap-dbt/0.1.0 Singer Tap for the dbt Cloud API` |
+| `base_url`    | Base URL for the dbt Cloud API                                  | `string`       | no       | `https://cloud.getdbt.com/api/v2`                |
+| `page_size`   | Number of records per API call, sets the `limit=` url parameter | `integer`      | no       | 100                                              |
 
 A full list of supported settings and capabilities for this tap is available by running:
 
@@ -75,7 +76,8 @@ tap-dbt --about --format json
   "api_key": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
   "account_ids": ["51341"],
   "user_agent": "tap-dbt/0.1.0 Singer Tap for the dbt Cloud API",
-  "base_url": "https://my-dbt-cloud-api.com"
+  "base_url": "https://my-dbt-cloud-api.com",
+  "page_size": 5000
 }
 ```
 
@@ -86,6 +88,7 @@ TAP_DBT_API_KEY=da39a3ee5e6b4b0d3255bfef95601890afd80709
 TAP_DBT_ACCOUNT_IDS=51341
 TAP_DBT_USER_AGENT='tap-dbt/0.1.0 Singer Tap for the dbt Cloud API'
 TAP_DBT_BASE_URL=https://my-dbt-cloud-api.com"
+TAP_DBT_PAGE_SIZE=5000
 ```
 
 ### Meltano Example
@@ -118,6 +121,10 @@ plugins:
         - name: user_agent
           label: User-Agent
           placeholder: "tap-dbt/0.1.0 Singer Tap for the dbt Cloud API"
+        - name: page_size
+          kind: integer
+          label: Page Size
+          
 ```
 
 ## Usage
