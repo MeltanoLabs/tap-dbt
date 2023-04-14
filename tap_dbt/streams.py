@@ -61,7 +61,7 @@ class AccountBasedStream(DBTStream):
         """Return a new paginator instance for this stream."""
         page_size = self.config.get("page_size", 100)
 
-        self.logger.info("Using page size of %s for the limit url parameter", page_size)
+        self.logger.debug("Using page size of %s for the limit URL parameter", page_size)
 
         return DbtPaginator(start_value=0, page_size=page_size)
 
