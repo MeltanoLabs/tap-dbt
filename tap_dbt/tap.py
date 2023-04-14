@@ -65,6 +65,7 @@ class TapDBT(Tap):
                 IntegerType,
                 default=5000,
                 description="Page size to use in limit= url parameter",
+                required=True,
             ),
         ).to_dict()
 
