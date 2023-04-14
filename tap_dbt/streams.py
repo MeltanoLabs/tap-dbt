@@ -59,7 +59,14 @@ class AccountBasedStream(DBTStream):
 
     def get_new_paginator(self) -> DbtPaginator:
         """Return a new paginator instance for this stream."""
-        return DbtPaginator(start_value=0, page_size=100)
+        page_size = self.config["page_size"]
+
+        self.logger.debug(
+            "Using page size of %s for the limit URL parameter",
+            page_size,
+        )
+
+        return DbtPaginator(start_value=0, page_size=page_size)
 
     def get_url_params(
         self,
@@ -69,10 +76,16 @@ class AccountBasedStream(DBTStream):
         """Return offset as the next page token."""
         params = {}
         _ = context
+        # TODO: Get page size from the pagination object when it's available
+        # in this scope (https://github.com/meltano/sdk/issues/1606)
+        params["limit"] = self.config["page_size"]
 
         # Next page token is an offset
         if next_page_token:
             params["offset"] = next_page_token
+
+        self.logger.debug("context=%s", context)
+        self.logger.debug("params=%s", params)
 
         return params
 
@@ -108,4 +121,3 @@ class RunsStream(AccountBasedStream):
     name = "runs"
     path = "/accounts/{account_id}/runs"
     openapi_ref = "Run"
-    page_size = 100
