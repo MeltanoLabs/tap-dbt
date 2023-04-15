@@ -14,7 +14,7 @@ src_paths = "tap_dbt"
 
 [tool.poetry]
 name = "tap-dbt"
-version = "0.4.0"
+version = "0.5.0"
 description = "Singer tap for dbt, built with the Singer SDK."
 license = "Apache-2.0"
 authors = ["Edgar Ramírez Mondragón <edgarrm358@sample.com>"]
