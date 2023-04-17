@@ -14,7 +14,7 @@ src_paths = "tap_dbt"
 
 [tool.poetry]
 name = "tap-dbt"
-version = "0.5.0"
+version = "0.0.0"
 description = "Singer tap for dbt, built with the Singer SDK."
 license = "Apache-2.0"
 authors = ["Edgar Ramírez Mondragón <edgarrm358@sample.com>"]
@@ -35,6 +35,21 @@ responses = "^0.23.1"
 
 [tool.poetry.scripts]
 tap-dbt = 'tap_dbt.tap:cli'
+
+[tool.poetry-dynamic-versioning]
+enable = true
+format-jinja = """
+    {%- if distance == 0 -%}
+        {{ serialize_pep440(base, stage, revision) }}
+    {%- elif revision is not none -%}
+        {{ serialize_pep440(base, stage, revision + 1, dev=distance, metadata=[commit]) }}
+    {%- else -%}
+        {{ serialize_pep440(bump_version(base), stage, revision, dev=distance, metadata=[commit]) }}
+    {%- endif -%}
+"""
+metadata = true
+style = "pep440"
+vcs = "git"
 
 [tool.ruff]
 ignore = ["ANN101"]
