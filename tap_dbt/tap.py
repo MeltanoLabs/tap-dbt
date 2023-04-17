@@ -12,11 +12,20 @@ from singer_sdk.typing import (
     StringType,
 )
 
-from tap_dbt.streams import AccountsStream, JobsStream, ProjectsStream, RunsStream
+from tap_dbt.streams import (
+  AccountsStream,
+  ConnectionsStream,
+  EnvironmentsStream,
+  JobsStream,
+  ProjectsStream,
+  RunsStream,
+)
 
 TAP_NAME = "tap-dbt"
 STREAM_TYPES = [
     AccountsStream,
+    ConnectionsStream,
+    EnvironmentsStream,
     JobsStream,
     ProjectsStream,
     RunsStream,

@@ -99,6 +99,22 @@ class AccountsStream(DBTStream):
     openapi_ref = "Account"
 
 
+class ConnectionsStream(AccountBasedStream):
+    """A stream for the projects endpoint."""
+
+    name = "connections"
+    path = "/accounts/{account_id}/connections"
+    openapi_ref = "Connection"
+    
+
+class EnvironmentsStream(AccountBasedStream):
+    """A stream for the projects endpoint."""
+
+    name = "environments"
+    path = "/accounts/{account_id}/environments"
+    openapi_ref = "Environment"
+
+
 class JobsStream(AccountBasedStream):
     """A stream for the jobs endpoint."""
 
