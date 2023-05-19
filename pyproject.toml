@@ -1,6 +1,9 @@
 [build-system]
-requires = ["poetry-core==1.6.0", "poetry-dynamic-versioning"]
 build-backend = "poetry_dynamic_versioning.backend"
+requires = [
+  "poetry-core==1.6",
+  "poetry-dynamic-versioning",
+]
 
 [tool.poetry]
 name = "tap-dbt"
