@@ -1,8 +1,6 @@
 [build-system]
-build-backend = "poetry.core.masonry.api"
-requires = [
-  "poetry-core>=1.5",
-]
+requires = ["poetry-core==1.6.0", "poetry-dynamic-versioning"]
+build-backend = "poetry_dynamic_versioning.backend"
 
 [tool.poetry]
 name = "tap-dbt"
