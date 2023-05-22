@@ -76,8 +76,9 @@ class AccountBasedStream(DBTStream):
         """Return offset as the next page token."""
         params = {}
         _ = context
-        # TODO: Get page size from the pagination object when it's available
-        # in this scope (https://github.com/meltano/sdk/issues/1606)
+        # TODO(edgarrmondragon): Get page size from the pagination object when
+        # it's available in this scope
+        # https://github.com/meltano/sdk/issues/1606)
         params["limit"] = self.config["page_size"]
 
         # Next page token is an offset
