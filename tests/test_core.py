@@ -113,14 +113,14 @@ def environments_response(faker: Faker):
                 "account_id": 1,
                 "connection_id": 1,
                 "repository_id": 8,
-                "credentials_id": null,
-                "created_by_id": null,
+                "credentials_id": None,
+                "created_by_id": None,
                 "name": "dev",
-                "use_custom_branch": false,
-                "custom_branch": null,
+                "use_custom_branch": False,
+                "custom_branch": None,
                 "dbt_version": "1.3.0-latest",
                 "raw_dbt_version": "1.3.0-latest",
-                "supports_docs": false,
+                "supports_docs": False,
                 "state": faker.random_element([1, 2]),
                 "updated_at": "2023-02-06T21:49:24.396847+00:00",
             }
@@ -418,9 +418,13 @@ def users_response(faker: Faker):
 @responses.activate
 def test_standard_tap_tests(
     accounts_response: dict,
-    projects_response: dict,
+    connections_response: dict,
+    environments_response: dict,
     jobs_response: dict,
+    projects_response: dict,
+    repositories_response: dict,
     runs_response: dict,
+    users_response: dict,
 ):
     """Run standard tap tests from the SDK."""
     responses.add_passthru(re.compile("https://raw.githubusercontent.com/\\w+"))
@@ -462,7 +466,7 @@ def test_standard_tap_tests(
     responses.add(
         responses.GET,
         "https://cloud.getdbt.com/api/v2/accounts/1000/repositories",
-        json=respositories_response,
+        json=repositories_response,
         status=200,
     )
 
