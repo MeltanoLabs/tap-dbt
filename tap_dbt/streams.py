@@ -145,3 +145,11 @@ class RunsStream(AccountBasedStream):
     name = "runs"
     path = "/accounts/{account_id}/runs"
     openapi_ref = "Run"
+
+
+class UsersStream(AccountBasedStream):
+    """A stream for the users endpoint."""
+
+    name = "users"
+    path = "/accounts/{account_id}/users"
+    openapi_ref = "User"

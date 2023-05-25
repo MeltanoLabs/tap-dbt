@@ -20,6 +20,7 @@ from tap_dbt.streams import (
   ProjectsStream,
   RepositoriesStream,
   RunsStream,
+  UsersStream,
 )
 
 TAP_NAME = "tap-dbt"
@@ -31,6 +32,7 @@ STREAM_TYPES = [
     ProjectsStream,
     RepositoriesStream,
     RunsStream,
+    UsersStream,
 ]
 
 
