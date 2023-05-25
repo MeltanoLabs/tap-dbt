@@ -149,7 +149,6 @@ class RunsStream(AccountBasedStream):
     name = "runs"
     path = "/accounts/{account_id}/runs"
     openapi_ref = "Run"
-    selected_by_default = False
 
 
 class UsersStream(AccountBasedStream):
