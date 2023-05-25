@@ -4,8 +4,8 @@ on:
   pull_request: {}
   push:
     branches: [main]
-    paths:
-      - !README.md
+    paths-ignore:
+      - 'README.md'
 
 jobs:
   test_tap:
