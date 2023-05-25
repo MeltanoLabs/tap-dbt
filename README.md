@@ -32,9 +32,10 @@ pip install tap-dbt
 #### Selected by default
 The following will be extracted by default if no catalog is used:
 
-- [x] Stream: jobs
 - [x] Stream: accounts
+- [x] Stream: jobs
 - [x] Stream: projects
+- [x] Stream: runs
 
 
 #### Configurable
@@ -43,7 +44,6 @@ Can be enabled by setting `selected` in the catalog:
 - [x] Stream: connections
 - [x] Stream: environments
 - [x] Stream: repositories
-- [x] Stream: runs
 - [x] Stream: users
 
 ## Upcoming features
