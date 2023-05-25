@@ -28,10 +28,25 @@ pip install tap-dbt
 
 ## Features
 
+### Streams
+#### Selected by default
+The following will be extracted if no catalog is used:
+
+- [x] Stream: jobs
 - [x] Stream: accounts
 - [x] Stream: projects
-- [x] Stream: jobs
+
+
+#### Configurable
+Can be enabled by setting `selected` in the catalog:
+
+- [x] Stream: connections
+- [x] Stream: environments
+- [x] Stream: repositories
 - [x] Stream: runs
+- [x] Stream: users
+
+## Upcoming features
 - [ ] Incremental streams
 
 ## Configuration
