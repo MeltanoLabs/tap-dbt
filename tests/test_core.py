@@ -48,6 +48,7 @@ def accounts_response(faker: Faker):
         },
     }
 
+
 @pytest.fixture()
 def connections_response(faker: Faker):
     """Return a sample response for the connections stream."""
@@ -84,8 +85,9 @@ def connections_response(faker: Faker):
                 "role": faker.bs(),
                 "allow_sso": True,
             },
-        ]
+        ],
     }
+
 
 @pytest.fixture()
 def environments_response(faker: Faker):
@@ -124,8 +126,9 @@ def environments_response(faker: Faker):
                 "state": faker.random_element([1, 2]),
                 "updated_at": "2023-02-06T21:49:24.396847+00:00",
             },
-        ]
+        ],
     }
+
 
 @pytest.fixture()
 def jobs_response(faker: Faker):
@@ -193,6 +196,7 @@ def jobs_response(faker: Faker):
         ],
     }
 
+
 @pytest.fixture()
 def projects_response():
     """Return a sample response for the projects stream."""
@@ -221,6 +225,7 @@ def projects_response():
             },
         },
     }
+
 
 @pytest.fixture()
 def repositories_response(faker: Faker):
@@ -259,6 +264,7 @@ def repositories_response(faker: Faker):
         ],
     }
 
+
 @pytest.fixture()
 def runs_response():
     """Return a sample response for the runs stream."""
@@ -289,6 +295,7 @@ def runs_response():
             for i in range(10)
         ],
     }
+
 
 @pytest.fixture()
 def users_response(faker: Faker):
@@ -357,7 +364,7 @@ def users_response(faker: Faker):
                                 "sso_mapping_groups": [],
                                 "created_at": "2021-02-24 16:29:13.116664+00:00",
                                 "updated_at": "2021-02-24 16:29:13.116676+00:00",
-                                "group_permissions": []
+                                "group_permissions": [],
                             },
                             {
                                 "account_id": 1000,
@@ -372,16 +379,16 @@ def users_response(faker: Faker):
                                 "updated_at": "2022-05-05 05:17:48.090351+00:00",
                                 "group_permissions": [
                                     {
-                                    "account_id": 1,
-                                    "group_id": 13,
-                                    "project_id": None,
-                                    "all_projects": True,
-                                    "permission_set": faker.bs(),
-                                    "permission_level": None,
-                                    "id": 13,
-                                    "state": 1,
-                                    "created_at": "2021-10-19 21:15:13.668908+00:00",
-                                    "updated_at": "2022-05-05 05:17:48.273425+00:00",
+                                        "account_id": 1,
+                                        "group_id": 13,
+                                        "project_id": None,
+                                        "all_projects": True,
+                                        "permission_set": faker.bs(),
+                                        "permission_level": None,
+                                        "id": 13,
+                                        "state": 1,
+                                        "created_at": "2021-10-19 21:15:13.668908+00:00",
+                                        "updated_at": "2022-05-05 05:17:48.273425+00:00",
                                     },
                                 ],
                             },
@@ -413,6 +420,7 @@ def users_response(faker: Faker):
             },
         ],
     }
+
 
 @responses.activate
 def test_standard_tap_tests(

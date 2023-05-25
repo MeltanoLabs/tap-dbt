@@ -106,7 +106,7 @@ class ConnectionsStream(AccountBasedStream):
     name = "connections"
     path = "/accounts/{account_id}/connections"
     openapi_ref = "Connection"
-    
+
 
 class EnvironmentsStream(AccountBasedStream):
     """A stream for the projects endpoint."""
