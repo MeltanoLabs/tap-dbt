@@ -30,7 +30,7 @@ pip install tap-dbt
 
 ### Streams
 #### Selected by default
-The following will be extracted if no catalog is used:
+The following will be extracted by default if no catalog is used:
 
 - [x] Stream: jobs
 - [x] Stream: accounts
