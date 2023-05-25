@@ -82,8 +82,8 @@ def connections_response(faker: Faker):
                 "database": faker.bs(),
                 "warehouse": faker.bs(),
                 "role": faker.bs(),
-                "allow_sso": True
-            }
+                "allow_sso": True,
+            },
         ]
     }
 
@@ -123,7 +123,7 @@ def environments_response(faker: Faker):
                 "supports_docs": False,
                 "state": faker.random_element([1, 2]),
                 "updated_at": "2023-02-06T21:49:24.396847+00:00",
-            }
+            },
         ]
     }
 
@@ -255,8 +255,8 @@ def repositories_response(faker: Faker):
                 "created_at": "2021-05-24T22:17:33.679057+00:00",
                 "updated_at": "2021-05-27T23:47:06.143161+00:00",
                 "state": faker.random_element([1, 2]),
-            }
-        ]
+            },
+        ],
     }
 
 @pytest.fixture()
@@ -334,10 +334,9 @@ def users_response(faker: Faker):
                 "auth_provider_infos": {
                     "sso-azure": {
                         "domain": faker.domain_name(),
-                        "groups": [
-                        ],
-                        "auth_provider_type": "azure_single_tenant"
-                    }
+                        "groups": [],
+                        "auth_provider_type": "azure_single_tenant",
+                    },
                 },
                 "permissions": [
                     {
@@ -367,34 +366,34 @@ def users_response(faker: Faker):
                                 "state": 1,
                                 "assign_by_default": False,
                                 "sso_mapping_groups": [
-                                    faker.bs()
+                                    faker.bs(),
                                 ],
                                 "created_at": "2021-10-19 21:15:13.346836+00:00",
                                 "updated_at": "2022-05-05 05:17:48.090351+00:00",
                                 "group_permissions": [
                                     {
-                                        "account_id": 1,
-                                        "group_id": 13,
-                                        "project_id": None,
-                                        "all_projects": True,
-                                        "permission_set": faker.bs(),
-                                        "permission_level": None,
-                                        "id": 13,
-                                        "state": 1,
-                                        "created_at": "2021-10-19 21:15:13.668908+00:00",
-                                        "updated_at": "2022-05-05 05:17:48.273425+00:00"
-                                    }
-                                ]
-                            }
+                                    "account_id": 1,
+                                    "group_id": 13,
+                                    "project_id": None,
+                                    "all_projects": True,
+                                    "permission_set": faker.bs(),
+                                    "permission_level": None,
+                                    "id": 13,
+                                    "state": 1,
+                                    "created_at": "2021-10-19 21:15:13.668908+00:00",
+                                    "updated_at": "2022-05-05 05:17:48.273425+00:00",
+                                    },
+                                ],
+                            },
                         ],
                         "permission_statements": [
                             {
                                 "permission": "custom_environment_variables_write",
                                 "target_resource": None,
-                                "all_resources": True
-                            }
-                        ]
-                    }
+                                "all_resources": True,
+                            },
+                        ],
+                    },
                 ],
                 "licenses": {
                     "1": {
@@ -404,15 +403,15 @@ def users_response(faker: Faker):
                         "account_id": 1000,
                         "state": faker.random_element([1, 2]),
                         "created_at": "2021-02-25T22:49:00.276363Z",
-                        "updated_at": "2023-05-24T20:11:21.511698Z"
-                    }
+                        "updated_at": "2023-05-24T20:11:21.511698Z",
+                    },
                 },
                 "gitlab_token_retrieval_failure": False,
                 "avatar_url": None,
                 "fullname": faker.name(),
-                "show_existing_user_email_verification": False
-            }
-        ]
+                "show_existing_user_email_verification": False,
+            },
+        ],
     }
 
 @responses.activate
