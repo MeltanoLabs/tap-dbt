@@ -131,6 +131,14 @@ class ProjectsStream(AccountBasedStream):
     openapi_ref = "Project"
 
 
+class RepositoriesStream(AccountBasedStream):
+    """A stream for the repositories endpoint."""
+
+    name = "repositories"
+    path = "/accounts/{account_id}/repositories"
+    openapi_ref = "Repository"
+
+
 class RunsStream(AccountBasedStream):
     """A stream for the runs endpoint."""
 

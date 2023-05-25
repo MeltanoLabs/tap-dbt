@@ -18,6 +18,7 @@ from tap_dbt.streams import (
   EnvironmentsStream,
   JobsStream,
   ProjectsStream,
+  RepositoriesStream,
   RunsStream,
 )
 
@@ -28,6 +29,7 @@ STREAM_TYPES = [
     EnvironmentsStream,
     JobsStream,
     ProjectsStream,
+    RepositoriesStream,
     RunsStream,
 ]
 
