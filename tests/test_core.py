@@ -19,6 +19,7 @@ SAMPLE_CONFIG: dict[str, Any] = {
     "account_ids": ["1000"],
 }
 
+
 def fake_date(faker: Faker):
     """Generate a fake date for datetime stream values."""
     return faker.date_time().strftime("%Y-%m-%d %H:%M:%S")
