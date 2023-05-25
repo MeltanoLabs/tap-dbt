@@ -19,6 +19,8 @@ SAMPLE_CONFIG: dict[str, Any] = {
     "account_ids": ["1000"],
 }
 
+def fake_date(faker: Faker):
+    return faker.date_time().strftime("%Y-%m-%d %H:%M:%S")
 
 @pytest.fixture()
 def accounts_response(faker: Faker):
@@ -124,7 +126,7 @@ def environments_response(faker: Faker):
                 "raw_dbt_version": "1.3.0-latest",
                 "supports_docs": False,
                 "state": faker.random_element([1, 2]),
-                "updated_at": "2023-02-06T21:49:24.396847+00:00",
+                "updated_at": fake_date(faker),
             },
         ],
     }
@@ -257,8 +259,8 @@ def repositories_response(faker: Faker):
                 "deploy_key_id": 1,
                 "github_installation_id": 1,
                 "pull_request_url_template": faker.url(),
-                "created_at": "2021-05-24T22:17:33.679057+00:00",
-                "updated_at": "2021-05-27T23:47:06.143161+00:00",
+                "created_at": fake_date(faker),
+                "updated_at": fake_date(faker),
                 "state": faker.random_element([1, 2]),
             },
         ],
@@ -322,8 +324,8 @@ def users_response(faker: Faker):
                 "id": 3,
                 "first_name": faker.first_name(),
                 "last_name": faker.last_name(),
-                "created_at": "2021-02-25T22:49:00.244461+00:00",
-                "last_login": "2023-05-24T20:11:21.637217+00:00",
+                "created_at": fake_date(faker),
+                "last_login": fake_date(faker),
                 "is_staff": False,
                 "is_active": True,
                 "email": faker.email(),
@@ -352,8 +354,8 @@ def users_response(faker: Faker):
                         "user_id": 3,
                         "account_id": 1000,
                         "state": faker.random_element([1, 2]),
-                        "created_at": "2021-02-25T22:49:00.276363+00:00",
-                        "updated_at": "2023-05-24T20:11:21.511698+00:00",
+                        "created_at": fake_date(faker),
+                        "updated_at": fake_date(faker),
                         "groups": [
                             {
                                 "account_id": 1,
@@ -362,8 +364,8 @@ def users_response(faker: Faker):
                                 "state": 1,
                                 "assign_by_default": True,
                                 "sso_mapping_groups": [],
-                                "created_at": "2021-02-24 16:29:13.116664+00:00",
-                                "updated_at": "2021-02-24 16:29:13.116676+00:00",
+                                "created_at": fake_date(faker),
+                                "updated_at": fake_date(faker),
                                 "group_permissions": [],
                             },
                             {
@@ -375,8 +377,8 @@ def users_response(faker: Faker):
                                 "sso_mapping_groups": [
                                     faker.bs(),
                                 ],
-                                "created_at": "2021-10-19 21:15:13.346836+00:00",
-                                "updated_at": "2022-05-05 05:17:48.090351+00:00",
+                                "created_at": fake_date(faker),
+                                "updated_at": fake_date(faker),
                                 "group_permissions": [
                                     {
                                         "account_id": 1,
@@ -387,15 +389,15 @@ def users_response(faker: Faker):
                                         "permission_level": None,
                                         "id": 13,
                                         "state": 1,
-                                        "created_at": "2021-10-19 21:15:13.668908+00:00",
-                                        "updated_at": "2022-05-05 05:17:48.273425+00:00",
+                                        "created_at": fake_date(faker),
+                                        "updated_at": fake_date(faker),
                                     },
                                 ],
                             },
                         ],
                         "permission_statements": [
                             {
-                                "permission": "custom_environment_variables_write",
+                                "permission": "custom",
                                 "target_resource": None,
                                 "all_resources": True,
                             },
@@ -409,8 +411,8 @@ def users_response(faker: Faker):
                         "user_id": 3,
                         "account_id": 1000,
                         "state": faker.random_element([1, 2]),
-                        "created_at": "2021-02-25T22:49:00.276363Z",
-                        "updated_at": "2023-05-24T20:11:21.511698Z",
+                        "created_at": fake_date(faker),
+                        "updated_at": fake_date(faker),
                     },
                 },
                 "gitlab_token_retrieval_failure": False,
