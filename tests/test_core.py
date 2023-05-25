@@ -20,7 +20,9 @@ SAMPLE_CONFIG: dict[str, Any] = {
 }
 
 def fake_date(faker: Faker):
+    """Generate a fake date for datetime stream values."""
     return faker.date_time().strftime("%Y-%m-%d %H:%M:%S")
+
 
 @pytest.fixture()
 def accounts_response(faker: Faker):
