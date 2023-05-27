@@ -112,13 +112,6 @@ class AccountBasedIncrementalStream(AccountBasedStream):
             One item per (possibly processed) record in the API.
         """
         starting_replication_key_value = self.get_starting_timestamp(context)
-        if starting_replication_key_value is None:
-          for record in self.request_records(context):
-              transformed_record = self.post_process(record, context)
-              if transformed_record is None:
-                  # Record filtered out during post_process()
-                  continue
-              yield transformed_record
 
         for record in self.request_records(context):
             transformed_record = self.post_process(record, context)
