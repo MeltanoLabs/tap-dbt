@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import typing as t
+from typing import cast
+import pendulum
 from pathlib import Path
 
 from singer_sdk.pagination import BaseOffsetPaginator
@@ -98,6 +100,7 @@ class AccountsStream(DBTStream):
     path = "/accounts"
     schema_filepath = SCHEMAS_DIR / "accounts.json"
     openapi_ref = "Account"
+    selected_by_default = False
 
 
 class ConnectionsStream(AccountBasedStream):
@@ -124,11 +127,13 @@ class JobsStream(AccountBasedStream):
     name = "jobs"
     path = "/accounts/{account_id}/jobs"
     openapi_ref = "Job"
+    selected_by_default = False
 
 
 class ProjectsStream(AccountBasedStream):
     """A stream for the projects endpoint."""
 
+    selected_by_default = False
     name = "projects"
     path = "/accounts/{account_id}/projects"
     openapi_ref = "Project"
@@ -146,9 +151,54 @@ class RepositoriesStream(AccountBasedStream):
 class RunsStream(AccountBasedStream):
     """A stream for the runs endpoint."""
 
+    selected_by_default = False
     name = "runs"
-    path = "/accounts/{account_id}/runs"
+    # Reverse the order of the API query for runs only to enable get_records to stop
+    # when updated_at value is less than bookmark
+    path = "/accounts/{account_id}/runs/?order_by=-id"
     openapi_ref = "Run"
+    replication_key = "updated_at"
+    
+    def get_records(self, context: dict | None) -> Iterable[dict[str, Any]]:
+        """Return a generator of record-type dictionary objects.
+
+        Each record emitted should be a dictionary of property names to their values.
+
+        Args:
+            context: Stream partition or context dictionary.
+
+        Yields:
+            One item per (possibly processed) record in the API.
+        """
+        starting_replication_key_value = self.get_starting_timestamp(context)
+        if starting_replication_key_value is None:
+            # TODO: Replace this with the regular records functionality
+            raise ValueError(  # noqa: TRY003
+                "No starting replication key value found.",
+            )
+        starting_replication_key_value = pendulum.instance(
+            starting_replication_key_value,
+        )
+
+        for record in self.request_records(context):
+            transformed_record = self.post_process(record, context)
+            if transformed_record is None:
+                # Record filtered out during post_process()
+                continue
+            record_last_received_datetime: pendulum.DateTime = cast(
+                pendulum.DateTime,
+                pendulum.parse(record[self.replication_key]),
+            )
+            # Runs are returned in descending id order, so we can stop
+            # There's no filtering parameter just this applied ordering
+            if record_last_received_datetime < starting_replication_key_value:
+                self.logger.info(
+                    "Breaking after hitting a record with replication key %s < %s",
+                    record_last_received_datetime,
+                    starting_replication_key_value,
+                )
+                break
+            yield transformed_record
 
 
 class UsersStream(AccountBasedStream):
