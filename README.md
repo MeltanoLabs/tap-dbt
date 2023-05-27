@@ -51,25 +51,7 @@ Can be enabled by setting `selected` in the catalog:
 
 ### Incremental Run Stream
 
-The run endpoint represents job runs in dbt Cloud returning a single row for each run of a job. Each new run generates a new id value, incremented from the previous maximum ID.
-
-The run endpoint results can be ordered by the following values in ascending or descending order:
-
-- id 
-- created_at
-- finished_at
-
-Sorting by `id` or `created_at` should yield the same results, as the `id` values are generated incrementally, for example:
-
-```
-id    created_at
-----------------
-1     2023-05-28 10:00:00
-2     2023-05-28 10:01:32
-3     2023-05-28 10:04:45
-```
-
-However `finished_at` is not populated until the job has finished. Ordering by `-finished_at`, i.e. descending Run Finished Datetime, yields:
+Ordering the query from the Runs endpoint by `-finished_at`, i.e. descending Run Finished Datetime, yields:
 
 |id|finished_at|updated_at|created_at|
 |---|---|---|---|
