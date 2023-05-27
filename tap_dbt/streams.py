@@ -109,7 +109,7 @@ class AccountBasedIncrementalStream(AccountBasedStream):
         params = super().get_url_params(context, next_page_token)
 
         if self.get_starting_timestamp(context):
-          params["order_by"] = "-id"
+          params["order_by"] = "-"+self.replication_key
 
         return params
     
@@ -136,20 +136,24 @@ class AccountBasedIncrementalStream(AccountBasedStream):
                 yield transformed_record
                 
             else: # INCREMENTAL
-                record_last_received_datetime: pendulum.DateTime = cast(
-                    pendulum.DateTime,
-                    pendulum.parse(record[self.replication_key]),
-                )
-                # Runs are returned in descending id order, so we can stop
-                # There's no filtering parameter just this applied ordering
-                if record_last_received_datetime < starting_replication_key_value:
-                    self.logger.info(
-                        "Breaking after hitting a record with replication key %s < %s",
-                        record_last_received_datetime,
-                        starting_replication_key_value,
+                # If the record is not populated yet, then include it
+                if not record[self.replication_key]:
+                    yield transformed_record
+                # When the first value lower than the bookmark is found, stop
+                else:
+                    record_last_received_datetime: pendulum.DateTime = cast(
+                        pendulum.DateTime,
+                        pendulum.parse(record[self.replication_key]),
                     )
-                    break
-                yield transformed_record
+                    
+                    if record_last_received_datetime < starting_replication_key_value:
+                        self.logger.info(
+                            "Breaking after hitting a record with replication key %s < %s",
+                            record_last_received_datetime,
+                            starting_replication_key_value,
+                        )
+                        break
+                    yield transformed_record
 
 
 class AccountsStream(DBTStream):
@@ -210,7 +214,7 @@ class RunsStream(AccountBasedIncrementalStream):
     name = "runs"
     path = "/accounts/{account_id}/runs"
     openapi_ref = "Run"
-    replication_key = "updated_at"
+    replication_key = "finished_at"
 
 
 class UsersStream(AccountBasedStream):
