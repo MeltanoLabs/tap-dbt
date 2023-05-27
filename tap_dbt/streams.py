@@ -93,12 +93,25 @@ class AccountBasedStream(DBTStream):
         return params
 
 class AccountBasedIncrementalStream(AccountBasedStream):
-    """A stream that requires an account ID and is synced incrementally.
+    """A stream that requires an account ID and can be synced incrementally
+    by a datetime field.
     
     Requires a reverse sorted response such that syncing stops once the 
     replication_key value is less than the bookmark
     
     """
+    def get_url_params(
+        self,
+        context: dict,
+        next_page_token: int,
+    ) -> dict:
+        """Reverse-sort the list by id if performing INCREMENTAL sync."""
+        params = super().get_url_params(context, next_page_token)
+
+        if self.get_starting_timestamp(context):
+          params["order_by"] = "-id"
+
+        return params
     
     def get_records(self, context: dict | None) -> Iterable[dict[str, Any]]:
         """Return a generator of record-type dictionary objects.
@@ -195,10 +208,7 @@ class RunsStream(AccountBasedIncrementalStream):
     """A stream for the runs endpoint."""
 
     name = "runs"
-    # Reverse the order of the API query for runs only to enable get_records to stop
-    # when updated_at value is less than bookmark
-    # TODO - only order by reverse ID if INCREMENTAL otherwise do normal
-    path = "/accounts/{account_id}/runs/?order_by=-id"
+    path = "/accounts/{account_id}/runs"
     openapi_ref = "Run"
     replication_key = "updated_at"
 
