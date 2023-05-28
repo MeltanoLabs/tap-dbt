@@ -109,7 +109,7 @@ class AccountBasedIncrementalStream(AccountBasedStream):
         params = super().get_url_params(context, next_page_token)
 
         if self.get_starting_timestamp(context):
-          params["order_by"] = "-"+self.replication_key
+          params["order_by"] = "-{}".format(self.replication_key)
 
         return params
     

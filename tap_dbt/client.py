@@ -33,7 +33,6 @@ class DBTStream(RESTStream):
     """dbt stream class."""
 
     primary_keys = ["id"]
-    replication_key = None
     records_jsonpath = "$.data[*]"
 
     @property
