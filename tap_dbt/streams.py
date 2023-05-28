@@ -2,12 +2,11 @@
 
 from __future__ import annotations
 
-import pendulum
 import typing as t
-
 from pathlib import Path
 from typing import cast
 
+import pendulum
 from singer_sdk.pagination import BaseOffsetPaginator
 
 from tap_dbt.client import DBTStream
@@ -109,7 +108,8 @@ class AccountBasedIncrementalStream(AccountBasedStream):
         params = super().get_url_params(context, next_page_token)
 
         if self.get_starting_timestamp(context):
-          params["order_by"] = "-{}".format(self.replication_key)
+            # Precede replication key with minus to reverse sort
+            params["order_by"] = f"-{self.replication_key}"
 
         return params
     
