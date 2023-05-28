@@ -92,13 +92,15 @@ class AccountBasedStream(DBTStream):
 
         return params
 
+
 class AccountBasedIncrementalStream(AccountBasedStream):
     """Account stream that can be synced incrementally by a datetime field.
-    
-    Requires a reverse sorted response such that syncing stops once the 
+
+    Requires a reverse sorted response such that syncing stops once the
     replication_key value is less than the bookmark
-    
+
     """
+
     def get_url_params(
         self,
         context: dict,
@@ -112,7 +114,7 @@ class AccountBasedIncrementalStream(AccountBasedStream):
             params["order_by"] = f"-{self.replication_key}"
 
         return params
-    
+
     def get_records(self, context: dict | None) -> t.Iterable[dict[str, t.Any]]:
         """Return a generator of record-type dictionary objects.
 
@@ -131,21 +133,20 @@ class AccountBasedIncrementalStream(AccountBasedStream):
             if transformed_record is None:
                 # Record filtered out during post_process()
                 continue
-            
-            if ( 
-                    starting_replication_key_value is None
-                    or
-                    record[self.replication_key] is None
-                    ): # FULL_TABLE
+
+            if (
+                starting_replication_key_value is None
+                or record[self.replication_key] is None
+            ):  # FULL_TABLE
                 yield transformed_record
-                
+
             # When the first value lower than the bookmark is found, stop
             else:
                 record_last_received_datetime: pendulum.DateTime = cast(
                     pendulum.DateTime,
                     pendulum.parse(record[self.replication_key]),
                 )
-                
+
                 if record_last_received_datetime < starting_replication_key_value:
                     self.logger.info(
                         "Breaking after hitting a record with replication key %s < %s",
