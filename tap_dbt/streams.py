@@ -2,10 +2,11 @@
 
 from __future__ import annotations
 
-import typing as t
-from typing import cast
 import pendulum
+import typing as t
+
 from pathlib import Path
+from typing import cast
 
 from singer_sdk.pagination import BaseOffsetPaginator
 
@@ -93,8 +94,7 @@ class AccountBasedStream(DBTStream):
         return params
 
 class AccountBasedIncrementalStream(AccountBasedStream):
-    """A stream that requires an account ID and can be synced incrementally
-    by a datetime field.
+    """Account stream that can be synced incrementally by a datetime field.
     
     Requires a reverse sorted response such that syncing stops once the 
     replication_key value is less than the bookmark
@@ -113,7 +113,7 @@ class AccountBasedIncrementalStream(AccountBasedStream):
 
         return params
     
-    def get_records(self, context: dict | None) -> Iterable[dict[str, Any]]:
+    def get_records(self, context: dict | None):
         """Return a generator of record-type dictionary objects.
 
         Each record emitted should be a dictionary of property names to their values.
@@ -132,28 +132,29 @@ class AccountBasedIncrementalStream(AccountBasedStream):
                 # Record filtered out during post_process()
                 continue
             
-            if starting_replication_key_value is None: # FULL_TABLE
+            if ( 
+                    starting_replication_key_value is None
+                    or
+                    record[self.replication_key] is None
+                    ): # FULL_TABLE
                 yield transformed_record
                 
-            else: # INCREMENTAL
-                # If the record is not populated yet, then include it
-                if not record[self.replication_key]:
-                    yield transformed_record
-                # When the first value lower than the bookmark is found, stop
-                else:
-                    record_last_received_datetime: pendulum.DateTime = cast(
-                        pendulum.DateTime,
-                        pendulum.parse(record[self.replication_key]),
+            # When the first value lower than the bookmark is found, stop
+            else:
+                record_last_received_datetime: pendulum.DateTime = cast(
+                    pendulum.DateTime,
+                    pendulum.parse(record[self.replication_key]),
+                )
+                
+                if record_last_received_datetime < starting_replication_key_value:
+                    self.logger.info(
+                        "Breaking after hitting a record with replication key %s < %s",
+                        record_last_received_datetime,
+                        starting_replication_key_value,
                     )
-                    
-                    if record_last_received_datetime < starting_replication_key_value:
-                        self.logger.info(
-                            "Breaking after hitting a record with replication key %s < %s",
-                            record_last_received_datetime,
-                            starting_replication_key_value,
-                        )
-                        break
-                    yield transformed_record
+                    break
+
+                yield transformed_record
 
 
 class AccountsStream(DBTStream):
