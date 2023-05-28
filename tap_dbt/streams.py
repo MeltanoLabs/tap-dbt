@@ -113,7 +113,7 @@ class AccountBasedIncrementalStream(AccountBasedStream):
 
         return params
     
-    def get_records(self, context: dict | None):
+    def get_records(self, context: dict | None) -> t.Iterable[dict[str, t.Any]]:
         """Return a generator of record-type dictionary objects.
 
         Each record emitted should be a dictionary of property names to their values.
