@@ -28,10 +28,28 @@ pip install tap-dbt
 
 ## Features
 
+### Streams
+
+Full stream metadata is available in the dbt Labs repository: [openapi_schema]
+
+#### Selected by default
+The following will be extracted by default if no catalog is used:
+
 - [x] Stream: accounts
-- [x] Stream: projects
 - [x] Stream: jobs
+- [x] Stream: projects
 - [x] Stream: runs
+
+
+#### Configurable
+Can be enabled by setting `selected` in the catalog:
+
+- [x] Stream: connections
+- [x] Stream: environments
+- [x] Stream: repositories
+- [x] Stream: users
+
+## Upcoming features
 - [ ] Incremental streams
 
 ## Configuration
@@ -146,3 +164,4 @@ meltano elt tap-dbt target-snowflake --job_id dbt_snowflake
 [sdk]: https://gitlab.com/meltano/singer-sdk
 [apidocs]: https://docs.getdbt.com/dbt-cloud/api#section/Authentication
 [meltano]: https://www.meltano.com
+[openapi_schema]: https://github.com/dbt-labs/dbt-cloud-openapi-spec/blob/master/openapi-v3.yaml

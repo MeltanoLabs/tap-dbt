@@ -106,6 +106,7 @@ class ConnectionsStream(AccountBasedStream):
     name = "connections"
     path = "/accounts/{account_id}/connections"
     openapi_ref = "Connection"
+    selected_by_default = False
 
 
 class EnvironmentsStream(AccountBasedStream):
@@ -114,6 +115,7 @@ class EnvironmentsStream(AccountBasedStream):
     name = "environments"
     path = "/accounts/{account_id}/environments"
     openapi_ref = "Environment"
+    selected_by_default = False
 
 
 class JobsStream(AccountBasedStream):
@@ -138,6 +140,7 @@ class RepositoriesStream(AccountBasedStream):
     name = "repositories"
     path = "/accounts/{account_id}/repositories"
     openapi_ref = "Repository"
+    selected_by_default = False
 
 
 class RunsStream(AccountBasedStream):
@@ -154,3 +157,4 @@ class UsersStream(AccountBasedStream):
     name = "users"
     path = "/accounts/{account_id}/users"
     openapi_ref = "User"
+    selected_by_default = False
