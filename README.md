@@ -49,6 +49,7 @@ Can be enabled by setting `selected` in the catalog:
 - [x] Stream: repositories
 - [x] Stream: users
 
+
 ### Incremental Run Stream
 
 Ordering the query from the Runs endpoint by `-finished_at`, i.e. descending Run Finished Datetime, yields:
@@ -71,6 +72,7 @@ The incremental sync has been set up so that it works on `replication_key = "fin
 - If the bookmark is set, the stream is queried in reverse `finished_at` order.
 - If the `finished_at` value is not set, the run is assumed to still be running so the record is included, plus the sort order implies that there should be records with populated `finished_at` appearing later in the stream - *Repeated sync operation will yield the same records if the dbt Job Run is still underway, however this adheres to the 'at least once' delivery promise - https://sdk.meltano.com/en/latest/implementation/at_least_once.html*
 - Once the sync operation reaches records with populated `finished_at`, the values are compared with the bookmark and once the `finished_at` value becomes less than the bookmark the stream finishes syncing.
+
 
 ## Configuration
 
