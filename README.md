@@ -49,8 +49,30 @@ Can be enabled by setting `selected` in the catalog:
 - [x] Stream: repositories
 - [x] Stream: users
 
-## Upcoming features
-- [ ] Incremental streams
+
+### Incremental Run Stream
+
+Ordering the query from the Runs endpoint by `-finished_at`, i.e. descending Run Finished Datetime, yields:
+
+|id|finished_at|updated_at|created_at|
+|---|---|---|---|
+|314516|None|2023-05-27 21:05:16.109548+00:00|2023-05-27 21:05:05.664170+00:00|
+|314514|None|2023-05-27 21:00:16.847296+00:00|2023-05-27 21:00:05.458908+00:00|
+|314513|None|2023-05-27 21:00:16.355680+00:00|2023-05-27 21:00:05.427258+00:00|
+|314517|None|2023-05-27 21:05:17.094309+00:00|2023-05-27 21:05:05.696222+00:00|
+|314515|2023-05-27 21:01:28.568431+00:00|2023-05-27 21:01:29.269048+00:00|2023-05-27 21:00:05.488543+00:00|
+|314512|2023-05-27 20:48:59.342035+00:00|2023-05-27 20:48:59.844412+00:00|2023-05-27 20:45:04.509746+00:00|
+|314511|2023-05-27 20:48:46.571106+00:00|2023-05-27 20:48:47.079130+00:00|2023-05-27 20:40:04.257950+00:00|
+|314505|2023-05-27 20:41:35.591976+00:00|2023-05-27 20:41:36.305364+00:00|2023-05-27 20:15:02.808079+00:00|
+|314510|2023-05-27 20:39:27.162437+00:00|2023-05-27 20:39:28.628257+00:00|2023-05-27 20:35:03.939439+00:00|
+|314509|2023-05-27 20:37:39.965974+00:00|2023-05-27 20:37:40.496212+00:00|2023-05-27 20:30:03.802620+00:00|
+
+The incremental sync has been set up so that it works on `replication_key = "finished_at"`, when an INCREMENTAL sync is run:
+
+- If the bookmark is set, the stream is queried in reverse `finished_at` order.
+- If the `finished_at` value is not set, the run is assumed to still be running so the record is included, plus the sort order implies that there should be records with populated `finished_at` appearing later in the stream - *Repeated sync operation will yield the same records if the dbt Job Run is still underway, however this adheres to the 'at least once' delivery promise - https://sdk.meltano.com/en/latest/implementation/at_least_once.html*
+- Once the sync operation reaches records with populated `finished_at`, the values are compared with the bookmark and once the `finished_at` value becomes less than the bookmark the stream finishes syncing.
+
 
 ## Configuration
 

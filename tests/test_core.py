@@ -271,7 +271,7 @@ def repositories_response(faker: Faker):
 
 
 @pytest.fixture()
-def runs_response():
+def runs_response(faker: Faker):
     """Return a sample response for the runs stream."""
     return {
         "status": {
@@ -296,6 +296,7 @@ def runs_response():
                 "trigger_id": 1000 + i,
                 "account_id": 1000,
                 "project_id": 1000 + i % 3,
+                "finished_at": fake_date(faker),
             }
             for i in range(10)
         ],
