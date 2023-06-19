@@ -14,7 +14,7 @@ from singer_sdk.authenticators import APIAuthenticatorBase, SimpleAuthenticator
 
 OPENAPI_URL = (
     "https://raw.githubusercontent.com/fishtown-analytics/dbt-cloud-openapi-spec"
-    "/master/openapi-v3.yaml"
+    "/ee64f573d79585f12d30eaafc223dc8a84052c9a/openapi-v2-old.yaml"
 )
 
 
