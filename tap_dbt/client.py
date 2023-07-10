@@ -32,7 +32,7 @@ def load_openapi() -> dict[str, t.Any]:
 class DBTStream(RESTStream):
     """dbt stream class."""
 
-    primary_keys = ["id"]
+    primary_keys: t.ClassVar[list[str]] = ["id"]
     records_jsonpath = "$.data[*]"
 
     @property
