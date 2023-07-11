@@ -9,23 +9,27 @@ updates:
     directory: /
     schedule:
       interval: "daily"
-      time: "09:49"
       timezone: "America/Mexico_City"
     reviewers:
       - "edgarrmondragon"
+    commit-message:
+      prefix: "feat(deps): "
+      prefix-development: "chore(deps-dev): "
   - package-ecosystem: pip
     directory: "/.github/workflows"
     schedule:
-      interval: "daily"
-      time: "09:49"
+      interval: "weekly"
       timezone: "America/Mexico_City"
     reviewers:
       - "edgarrmondragon"
+    commit-message:
+      prefix: "ci: "
   - package-ecosystem: github-actions
     directory: "/"
     schedule:
       interval: "weekly"
-      time: "09:49"
       timezone: "America/Mexico_City"
     reviewers:
       - "edgarrmondragon"
+    commit-message:
+      prefix: "ci: "
