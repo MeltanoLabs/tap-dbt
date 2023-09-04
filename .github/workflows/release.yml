@@ -17,7 +17,7 @@ jobs:
       PIP_CONSTRAINT: .github/workflows/constraints.txt
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3.5.0
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
