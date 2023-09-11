@@ -72,15 +72,13 @@ class DBTStream(RESTStream):
             The schema for this stream.
         """
         openapi_response = self._resolve_openapi_ref()
-        # Append "null" to types in all properties if "nullable" key is present
-        for property_name, property_schema in openapi_response["properties"].items():
+        
+        for property_schema in openapi_response["properties"].values():
             if property_schema.get("nullable"):
                 if isinstance(property_schema["type"], list):
                     property_schema["type"].append("null")
                 else:
                     property_schema["type"] = [property_schema["type"], "null"]
-
-        print(openapi_response["properties"])
 
         return openapi_response
 
