@@ -71,7 +71,16 @@ class DBTStream(RESTStream):
         Returns:
             The schema for this stream.
         """
-        return self._resolve_openapi_ref()
+        openapi_response = self._resolve_openapi_ref()
+
+        for property_schema in openapi_response["properties"].values():
+            if property_schema.get("nullable"):
+                if isinstance(property_schema["type"], list):
+                    property_schema["type"].append("null")
+                else:
+                    property_schema["type"] = [property_schema["type"], "null"]
+
+        return openapi_response
 
     @property
     @abstractmethod
