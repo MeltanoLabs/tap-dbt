@@ -17,14 +17,14 @@ repository = "https://github.com/edgarrmondragon/tap-dbt"
 keywords = ["singer.io", "elt", "dbt", "singer-sdk"]
 
 [tool.poetry.dependencies]
-python = "<3.12,>=3.7.1"
-pyyaml = "^6.0"
-singer-sdk = ">=0.32,<0.34"
+python = ">=3.7.1,<4"
+pyyaml = "~=6.0"
+singer-sdk = "~=0.33.0"
 
 [tool.poetry.group.dev.dependencies]
-faker = ">=17.6,<19.0"
-pytest = "^7.2.2"
-responses = "^0.23.1"
+faker = ">=17.6"
+pytest = "~=7.4"
+responses = "~=0.23.1"
 
 [tool.poetry.scripts]
 tap-dbt = 'tap_dbt.tap:cli'
