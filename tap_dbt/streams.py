@@ -135,13 +135,9 @@ class AccountBasedIncrementalStream(AccountBasedStream):
                 continue
 
             if (
-                starting_replication_key_value is None
-                or record[self.replication_key] is None
-            ):  # FULL_TABLE
-                yield transformed_record
-
-            # When the first value lower than the bookmark is found, stop
-            else:
+                starting_replication_key_value is not None
+                and record[self.replication_key] is not None
+            ):
                 record_last_received_datetime: pendulum.DateTime = cast(
                     pendulum.DateTime,
                     pendulum.parse(record[self.replication_key]),
@@ -155,7 +151,7 @@ class AccountBasedIncrementalStream(AccountBasedStream):
                     )
                     break
 
-                yield transformed_record
+            yield transformed_record
 
 
 class AccountsStream(DBTStream):

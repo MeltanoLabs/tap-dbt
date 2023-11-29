@@ -18,7 +18,19 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        python-version: ['3.7', '3.8', '3.9', '3.10', '3.11']
+        include:
+          - python-version: "3.7"
+            toxenv: py37
+          - python-version: "3.8"
+            toxenv: py38
+          - python-version: "3.9"
+            toxenv: py39
+          - python-version: "3.10"
+            toxenv: py310
+          - python-version: "3.11"
+            toxenv: py311
+          - python-version: "3.11"
+            toxenv: deps
 
     steps:
       - name: Checkout code
@@ -30,15 +42,10 @@ jobs:
           python-version: ${{ matrix.python-version }}
           architecture: x64
 
-      - name: Install Poetry
+      - name: Install Tox
         run: |
-          pipx install poetry
-          poetry --version
-
-      - name: Install dependencies
-        run: |
-          poetry install
+          pipx install tox
 
       - name: Test tap
         run: |
-          poetry run pytest
+          tox -e ${{ matrix.toxenv }}
