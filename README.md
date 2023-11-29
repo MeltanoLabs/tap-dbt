@@ -3,7 +3,7 @@
 [![PyPI](https://img.shields.io/pypi/v/tap-dbt.svg?color=blue)](https://pypi.org/project/tap-dbt/)
 [![Python versions](https://img.shields.io/pypi/pyversions/tap-dbt.svg)](https://pypi.org/project/tap-dbt/)
 [![Singer](https://img.shields.io/badge/Singer-Tap-purple.svg)](https://hub.meltano.com/taps/dbt)
-[![Test Tap](https://github.com/edgarrmondragon/tap-dbt/actions/workflows/test-tap.yml/badge.svg)](https://github.com/edgarrmondragon/tap-dbt/actions/workflows/test-tap.yml)
+[![Test Tap](https://github.com/edgarrmondragon/tap-dbt/actions/workflows/ci.yml/badge.svg)](https://github.com/MeltanoLabs/tap-dbt/actions/workflows/ci.yml)
 
 `tap-dbt` is a Singer tap for the [dbt Cloud API v2][dbtcloud].
 
