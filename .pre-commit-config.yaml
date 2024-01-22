@@ -21,7 +21,7 @@ repos:
   - id: trailing-whitespace
 
 - repo: https://github.com/tox-dev/pyproject-fmt
-  rev: "1.6.0"
+  rev: "1.7.0"
   hooks:
   - id: pyproject-fmt
 
@@ -32,7 +32,7 @@ repos:
   - id: check-github-workflows
 
 - repo: https://github.com/astral-sh/ruff-pre-commit
-  rev: v0.1.13
+  rev: v0.1.14
   hooks:
   - id: ruff
   - id: ruff-format
