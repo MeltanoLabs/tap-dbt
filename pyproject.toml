@@ -1,8 +1,8 @@
 [build-system]
 build-backend = "poetry_dynamic_versioning.backend"
 requires = [
-  "poetry-core==1.6",
-  "poetry-dynamic-versioning",
+  "poetry-core==1.9",
+  "poetry-dynamic-versioning==1.2",
 ]
 
 [tool.poetry]
@@ -17,14 +17,14 @@ repository = "https://github.com/edgarrmondragon/tap-dbt"
 keywords = ["singer.io", "elt", "dbt", "singer-sdk"]
 
 [tool.poetry.dependencies]
-python = ">=3.7.1,<4"
+python = ">=3.8"
 pendulum = ">=2.1.2,<4"
 pyyaml = "~=6.0"
 requests = "~=2.31.0"
 singer-sdk = "~=0.34.0"
 
 [tool.poetry.group.dev.dependencies]
-deptry = { version = ">=0.8.0", python = ">=3.8" }
+deptry = { version = ">=0.8.0", python = "<4" }
 faker = ">=17.6"
 pytest = "~=7.4"
 responses = "~=0.23.1"
@@ -50,7 +50,7 @@ vcs = "git"
 [tool.ruff]
 line-length = 88
 src = ["tap_dbt", "tests"]
-target-version = "py37"
+target-version = "py38"
 
 [tool.ruff.lint]
 ignore = [

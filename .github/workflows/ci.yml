@@ -19,8 +19,6 @@ jobs:
       fail-fast: true
       matrix:
         include:
-          - python-version: "3.7"
-            toxenv: py37
           - python-version: "3.8"
             toxenv: py38
           - python-version: "3.9"
