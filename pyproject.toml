@@ -27,7 +27,7 @@ singer-sdk = "~=0.35.0"
 deptry = { version = ">=0.8.0", python = "<4" }
 faker = ">=17.6"
 pytest = "~=8.0"
-responses = "~=0.24.1"
+responses = "~=0.25.0"
 
 [tool.poetry.scripts]
 tap-dbt = 'tap_dbt.tap:cli'
