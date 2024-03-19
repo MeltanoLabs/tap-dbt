@@ -386,17 +386,21 @@ test-randomorder = ["pytest-randomly"]
 
 [[package]]
 name = "deptry"
-version = "0.14.0"
+version = "0.14.2"
 description = "A command line utility to check for unused, missing and transitive dependencies in a Python project."
 optional = false
 python-versions = ">=3.8, <4.0"
 files = [
-    {file = "deptry-0.14.0-cp38-abi3-macosx_10_12_x86_64.whl", hash = "sha256:951d40e40cca6b538d8b1992e9532c082757598c73249469d3f6f90cf3344c9f"},
-    {file = "deptry-0.14.0-cp38-abi3-macosx_11_0_arm64.whl", hash = "sha256:59e0808507ffb57a0ce9b8c40ecda7b4a235a0627f00485d8e6104bf71dc99f8"},
-    {file = "deptry-0.14.0-cp38-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:b5e6b7485c3ece10eb94b2787258282275687a101587c6f88f65a6eadc65c4a4"},
-    {file = "deptry-0.14.0-cp38-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:9d5a8299b9627dc32352caf99c5e8fdff0227539ccbe1535a6145649b5caa394"},
-    {file = "deptry-0.14.0-cp38-abi3-win_amd64.whl", hash = "sha256:d55654025b567739a57f9b6b8467a21c65a30c21e834b2d8cb225618b320874c"},
-    {file = "deptry-0.14.0.tar.gz", hash = "sha256:3415c65c0734f6dfafa1321c77c1c9fafb6d6f88d0f8441e5b2cfb5b3b41f71b"},
+    {file = "deptry-0.14.2-cp38-abi3-macosx_10_12_x86_64.whl", hash = "sha256:6f451ac26990bcb3e4d517271b87f1f02e7272da6644e47755aa72bbb649a8dd"},
+    {file = "deptry-0.14.2-cp38-abi3-macosx_11_0_arm64.whl", hash = "sha256:7b3eeeace8c3cdb2eafe14d7a0261bb2ec410d1887a4152091e9dcb73325b452"},
+    {file = "deptry-0.14.2-cp38-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:cb4988bff104bfd3c0b13841f18dbddc6c818b88101cad97f662acc5827209ac"},
+    {file = "deptry-0.14.2-cp38-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:8f61a6c1165e91753d029c2a598d0ff37b7e6cb436beff5cc3ba6c7b8b4acf93"},
+    {file = "deptry-0.14.2-cp38-abi3-win_amd64.whl", hash = "sha256:65d20f7316b2f2ff545430dd3c2dea6dc668cd6ee3b866dffdf78d39c3b07ee8"},
+    {file = "deptry-0.14.2-pp310-pypy310_pp73-macosx_10_12_x86_64.whl", hash = "sha256:95901237482a390611370522d707931eeb1ea7172a56fe1bf84f0d4624b1dd4c"},
+    {file = "deptry-0.14.2-pp310-pypy310_pp73-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:6f531fd1cdcc980438647cc8c95115989f0a7efbf3456611174cfd54db721657"},
+    {file = "deptry-0.14.2-pp310-pypy310_pp73-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:54182741d343bcca73116a13eb905b5bded80ef72e2d13cdb23081c72a486f17"},
+    {file = "deptry-0.14.2-pp310-pypy310_pp73-win_amd64.whl", hash = "sha256:6c9a2949d2c0c580981e22c8ceff0461e77e632b94dacd02307f81caaa35f93f"},
+    {file = "deptry-0.14.2.tar.gz", hash = "sha256:1c585d4a5f9ddc75ed0cb27f99e998edda4720d050ba7214503a2bfe5e85d7df"},
 ]
 
 [package.dependencies]
