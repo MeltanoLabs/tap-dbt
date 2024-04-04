@@ -14,7 +14,7 @@ jobs:
     name: Test Tap connectivity and Configuration
     runs-on: ubuntu-latest
     env:
-      PIP_CONSTRAINT: .github/workflows/constraints.txt
+      PIP_CONSTRAINT: ${{ github.workspace }}/.github/workflows/constraints.txt
     strategy:
       fail-fast: true
       matrix:
