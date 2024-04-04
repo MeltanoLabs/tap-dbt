@@ -24,7 +24,7 @@ requests = "~=2.31.0"
 singer-sdk = "~=0.36.0"
 
 [tool.poetry.group.dev.dependencies]
-deptry = { version = ">=0.8.0", python = "<4" }
+deptry = ">=0.14.2"
 faker = ">=17.6"
 pytest = "~=8.0"
 responses = "~=0.25.0"
