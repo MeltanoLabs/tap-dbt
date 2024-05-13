@@ -8,7 +8,7 @@ ci:
 
 repos:
 - repo: https://github.com/pre-commit/pre-commit
-  rev: v3.7.0
+  rev: v3.7.1
   hooks:
   - id: validate_manifest
 
@@ -23,18 +23,18 @@ repos:
   - id: trailing-whitespace
 
 - repo: https://github.com/tox-dev/pyproject-fmt
-  rev: "1.8.0"
+  rev: "2.0.4"
   hooks:
   - id: pyproject-fmt
 
 - repo: https://github.com/python-jsonschema/check-jsonschema
-  rev: 0.28.2
+  rev: 0.28.3
   hooks:
   - id: check-dependabot
   - id: check-github-workflows
 
 - repo: https://github.com/astral-sh/ruff-pre-commit
-  rev: v0.4.3
+  rev: v0.4.4
   hooks:
   - id: ruff
   - id: ruff-format
