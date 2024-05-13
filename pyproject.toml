@@ -10,11 +10,20 @@ name = "tap-dbt"
 version = "0.0.0"
 description = "Singer tap for dbt, built with the Singer SDK."
 license = "Apache-2.0"
-authors = ["Edgar Ramírez Mondragón <edgarrm358@sample.com>"]
-maintainers = ["Edgar Ramírez Mondragón <edgarrm358@sample.com>"]
+authors = [
+  "Edgar Ramírez Mondragón <edgarrm358@sample.com>",
+]
+maintainers = [
+  "Edgar Ramírez Mondragón <edgarrm358@sample.com>",
+]
 readme = "README.md"
 repository = "https://github.com/edgarrmondragon/tap-dbt"
-keywords = ["singer.io", "elt", "dbt", "singer-sdk"]
+keywords = [
+  "singer.io",
+  "elt",
+  "dbt",
+  "singer-sdk",
+]
 
 [tool.poetry.dependencies]
 python = ">=3.8"
@@ -23,14 +32,14 @@ pyyaml = "~=6.0"
 requests = "~=2.31.0"
 singer-sdk = "~=0.37.0"
 
+[tool.poetry.scripts]
+tap-dbt = 'tap_dbt.tap:cli'
+
 [tool.poetry.group.dev.dependencies]
 deptry = ">=0.14.2"
 faker = ">=17.6"
 pytest = "~=8.0"
 responses = "~=0.25.0"
-
-[tool.poetry.scripts]
-tap-dbt = 'tap_dbt.tap:cli'
 
 [tool.poetry-dynamic-versioning]
 enable = true
@@ -49,33 +58,47 @@ vcs = "git"
 
 [tool.ruff]
 line-length = 88
-src = ["tap_dbt", "tests"]
+src = [
+  "tap_dbt",
+  "tests",
+]
 target-version = "py38"
+
+[tool.ruff.lint.isort]
+known-first-party = [
+  "tap_dbt",
+]
+required-imports = [
+  "from __future__ import annotations",
+]
 
 [tool.ruff.lint]
 ignore = [
-  "ANN101",  # missing-type-self
-  "FIX002",  # line-contains-todo
-  "COM812",  # missing-trailing-comma
-  "ISC001",  # single-line-implicit-string-concatenation
+  "ANN101", # missing-type-self
+  "FIX002", # line-contains-todo
+  "COM812", # missing-trailing-comma
+  "ISC001", # single-line-implicit-string-concatenation
 ]
-select = ["ALL"]
+select = [
+  "ALL",
+]
 unfixable = [
-  "ERA001",  # commented-out-code
+  "ERA001", # commented-out-code
 ]
-
-[tool.ruff.lint.isort]
-known-first-party = ["tap_dbt"]
-required-imports = ["from __future__ import annotations"]
 
 [tool.ruff.lint.per-file-ignores]
-"tests/*" = ["ANN201", "S101"]
+"tests/*" = [
+  "ANN201",
+  "S101",
+]
 
 [tool.ruff.lint.pydocstyle]
 convention = "google"
 
 [tool.deptry]
-known_first_party = ["tap_dbt"]
+known_first_party = [
+  "tap_dbt",
+]
 
 [tool.deptry.package_module_name_map]
 faker = "faker"
