@@ -57,43 +57,36 @@ style = "pep440"
 vcs = "git"
 
 [tool.ruff]
+target-version = "py38"
+
 line-length = 88
 src = [
   "tap_dbt",
   "tests",
 ]
-target-version = "py38"
-
-[tool.ruff.lint]
-ignore = [
-  "ANN101", # missing-type-self
-  "FIX002", # line-contains-todo
-  "COM812", # missing-trailing-comma
-  "ISC001", # single-line-implicit-string-concatenation
-]
-select = [
+lint.select = [
   "ALL",
 ]
-unfixable = [
-  "ERA001", # commented-out-code
-]
-
-[tool.ruff.lint.isort]
-known-first-party = [
-  "tap_dbt",
-]
-required-imports = [
-  "from __future__ import annotations",
-]
-
-[tool.ruff.lint.per-file-ignores]
-"tests/*" = [
+lint.per-file-ignores."tests/*" = [
   "ANN201",
   "S101",
 ]
-
-[tool.ruff.lint.pydocstyle]
-convention = "google"
+lint.unfixable = [
+  "ERA001", # commented-out-code
+]
+lint.isort.known-first-party = [
+  "tap_dbt",
+]
+lint.isort.required-imports = [
+  "from __future__ import annotations",
+]
+lint.pydocstyle.convention = "google"
+lint.ignore = [
+  "ANN101", # missing-type-self
+  "COM812", # missing-trailing-comma
+  "FIX002", # line-contains-todo
+  "ISC001", # single-line-implicit-string-concatenation
+]
 
 [tool.deptry]
 known_first_party = [
