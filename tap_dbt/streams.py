@@ -2,14 +2,19 @@
 
 from __future__ import annotations
 
+import datetime
+import sys
 import typing as t
 from pathlib import Path
-from typing import cast
 
-import pendulum
 from singer_sdk.pagination import BaseOffsetPaginator
 
 from tap_dbt.client import DBTStream
+
+if sys.version_info < (3, 11):
+    from backports.datetime_fromisoformat import MonkeyPatch
+
+    MonkeyPatch.patch_fromisoformat()
 
 SCHEMAS_DIR = Path(__file__).parent / Path("./schemas")
 
@@ -112,9 +117,8 @@ class AccountBasedIncrementalStream(AccountBasedStream):
                 starting_replication_key_value is not None
                 and record[self.replication_key] is not None
             ):
-                record_last_received_datetime: pendulum.DateTime = cast(
-                    pendulum.DateTime,
-                    pendulum.parse(record[self.replication_key]),
+                record_last_received_datetime = datetime.datetime.fromisoformat(
+                    self.replication_key,
                 )
 
                 if record_last_received_datetime < starting_replication_key_value:

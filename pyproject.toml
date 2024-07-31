@@ -27,6 +27,7 @@ keywords = [
 
 [tool.poetry.dependencies]
 python = ">=3.8"
+backports-datetime-fromisoformat = { version = "~=2.0.1", python = "<3.11" }
 pendulum = ">=2.1.2,<4"
 pyyaml = "~=6.0"
 requests = "~=2.32.0"
