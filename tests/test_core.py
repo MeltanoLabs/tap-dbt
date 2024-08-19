@@ -25,7 +25,7 @@ def fake_date(faker: Faker):
     return faker.date_time().strftime("%Y-%m-%d %H:%M:%S")
 
 
-@pytest.fixture()
+@pytest.fixture
 def accounts_response(faker: Faker):
     """Return a sample response for the accounts stream."""
     return {
@@ -54,7 +54,7 @@ def accounts_response(faker: Faker):
     }
 
 
-@pytest.fixture()
+@pytest.fixture
 def connections_response(faker: Faker):
     """Return a sample response for the connections stream."""
     return {
@@ -94,7 +94,7 @@ def connections_response(faker: Faker):
     }
 
 
-@pytest.fixture()
+@pytest.fixture
 def environments_response(faker: Faker):
     """Return a sample response for the environments stream."""
     return {
@@ -135,7 +135,7 @@ def environments_response(faker: Faker):
     }
 
 
-@pytest.fixture()
+@pytest.fixture
 def jobs_response(faker: Faker):
     """Return a sample response for the jobs stream."""
     return {
@@ -202,7 +202,7 @@ def jobs_response(faker: Faker):
     }
 
 
-@pytest.fixture()
+@pytest.fixture
 def projects_response():
     """Return a sample response for the projects stream."""
     return {
@@ -232,7 +232,7 @@ def projects_response():
     }
 
 
-@pytest.fixture()
+@pytest.fixture
 def repositories_response(faker: Faker):
     """Return a sample response for the repositories stream."""
     return {
@@ -270,7 +270,7 @@ def repositories_response(faker: Faker):
     }
 
 
-@pytest.fixture()
+@pytest.fixture
 def runs_response(faker: Faker):
     """Return a sample response for the runs stream."""
     return {
@@ -303,7 +303,7 @@ def runs_response(faker: Faker):
     }
 
 
-@pytest.fixture()
+@pytest.fixture
 def users_response(faker: Faker):
     """Return a sample response for the users stream."""
     return {
