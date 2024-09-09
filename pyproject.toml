@@ -17,7 +17,9 @@ maintainers = [
   "Edgar Ramírez Mondragón <edgarrm358@sample.com>",
 ]
 readme = "README.md"
-repository = "https://github.com/edgarrmondragon/tap-dbt"
+homepage = "https://github.com/MeltanoLabs/tap-dbt"
+repository = "https://github.com/MeltanoLabs/tap-dbt"
+documentation = "https://github.com/MeltanoLabs/tap-dbt/blob/main/README.md"
 keywords = [
   "singer.io",
   "elt",
