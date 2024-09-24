@@ -118,7 +118,7 @@ class AccountBasedIncrementalStream(AccountBasedStream):
                 and record[self.replication_key] is not None
             ):
                 record_last_received_datetime = datetime.datetime.fromisoformat(
-                    self.replication_key_value,
+                    record[self.replication_key],
                 )
 
                 if record_last_received_datetime < starting_replication_key_value:
