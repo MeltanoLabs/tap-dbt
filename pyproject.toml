@@ -28,7 +28,7 @@ keywords = [
 ]
 
 [tool.poetry.dependencies]
-python = ">=3.8"
+python = ">=3.9"
 backports-datetime-fromisoformat = { version = "~=2.0.1", python = "<3.11" }
 pyyaml = "~=6.0"
 requests = "~=2.32.0"
@@ -49,7 +49,7 @@ style = "pep440"
 vcs = "git"
 
 [tool.ruff]
-target-version = "py38"
+target-version = "py39"
 
 line-length = 88
 src = [
