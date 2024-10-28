@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import typing as t
 from abc import abstractmethod
-from functools import lru_cache
+from functools import cache
 
 import requests
 import yaml
@@ -18,7 +18,7 @@ OPENAPI_URL = (
 )
 
 
-@lru_cache(maxsize=None)
+@cache
 def load_openapi() -> dict[str, t.Any]:
     """Load the OpenAPI specification from the package.
 
@@ -64,7 +64,7 @@ class DBTStream(RESTStream):
         return resolve_schema_references(schema)
 
     @property
-    @lru_cache(maxsize=None)  # noqa: B019
+    @cache  # noqa: B019
     def schema(self) -> dict[str, t.Any]:
         """Return the schema for this stream.
 
