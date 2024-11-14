@@ -2,15 +2,17 @@
 
 from __future__ import annotations
 
+import importlib.resources
 import typing as t
 from abc import abstractmethod
 from functools import cache
-from pathlib import Path
 
 import yaml
 from singer_sdk import RESTStream
 from singer_sdk._singerlib import resolve_schema_references
 from singer_sdk.authenticators import APIAuthenticatorBase, SimpleAuthenticator
+
+from tap_dbt import schemas
 
 
 @cache
@@ -20,8 +22,8 @@ def load_openapi() -> dict[str, t.Any]:
     Returns:
         The OpenAPI specification as a dict.
     """
-    schema_path = Path(__file__).parent / "schemas" / "openapi_v2.yaml"
-    with Path.open(schema_path) as schema:
+    schema_path = importlib.resources.files(schemas) / "openapi_v2.yaml"
+    with schema_path.open() as schema:
         return yaml.safe_load(schema)
 
 
