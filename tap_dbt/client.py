@@ -7,7 +7,6 @@ from abc import abstractmethod
 from functools import cache
 from pathlib import Path
 
-import requests
 import yaml
 from singer_sdk import RESTStream
 from singer_sdk._singerlib import resolve_schema_references
