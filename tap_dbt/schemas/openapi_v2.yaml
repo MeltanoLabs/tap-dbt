@@ -68,7 +68,7 @@ info:
 
   contact:
     email: support@getdbt.com
-    
+
 tags:
   - name: Accounts
     description: List and view Accounts
@@ -78,7 +78,7 @@ tags:
     description: List, view, and modify, and trigger Jobs
   - name: Runs
     description: List and view Runs
-  
+
 paths:
   # Accounts
   /accounts/:
@@ -114,7 +114,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-                
+
         '404':
           description: Unauthorized or Not Found.
           content:
@@ -137,14 +137,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/AccountResponse'
-                
+
         '400':
           description: Bad Request.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-                
+
         '404':
           description: Unauthorized or Not Found.
           content:
@@ -229,7 +229,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-                
+
         '404':
           description: Unauthorized or Not Found.
           content:
@@ -258,14 +258,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProjectResponse'
-                
+
         '400':
           description: Bad Request.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-                
+
         '404':
           description: Unauthorized or Not Found.
           content:
@@ -302,7 +302,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/JobsResponse'
-                
+
         '400':
           description: Bad Request.
           content:
@@ -376,21 +376,21 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/JobResponse'
-                
+
         '400':
           description: Bad Request.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-                
+
         '404':
           description: Unauthorized or Not Found.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-                
+
     post:
       tags:
         - Jobs
@@ -412,14 +412,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/JobResponse'
-                
+
         '400':
           description: Bad Request.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-                
+
         '404':
           description: Unauthorized or Not Found.
           content:
@@ -526,14 +526,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/RunResponse'
-                
+
         '400':
           description: Bad Request.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-                
+
         '404':
           description: Unauthorized or Not Found.
           content:
@@ -570,7 +570,7 @@ paths:
           example: 10
           description: >
             Optional. Applies a filter to return only runs with the specified Status:
-            
+
              * `1` - The run is queued but hasn't begun being scheduled
              * `2` - The run is being removed from the queue and is actively being scheduled
              * `3` - The run is currently executing
@@ -613,14 +613,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/RunsResponse'
-                
+
         '400':
           description: Bad Request.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-                
+
         '404':
           description: Unauthorized or Not Found.
           content:
@@ -650,14 +650,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/RunResponse'
-                
+
         '400':
           description: Bad Request.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-                
+
         '404':
           description: Unauthorized or Not Found.
           content:
@@ -700,7 +700,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-                
+
         '404':
           description: Unauthorized or Not Found.
           content:
@@ -830,7 +830,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/RunResponse'
-                
+
         '404':
           description: Unauthorized or Not Found.
           content:
@@ -1220,10 +1220,10 @@ components:
           type: "boolean"
           example: True
           description: If set, use the custom_branch field when cloning and running jobs in this environment
-        custom_branch: 
+        custom_branch:
           type: "string"
           example: develop
-        supports_docs: 
+        supports_docs:
           type: "boolean"
           description: dbt Cloud-generated / read only field
         state:
@@ -1771,7 +1771,7 @@ components:
       properties:
         data:
           type: "array"
-          items: 
+          items:
             $ref: "#/components/schemas/Account"
         status:
           $ref: "#/components/schemas/Status"
@@ -1803,7 +1803,7 @@ components:
       properties:
         data:
           type: "array"
-          items: 
+          items:
             $ref: "#/components/schemas/Project"
         status:
           $ref: "#/components/schemas/Status"
@@ -1819,7 +1819,7 @@ components:
       properties:
         data:
           type: "array"
-          items: 
+          items:
             $ref: "#/components/schemas/Connection"
         status:
           $ref: "#/components/schemas/Status"
@@ -1828,7 +1828,7 @@ components:
       properties:
         data:
           type: "array"
-          items: 
+          items:
             $ref: "#/components/schemas/BigqueryCredential"
         status:
           $ref: "#/components/schemas/Status"
@@ -1837,7 +1837,7 @@ components:
       properties:
         data:
           type: "array"
-          items: 
+          items:
             $ref: "#/components/schemas/Environment"
         status:
           $ref: "#/components/schemas/Status"
@@ -1853,7 +1853,7 @@ components:
       properties:
         data:
           type: "array"
-          items: 
+          items:
             $ref: "#/components/schemas/Job"
         status:
           $ref: "#/components/schemas/Status"
@@ -1869,7 +1869,7 @@ components:
       properties:
         data:
           type: "array"
-          items: 
+          items:
             $ref: "#/components/schemas/Repository"
         status:
           $ref: "#/components/schemas/Status"
@@ -1885,7 +1885,7 @@ components:
       properties:
         data:
           type: "array"
-          items: 
+          items:
             $ref: "#/components/schemas/Run"
         status:
           $ref: "#/components/schemas/Status"
@@ -1924,7 +1924,7 @@ components:
         developer_message:
           type: "string"
           description: "Technical description of the response."
-          
+
   securitySchemes:
     TokenAuth:
       type: http
