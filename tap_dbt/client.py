@@ -5,17 +5,13 @@ from __future__ import annotations
 import typing as t
 from abc import abstractmethod
 from functools import cache
+from pathlib import Path
 
 import requests
 import yaml
 from singer_sdk import RESTStream
 from singer_sdk._singerlib import resolve_schema_references
 from singer_sdk.authenticators import APIAuthenticatorBase, SimpleAuthenticator
-
-OPENAPI_URL = (
-    "https://raw.githubusercontent.com/fishtown-analytics/dbt-cloud-openapi-spec"
-    "/ee64f573d79585f12d30eaafc223dc8a84052c9a/openapi-v2-old.yaml"
-)
 
 
 @cache
@@ -25,8 +21,9 @@ def load_openapi() -> dict[str, t.Any]:
     Returns:
         The OpenAPI specification as a dict.
     """
-    response = requests.get(OPENAPI_URL, timeout=10)
-    return yaml.safe_load(response.text)
+    schema_path = Path(__file__).parent / "schemas" / "openapi_v2.yaml"
+    with Path.open(schema_path) as schema:
+        return yaml.safe_load(schema)
 
 
 class DBTStream(RESTStream):
