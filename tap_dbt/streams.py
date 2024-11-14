@@ -5,7 +5,6 @@ from __future__ import annotations
 import datetime
 import sys
 import typing as t
-from pathlib import Path
 
 from singer_sdk.pagination import BaseOffsetPaginator
 
@@ -15,8 +14,6 @@ if sys.version_info < (3, 11):
     from backports.datetime_fromisoformat import MonkeyPatch
 
     MonkeyPatch.patch_fromisoformat()
-
-SCHEMAS_DIR = Path(__file__).parent / Path("./schemas")
 
 
 class AccountBasedStream(DBTStream):
@@ -137,7 +134,6 @@ class AccountsStream(DBTStream):
 
     name = "accounts"
     path = "/accounts"
-    schema_filepath = SCHEMAS_DIR / "accounts.json"
     openapi_ref = "Account"
 
 
