@@ -1,0 +1,1935 @@
+# taken from https://raw.githubusercontent.com/fishtown-analytics/dbt-cloud-openapi-spec/ee64f573d79585f12d30eaafc223dc8a84052c9a/openapi-v2-old.yaml
+
+openapi: 3.0.0
+servers:
+  - description: Production
+    url: https://cloud.getdbt.com/api/v2
+info:
+  version: "2.0.0"
+  title: dbt Cloud API v2
+  termsOfService: 'https://www.getdbt.com/cloud/terms'
+  description: |
+      The dbt Cloud API makes it possible to fetch data from your
+      dbt Cloud account and programmatically run and monitor dbt jobs.
+
+      # How to use this API
+
+      The dbt Cloud API is intended for enqueuing runs from a job, polling for run progress,
+      and downloading artifacts after jobs have completed running. Operational endpoints around
+      creating, modifying, and deleting _objects_ in dbt Cloud are still in flux. These endpoints
+      are largely undocumented in API v2.
+
+      The API docs are generated from an openapi spec defined in the
+      [dbt-cloud-openapi-spec](https://github.com/fishtown-analytics/dbt-cloud-openapi-spec)
+      repository. If you find issues in these docs or have questions about using the dbt Cloud
+      API, please open an issue in the dbt-cloud-openapi-spec repo or contact support@getdbt.com.
+
+      # Authentication
+
+      To authenticate an application with the dbt Cloud API, navigate to the
+      API Settings page in your [dbt Cloud profile](https://cloud.getdbt.com/#/profile/api/).
+      If you cannot access this page, confirm that your dbt Cloud account has access to the API,
+      and that you are using the hosted version of dbt Cloud. If dbt Cloud is running inside of a VPC
+      in an Enterprise account, contact your account manager for help finding your API key.
+
+      ## TokenAuth
+
+      Once you've found your API key, use it in the Authorization header of requests to the dbt Cloud API.
+      Be sure to include the `Token` prefix in the Authorization header, or the request will fail with a
+      "401 Unauthorized" error. Note: `Bearer` can be used in place of `Token` in the Authorization header.
+      Both syntaxes are equivalent.
+
+      **Headers**
+      ```
+      Accept: application/json
+      Authorization: Token <your token>
+      ```
+
+      ## Example request
+
+      The following example will list the Accounts that your token is authorized to access.
+      Be sure to replace `<your token>` in the Authorization header with your actual API token.
+
+      ```
+      curl --request GET \
+        --url https://cloud.getdbt.com/api/v2/accounts/ \
+        --header 'Content-Type: application/json' \
+        --header 'Authorization: Token <your token>'
+      ```
+
+      # Pagination
+
+      All top-level API resources have support for bulk fetches via "list" API methods. These list
+      API methods accept `limit` and `offset` query parameters which can be used together to paginate results.
+
+      Offsets begin at 0.
+
+      The maximum limit for a single request is 100.
+
+  contact:
+    email: support@getdbt.com
+
+tags:
+  - name: Accounts
+    description: List and view Accounts
+  - name: Projects
+    description: List, view, and modify Projects
+  - name: Jobs
+    description: List, view, and modify, and trigger Jobs
+  - name: Runs
+    description: List and view Runs
+
+paths:
+  # Accounts
+  /accounts/:
+    get:
+      tags:
+        - Accounts
+      summary: List Accounts
+      description: Use the List Accounts endpoint to list the Accounts that your API Token is authorized to access.
+      operationId: listAccounts
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountsResponse'
+          links:
+            GetAccountById:
+              operationId: getAccountById
+              parameters:
+                accountId: $response.body#/data/0/id
+            ListProjects:
+              operationId: listProjects
+              parameters:
+                accountId: $response.body#/data/0/id
+            ListJobsForAccount:
+              operationId: listJobsForAccount
+              parameters:
+                accountId: $response.body#/data/0/id
+        '400':
+          description: Bad Request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+        '404':
+          description: Unauthorized or Not Found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /accounts/{accountId}/:
+    get:
+      tags:
+        - Accounts
+      summary: Get Account
+      description: Get an Account by its ID
+      operationId: getAccountById
+      parameters:
+        - $ref: '#/components/parameters/accountId'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountResponse'
+
+        '400':
+          description: Bad Request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+        '404':
+          description: Unauthorized or Not Found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /accounts/{accountId}/users:
+    get:
+      tags:
+        - Accounts
+      summary: List Users
+      description: Use the List Users endpoint to list the Users in the specified Account
+      operationId: listUsers
+      parameters:
+        - $ref: '#/components/parameters/accountId'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UsersResponse'
+  /accounts/{accountId}/permissions/{licenseId}:
+    post:
+      tags:
+        - Accounts
+      summary: Update License
+      description: Update (or deactivate) permissions for a given license
+      operationId: updateLicense
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserLicense'
+      parameters:
+        - $ref: '#/components/parameters/accountId'
+        - in: path
+          name: licenseId
+          schema:
+            type: integer
+          required: true
+          description: Numeric ID of the License to update
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateLicenseResponse'
+        '404':
+          description: Unauthorized or Not Found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /accounts/{accountId}/projects/:
+    get:
+      tags:
+        - Projects
+      summary: List Projects
+      description: Use the List Projects endpoint to list the Projects in the specified Account
+      operationId: listProjects
+      parameters:
+        - $ref: '#/components/parameters/accountId'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectsResponse'
+          links:
+            GetProjectById:
+              operationId: getProjectById
+              parameters:
+                accoutnId: $request.path.accountId
+                projectId: $response.body#/id
+        '400':
+          description: Bad Request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+        '404':
+          description: Unauthorized or Not Found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /accounts/{accountId}/projects/{projectId}:
+    get:
+      tags:
+        - Projects
+      summary: Get Project
+      description: Get a Project by its ID
+      operationId: getProjectById
+      parameters:
+        - $ref: '#/components/parameters/accountId'
+        - in: path
+          name: projectId
+          schema:
+            type: integer
+          required: true
+          description: Numeric ID of the Project to retrieve
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectResponse'
+
+        '400':
+          description: Bad Request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+        '404':
+          description: Unauthorized or Not Found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /accounts/{accountId}/jobs/:
+    get:
+      tags:
+        - Jobs
+      summary: List jobs
+      description: List jobs in a project
+      operationId: listJobsForAccount
+      parameters:
+        - $ref: '#/components/parameters/accountId'
+        - in: query
+          name: order_by
+          example: "-id"
+          schema:
+            type: string
+          description: |
+            Field to order the result by. Use `-` to indicate reverse order.
+        - in: query
+          name: project_id
+          schema:
+            type: integer
+          description: |
+            Numeric ID of the project containing jobs
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JobsResponse'
+
+        '400':
+          description: Bad Request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+        '404':
+          description: Unauthorized or Not Found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    post:
+      tags:
+        - Jobs
+      summary: Create job
+      description: Create a job in a project.
+      operationId: createJob
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Job'
+      parameters:
+        - $ref: '#/components/parameters/accountId'
+      responses:
+        '201':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JobResponse'
+
+        '400':
+          description: Bad Request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+        '404':
+          description: Unauthorized or Not Found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /accounts/{accountId}/jobs/{jobId}/:
+    get:
+      tags:
+        - Jobs
+      summary: Get job
+      description: Return job details for a job on an account
+      operationId: getJobById
+      parameters:
+        - $ref: '#/components/parameters/accountId'
+        - $ref: '#/components/parameters/jobId'
+        - in: query
+          name: order_by
+          example: "-id"
+          schema:
+            type: string
+          description: |
+            Field to order the result by. Use `-` to indicate reverse order.
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JobResponse'
+
+        '400':
+          description: Bad Request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+        '404':
+          description: Unauthorized or Not Found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    post:
+      tags:
+        - Jobs
+      summary: Update job
+      description: Update the definition of an existing job
+      operationId: updateJobById
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Job'
+      parameters:
+        - $ref: '#/components/parameters/accountId'
+        - $ref: '#/components/parameters/jobId'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JobResponse'
+
+        '400':
+          description: Bad Request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+        '404':
+          description: Unauthorized or Not Found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      tags:
+        - Jobs
+      operationId: deleteJobById
+      summary: Delete job
+      description: Delete the given job by its id
+      parameters:
+        - $ref: '#/components/parameters/accountId'
+        - $ref: '#/components/parameters/jobId'
+      responses:
+        '200':
+          description: Job deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JobResponse'
+
+  /accounts/{accountId}/jobs/{jobId}/run/:
+    post:
+      tags:
+        - Jobs
+      summary: Trigger job to run
+      description: |
+        Use this endpoint to kick off a run for a job. When this endpoint returns a successful
+        response, a new run will be enqueued for the account. Users can poll the [Get run](#operation/getRunById)
+        endpoint to poll the run until it completes. After the run has completed, users can use the [Get run artifact](#operation/getArtifactsByRunId)
+        endpoint to download artifacts generated by the run.
+      operationId: triggerRun
+      requestBody:
+        content:
+          application/json:
+            example:
+              cause: Kicked off from Airflow
+              git_branch: staging
+              schema_override: dbt_cloud_pr_123
+              dbt_version_override: 0.18.0
+              target_name_override: staging
+              timeout_seconds_override: 3000
+              generate_docs_override: true
+              threads_override: 8
+              steps_override:
+                - dbt seed
+                - dbt run --fail-fast
+                - dbt test --fail-fast
+
+            schema:
+              type: object
+              required:
+                - cause
+              properties:
+                cause:
+                  description: A text description of the reason for running this job
+                  example: "Kicked off from Airflow"
+                  type: string
+                git_sha:
+                  description: Optional. The git sha to check out before running this job
+                  type: string
+                git_branch:
+                  description: Optional. The git branch to check out before running this job
+                  type: string
+                schema_override:
+                  description: Optional. Override the destination schema in the configured target for this job.
+                  example: "dbt_cloud_pr_123_456"
+                  type: string
+                dbt_version_override:
+                  description: Optional. Override the version of dbt used to run this job
+                  example: 0.18.0
+                  type: string
+                threads_override:
+                  description: Optional. Override the number of threads used to run this job
+                  example: 8
+                  type: integer
+                target_name_override:
+                  description: Optional. Override the `target.name` context variable used when running this job
+                  example: CI
+                  type: string
+                generate_docs_override:
+                  description: Optional. Override whether or not this job generates docs (true=yes, false=no)
+                  example: true
+                  type: boolean
+                timeout_seconds_override:
+                  description: Optional. Override the timeout in seconds for this job
+                  example: 60
+                  type: integer
+                steps_override:
+                  type: array
+                  description: Optional. Override the list of steps for this job
+                  example: ['dbt run', 'dbt test', 'dbt source snapshot-freshness']
+                  items:
+                    type: "string"
+      parameters:
+        - $ref: '#/components/parameters/accountId'
+        - $ref: '#/components/parameters/jobId'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RunResponse'
+
+        '400':
+          description: Bad Request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+        '404':
+          description: Unauthorized or Not Found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /accounts/{accountId}/runs/:
+    get:
+      tags:
+        - Runs
+      summary: List runs
+      description: List the runs for a given account
+      operationId: listRunsForAccount
+      parameters:
+        - $ref: '#/components/parameters/accountId'
+        - $ref: '#/components/parameters/includeRelated'
+        - in: query
+          name: job_definition_id
+          example: 1234
+          schema:
+            type: integer
+          description: Optional. Applies a filter to only return runs from the specified Job.
+        - in: query
+          name: project_id
+          example: 1234
+          schema:
+            type: integer
+          description: Optional. Applies a filter to only return runs from the specified Project.
+        - in: query
+          name: status
+          schema:
+            type: integer
+            enum: [1, 2, 3, 10, 20, 30]
+          example: 10
+          description: >
+            Optional. Applies a filter to return only runs with the specified Status:
+
+             * `1` - The run is queued but hasn't begun being scheduled
+             * `2` - The run is being removed from the queue and is actively being scheduled
+             * `3` - The run is currently executing
+             * `10` - The run completed successfully
+             * `20` - The run failed to complete
+             * `30` - The run was cancelled by a user or via the API
+        - in: query
+          name: order_by
+          example: "-id"
+          schema:
+            type: string
+            default: id
+            enum:
+              - id
+              - -id
+              - created_at
+              - -created_at
+              - finished_at
+              - -finished_at
+          description: |
+            Field to order the result by. Use `-` to indicate reverse order.
+
+            All other order_by values will be deprecated on May 15, 2023.
+        - in: query
+          name: offset
+          example: 100
+          schema:
+            type: integer
+          description: The offset to apply when listing runs. Use with `limit` to paginate results.
+        - in: query
+          name: limit
+          example: 100
+          schema:
+            type: integer
+          description: The limit to apply when listing runs. Use with `offset` to paginate results.
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RunsResponse'
+
+        '400':
+          description: Bad Request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+        '404':
+          description: Unauthorized or Not Found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /accounts/{accountId}/runs/{runId}/:
+    get:
+      tags:
+        - Runs
+      summary: Get run
+      description: Fetch information about a specific run
+      operationId: getRunById
+      parameters:
+        - $ref: '#/components/parameters/accountId'
+        - in: path
+          name: runId
+          schema:
+            type: integer
+          required: true
+          description: Numeric ID of the run to retrieve
+        - $ref: '#/components/parameters/includeRelatedRun'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RunResponse'
+
+        '400':
+          description: Bad Request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+        '404':
+          description: Unauthorized or Not Found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /accounts/{accountId}/runs/{runId}/artifacts/:
+    get:
+      tags:
+        - Runs
+      summary: List run artifacts
+      description: |
+        Use this endpoint to fetch a list of artifact files generated for a completed run.
+
+      operationId: listArtifactsByRunId
+      parameters:
+        - $ref: '#/components/parameters/accountId'
+        - in: path
+          name: runId
+          schema:
+            type: integer
+          required: true
+          description: Numeric ID of the run to retrieve
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                type: "array"
+                example: ['manifest.json', 'catalog.json', 'run_results.json', 'compiled/my_project/my_model.sql']
+                items:
+                  type: "string"
+                  description: A list of artifact file paths that can be used with the [getArtifactsByRunId](#operation/getArtifactsByRunId) endpoint
+
+        '400':
+          description: Bad Request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+        '404':
+          description: Unauthorized or Not Found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /accounts/{accountId}/runs/{runId}/artifacts/{path}:
+    get:
+      tags:
+        - Runs
+      summary: Get a run artifact
+      description: |
+        Use this endpoint to fetch artifacts from a completed run. Once a run has completed,
+        you can use this endpoint to download the `manifest.json`, `run_results.json` or
+        `catalog.json` files from dbt Cloud. These _artifacts_ contain information about
+        the models in your dbt project, timing information around their execution, and
+        a status message indicating the result of the model build.
+
+        **Note:** By default, this endpoint returns artifacts from the _last step_ in the run.
+        To list artifacts from other steps in the run, use the `step` query parameter described below.
+      operationId: getArtifactsByRunId
+      parameters:
+        - $ref: '#/components/parameters/accountId'
+        - in: path
+          name: runId
+          schema:
+            type: integer
+          required: true
+          description: Numeric ID of the run to retrieve
+        - in: path
+          name: path
+          schema:
+            type: string
+          required: true
+          example: 'manifest.json'
+          description: |
+            Paths are rooted at the `target/` directory. Use `manifest.json`, `catalog.json`,
+            or `run_results.json` to download dbt-generated artifacts for the run.
+        - in: query
+          name: step
+          schema:
+            type: integer
+          required: false
+          description: |
+            The index of the Step in the Run to query for artifacts. The first step in the run
+            has the index `1`. If the `step` parameter is omitted, then this endpoint
+            will return the artifacts compiled for the last step in the run.
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                type: string
+                description: Raw file contents product by dbt
+                example: "# package.yaml
+                  packages:
+                  - package: dbt-labs/audit_helper
+                  version: 0.5.0
+                  - package: dbt-labs/codegen
+                  version: 0.5.0
+                  - package: dbt-labs/dbt_utils
+                  version: 0.8.2"
+        '400':
+          description: Bad Request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+        '404':
+          description: Unauthorized or Not Found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /acounts/{accountId}/steps/{stepId}/:
+    get:
+      tags:
+        - Runs
+      summary: Get step
+      description: Fetch information about a given step
+      operationId: getStep
+      parameters:
+        - $ref: '#/components/parameters/accountId'
+        - in: path
+          name: stepId
+          schema:
+            type: integer
+          required: true
+          description: Numeric ID of the step
+        - $ref: '#/components/parameters/includeRelated'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StepResponse'
+        '404':
+          description: Unauthorized or Not Found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /accounts/{accountId}/runs/{runId}/cancel/:
+    post:
+      tags:
+        - Runs
+      summary: Cancel a run
+      description: Cancel a run in progress
+      operationId: cancelRunById
+      parameters:
+        - $ref: '#/components/parameters/accountId'
+        - in: path
+          name: runId
+          schema:
+            type: integer
+          required: true
+          description: Numeric ID of the run to cancel
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RunResponse'
+
+        '404':
+          description: Unauthorized or Not Found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  parameters:
+    accountId:
+      in: path
+      name: accountId
+      schema:
+        type: integer
+      required: true
+      description: Numeric ID of the account
+    jobId:
+      in: path
+      name: jobId
+      schema:
+        type: integer
+      required: true
+      description: Numeric ID of the job
+    includeRelatedRun:
+      in: query
+      name: include_related
+      schema:
+        type: string
+        example: '["run_steps", "job"]'
+        description: |
+          List of related fields to pull with the run. Valid values are
+          "trigger", "job", "debug_logs", and "run_steps". If "debug_logs"
+          is not provided in a request, then the included debug logs will
+          be truncated to the last 1,000 lines of the debug log output file.
+    includeRelated:
+      in: query
+      name: include_related
+      schema:
+        type: string
+      example: '["trigger", "job"]'
+      description: |
+        List of related fields to pull with the run. Valid values are
+        "trigger", "job", and "debug_logs". If "debug_logs" is not provided
+        in a request, then the included debug logs will be truncated to the last
+        1,000 lines of the debug log output file.
+  schemas:
+    Account:
+      type: object
+      properties:
+        id:
+          type: "integer"
+          description: A unique identifier for dbt Cloud accounts
+          example: 1
+        name:
+          type: "string"
+          description: The name of the dbt Cloud account
+        plan:
+          anyOf:
+            - enum: ["developer", "team", "enterprise"]
+            - type: "string"
+          example: team
+          description: The billing tier for the account
+        pending_cancel:
+          type: "boolean"
+          example: False
+          description: True if the account is pending cancellation
+        state:
+          $ref: '#/components/schemas/State'
+        developer_seats:
+          type: "integer"
+          example: 5
+          description: The number of Developer Licenses assigned to the account
+        read_only_seats:
+          type: "integer"
+          example: 50
+          description: The number of Read Only Licenses assigned to the account
+        run_slots:
+          type: "integer"
+          example: 5
+          description: The number of Run Slots assigned to the account
+        created_at:
+          type: "string"
+          format: "date-time"
+        updated_at:
+          type: "string"
+          format: "date-time"
+
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: A unique identifier for a user
+          example: 100
+        state:
+          $ref: '#/components/schemas/State'
+        name:
+          type: string
+          description: The user's name
+          example: John Doe
+        lock_reason:
+          type: string
+          nullable: true
+          description: The reason an account was locked
+        unlock_if_subscription_renewed:
+          type: boolean
+          description: If set, an admin will be able to unlock it by renewing its subscription
+        plan:
+          type: string
+          enum: [free, trial, enterprise, developer, team, cancelled]
+          description: The user's plan type
+        pending_cancel:
+          type: boolean
+        run_slots:
+          type: integer
+        developer_seats:
+          type: integer
+        read_only_seats:
+          type: integer
+        queue_limit:
+          type: integer
+        pod_memory_request_mebibytes:
+          type: integer
+          description: |
+            The amount of memory (in MiB) to request for scheduled runs and
+            develop pods on this account.
+        run_duration_limit_seconds:
+          type: integer
+          description: |
+            The maximum duration a run for this account is permitted to execute
+            before it is terminated
+        enterprise_authentication_method:
+          nullable: true
+          type: string
+          enum: [none, okta, azure_ad, gsuite]
+        enterprise_login_slug:
+          type: string
+          nullable: true
+        enterprise_unique_identifier:
+          type: string
+          nullable: true
+        billing_email_address:
+          type: string
+          nullable: true
+        locked:
+          type: boolean
+        unlocked_at:
+          type: string
+          format: date-time
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        starter_repo_url:
+          type: string
+          nullable: true
+          description: The account will use this to initialize projects if defined
+        sso_reauth:
+          type: boolean
+          description: |
+            If set and the account has configured SSO, users will be forced to
+            re-authenticate with their identity provider periodically
+        git_auth_level:
+          type: string
+          enum: [personal, team]
+          nullable: true
+          description: Indicates the git provider authentication level for this user
+        identifier:
+          type: string
+          description: A globally unique identifier
+          example: act_0ujtsYcgvSTl8PAuAdqWYSMnLOv
+        docs_job_id:
+          deprecated: true
+        freshness_job_id:
+          deprecated: true
+        docs_job:
+          deprecated: true
+        freshness_job:
+          deprecated: true
+        enterprise_login_url:
+          type: string
+          nullable: true
+          description: The enterprise login URL, if available
+        permissions:
+          $ref: '#/components/schemas/UserLicense'
+    State:
+      type: integer
+      description: 1 = Active, 2 = Deleted
+    Project:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: A unique identifier for a project
+          example: 100
+        account_id:
+          type: integer
+          example: 1
+        connection:
+          $ref: '#/components/schemas/Connection'
+        connection_id:
+          type: integer
+          example: 5000
+        dbt_project_subdirectory:
+          type: string
+          nullable: true
+          description: Optional. The path in the attached repository where a dbt project can be found
+          example: analytics/dbt-models
+        name:
+          type: string
+          description: A name for the project
+          example: Analytics
+        repository:
+          $ref: '#/components/schemas/Repository'
+        repository_id:
+          type: integer
+          example: 6000
+        state:
+          $ref: '#/components/schemas/State'
+        created_at:
+          type: "string"
+          format: "date-time"
+        updated_at:
+          type: "string"
+          format: "date-time"
+
+    BigqueryCredential:
+      type: "object"
+      properties:
+        id:
+          type: integer
+          description: "Leave blank when creating a BigqueryCredential object"
+        account_id:
+          type: integer
+          description: "The account id to create the BigqueryCredential in"
+        type:
+          type: string
+          description: "The database type (for BigqueryCredentials, use \"bigquery\")"
+        state:
+          type: integer
+          description: "The state of the BigqueryCredential (1 = present, 2 = deleted)"
+        schema:
+          type: string
+          description: "The schema (dataset) for this BigqueryCredential object"
+    Connection:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The numeric ID for the connection
+        account_id:
+          type: integer
+          description: The numeric ID for the associated account
+        project_id:
+          type: integer
+          description: The numeric ID for the associated project
+        name:
+          type: string
+        type:
+          type: string
+          enum:
+            - postgres
+            - redshift
+            - snowflake
+            - bigquery
+            - adapter
+        state:
+          $ref: '#/components/schemas/State'
+        created_by_id:
+          nullable: true
+          type: integer
+          description: The ID of the user who created the connection
+        created_by_service_token_id:
+          nullable: true
+          type: integer
+          description: The ID of the service token used to create the connection
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        details:
+          oneOf:
+            - $ref: '#/components/schemas/BigQueryConnectionDetails'
+            - $ref: '#/components/schemas/RedshiftConnectionDetails'
+            - $ref: '#/components/schemas/PostgresConnectionDetails'
+            - $ref: '#/components/schemas/SnowflakeConnectionDetails'
+
+    SnowflakeConnectionDetails:
+      type: object
+      properties:
+        account:
+          type: string
+          description: The Snowflake account id
+        database:
+          type: string
+        warehouse:
+          type: string
+        allow_sso:
+          type: boolean
+        client_session_keep_alive:
+          type: boolean
+
+    BigQueryConnectionDetails:
+      type: object
+      properties:
+        project_id:
+          type: string
+          description: Google BigQuery project ID
+        timeout_seconds:
+          type: integer
+        private_key_id:
+          type: string
+        private_key:
+          type: string
+        client_email:
+          type: string
+        client_id:
+          type: string
+        auth_uri:
+          type: string
+        token_uri:
+          type: string
+        auth_provider_x509_cert_url:
+          type: string
+        client_x509_cert_url:
+          type: string
+
+    RedshiftConnectionDetails:
+      type: object
+      properties:
+        hostname:
+          type: string
+          description: The hostname of the Redshift instance
+          example: "my-redshift.us-east-2.redshift.amazonaws.com"
+        dbname:
+          type: string
+          description: The database name within Redshift
+        port:
+          type: integer
+          description: The port to connect to the Redshift database
+        tunnel_enabled:
+          type: boolean
+
+    PostgresConnectionDetails:
+      type: object
+      properties:
+        hostname:
+          type: string
+          description: The hostname of the Postgres instance
+        dbname:
+          type: string
+          description: The database name within Postgres
+        port:
+          type: integer
+          description: The port to connect to the Postgres database
+        tunnel_enabled:
+          type: boolean
+
+    Environment:
+      type: object
+      properties:
+        id:
+          type: "integer"
+          description: A unique identifier for an environment
+          example: 10
+        account_id:
+          type: "integer"
+          example: 1
+        deploy_key_id:
+          type: "integer"
+        created_by_id:
+          type: "integer"
+        repository_id:
+          type: "integer"
+        name:
+          type: "string"
+          description: A name for the environment
+        dbt_version:
+          type: "string"
+          description: The default dbt version for jobs in this environment
+          example: 0.17.0
+        use_custom_branch:
+          type: "boolean"
+          example: True
+          description: If set, use the custom_branch field when cloning and running jobs in this environment
+        custom_branch:
+          type: "string"
+          example: develop
+        supports_docs:
+          type: "boolean"
+          description: dbt Cloud-generated / read only field
+        state:
+          $ref: '#/components/schemas/State'
+    Job:
+      type: "object"
+      required:
+        - id
+        - account_id
+        - project_id
+        - environment_id
+        - dbt_version
+        - name
+        - execute_steps
+        - state
+        - triggers
+        - settings
+        - schedule
+      properties:
+        id:
+          type: integer
+          nullable: true
+          description: Must be `null` when creating a new Job
+        account_id:
+          type: integer
+          example: 1
+        project_id:
+          type: integer
+          example: 100
+        environment_id:
+          type: integer
+          example: 10
+        name:
+          type: string
+          description: A name for the job
+          example: Nightly run
+        dbt_version:
+          type: string
+          nullable: true
+          description: Overrides the dbt_version specified on the attached Environment if provided
+          example: 0.17.1
+        triggers:
+          type: object
+          required:
+            - github_webhook
+            - schedule
+          properties:
+            github_webhook:
+              type: boolean
+            git_provider_webhook:
+              type: boolean
+            schedule:
+              type: boolean
+            custom_branch_only:
+              type: boolean
+        execute_steps:
+          type: array
+          description: "A list of commands that the job will run"
+          example: ['dbt run', 'dbt test', 'dbt source snapshot-freshness']
+          items:
+            type: string
+        settings:
+          type: object
+          required:
+            - threads
+            - target_name
+          properties:
+            threads:
+              type: integer
+              example: 4
+              description: The maximum number of models to run in parallel in a single dbt run
+            target_name:
+              example: prod
+              description: Informational field that can be consumed in dbt project code with `{{ target.name }}`
+              type: string
+        state:
+          $ref: '#/components/schemas/State'
+        generate_docs:
+          type: "boolean"
+          example: True
+          description: When true, run a `dbt docs generate` step at the end of runs triggered from this job
+        schedule:
+          type: object
+          required:
+            - date
+            - time
+          properties:
+            cron:
+              type: string
+              description: Cron-syntax schedule for the job
+              example: "0 7 * * 1"
+            date:
+              type: object
+              required:
+                - type
+              properties:
+                type:
+                  type: string
+                  enum: ["every_day", "days_of_week", "custom_cron"]
+                days:
+                  type: array
+                  nullable: true
+                  items:
+                    type: integer
+                  description: The numeric days of the week, required with days_of_week
+                cron:
+                  type: string
+                  nullable: true
+                  description: The custom schedule in crontab format, required with custom_cron
+            time:
+              type: object
+              required:
+                - type
+              properties:
+                type:
+                  type: string
+                  enum: ["every_hour", "at_exact_hours"]
+                interval:
+                  type: integer
+                  nullable: true
+                  description: The number of hours between runs, required with every_hour
+                hours:
+                  type: array
+                  nullable: true
+                  items:
+                    type: integer
+                  description: The specific hours to run in UTC, required with at_exact_hours
+
+
+    Repository:
+      type: object
+      properties:
+        id:
+          type: "integer"
+          description: A unique identifier for the Repository
+          example: 200
+        account_id:
+          type: "integer"
+          example: 1
+        remote_url:
+          type: "string"
+          description: The git clone URL for the repository
+          example: "git@github.com:fishtown-analytics/jaffle_shop.git"
+        remote_backend:
+          type: "string"
+        git_clone_strategy:
+          type: "string"
+          enum:
+              - azure_active_directory_app
+              - deploy_key
+              - deploy_token
+              - github_app
+              - git_token
+        deploy_key_id:
+          type: "integer"
+        github_installation_id:
+          type: "integer"
+        state:
+          $ref: '#/components/schemas/State'
+        created_at:
+          type: "string"
+          format: "date-time"
+        updated_at:
+          type: "string"
+          format: "date-time"
+    Step:
+      type: object
+      properties:
+        id:
+          type: "integer"
+          description: Unique identifier for a step
+        run_id:
+          type: "integer"
+          description: Unique identifier for a run
+        account_id:
+          type: "integer"
+          description: Unique identifier for an account
+        logs:
+          type: "string"
+          nullable: true
+          description: High level logs for the given run step
+        debug_logs:
+          type: "string"
+          nullable: true
+          description: The full debug logs, if requested
+        log_location:
+          type: "string"
+          enum: ["legacy", "db", "s3", "empty"]
+        log_path:
+          type: "string"
+          nullable: true
+          description: The path to the logs, if available
+        debug_log_path:
+          type: "string"
+          nullable: true
+          description: The path to the debug logs, if available
+        log_archive_type:
+          type: "string"
+          enum: ["db_flushed", "scribe"]
+        truncated_debug_logs:
+          type: "string"
+          nullable: true
+          description: A subset of the debug logs
+        created_at:
+          type: "string"
+          format: "date-time"
+          description: When the step was originally created
+        updated_at:
+          type: "string"
+          format: "date-time"
+        started_at:
+          type: "string"
+          format: "date-time"
+          description: When processing of the step began
+        finished_at:
+          type: "string"
+          format: "date-time"
+          description: When the step completed
+        status_color:
+          type: "string"
+          description: A color code, in hex format to display status
+          example: "#55973a"
+        status_humanized:
+          type: "string"
+          enum:
+            - "Queued"
+            - "Starting"
+            - "Running"
+            - "Success"
+            - "Error"
+            - "Cancelled"
+        duration:
+          type: "string"
+          nullable: true
+          description: The time it took to run the given step
+          example: "00:00:23"
+        duration_humanized:
+          type: "string"
+          nullable: true
+          description: A human-readable version of the step duration
+          example: "23 seconds"
+    Run:
+      type: object
+      properties:
+        id:
+          type: "integer"
+          description: Unique identifier for a run
+          example: 10000
+        trigger_id:
+          type: "integer"
+        account_id:
+          type: "integer"
+          example: 1
+        project_id:
+          type: "integer"
+          example: 100
+        job_definition_id:
+          type: "integer"
+        status:
+          type: "integer"
+          enum: [1,2,3,10,20,30]
+          description: |
+            A numeric representation of the job status
+            1: Queued
+            2: Starting
+            3: Running
+            10: Success
+            20: Error
+            30: Cancelled
+        git_branch:
+          type: "string"
+          example: develop
+          description: Optional. If provided, check out this branch or tag before running the job.
+        git_sha:
+          type: "string"
+          example: "#abcd123"
+          description: Optional. If provided, check out this sha before running the job.
+        status_message:
+          type: "string"
+          nullable: true
+          example: Success
+        dbt_version:
+          type: "string"
+          example: 0.17.0
+        created_at:
+          type: "string"
+          format: "date-time"
+          description: When the run was initially created (either via the scheduler or via an API request / webhook)
+        updated_at:
+          type: "string"
+          format: "date-time"
+        dequeued_at:
+          type: "string"
+          format: "date-time"
+          description: When the run was picked up by a processor node
+        started_at:
+          type: "string"
+          format: "date-time"
+          description: When processing of the node actually began
+        finished_at:
+          type: "string"
+          format: "date-time"
+          description: When the run completed execution
+        last_checked_at:
+          type: "string"
+          format: "date-time"
+        last_heartbeat_at:
+          type: "string"
+          format: "date-time"
+        owner_thread_id:
+          type: "string"
+          nullable: true
+        executed_by_thread_id:
+          type: "string"
+        artifacts_saved:
+          type: "boolean"
+        artifact_s3_path:
+          type: "string"
+        has_docs_generated:
+          type: "boolean"
+        trigger:
+          $ref: '#/components/schemas/Trigger'
+        job:
+          $ref: '#/components/schemas/Job'
+        duration:
+          type: "string"
+          example: "00:00:12"
+        queued_duration:
+          type: "string"
+          example: "00:00:12"
+        run_duration:
+          type: "string"
+          example: "00:00:12"
+        duration_humanized:
+          type: "string"
+        queued_duration_humanized:
+          type: "string"
+        run_duration_humanized:
+          type: "string"
+        finished_at_humanized:
+          type: "string"
+        status_humanized:
+          type: "string"
+          enum: ["Queued", "Starting", "Running", "Success", "Error", "Cancelled"]
+        created_at_humanized:
+          type: "string"
+    Trigger:
+      type: "object"
+      properties:
+        id:
+          type: "integer"
+        cause:
+          type: "string"
+        job_definition_id:
+          type: "integer"
+        git_branch:
+          type: "string"
+        git_sha:
+          type: "string"
+        github_pull_request_id:
+          type: "integer"
+        schema_override:
+          type: "string"
+        dbt_version_override:
+          description: Optional. Override the version of dbt used to run this job
+          example: 0.18.0
+          type: string
+        threads_override:
+          description: Optional. Override the number of threads used to run this job
+          example: 8
+          type: integer
+        target_name_override:
+          description: Optional. Override the `target.name` context variable used when running this job
+          example: CI
+          type: string
+        generate_docs_override:
+          description: Optional. Override whether or not this job generates docs (true=yes, false=no)
+          example: true
+          type: boolean
+        timeout_seconds_override:
+          description: Optional. Override the timeout in seconds for this job
+          example: 60
+          type: integer
+        steps_override:
+          type: array
+          description: Optional. Override the list of steps for this job
+          example: ['dbt run', 'dbt test', 'dbt source snapshot-freshness']
+          items:
+            type: "string"
+        created_at:
+          type: "string"
+          format: "date-time"
+
+    UserLicense:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The numeric ID for the License
+        license_type:
+          type: string
+          enum: [developer, read_only]
+        user_id:
+          type: integer
+          description: The associated User ID
+        account_id:
+          type: integer
+          description: The associated Account ID
+        state:
+          $ref: '#/components/schemas/State'
+        groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/Group'
+        permission_statements:
+          type: array
+          items:
+            $ref: '#/components/schemas/PermissionStatement'
+
+    Group:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The numeric ID for the Group
+        account_id:
+          type: integer
+          description: The associated Account ID
+        name:
+          type: string
+          description: The name of the group
+          example: "Owner"
+        state:
+            $ref: '#/components/schemas/State'
+        assign_by_default:
+          type: boolean
+          description: Should the group be assigned by default?
+        group_permissions:
+          type: array
+          items:
+            $ref: '#/components/schemas/GroupPermission'
+
+    PermissionStatement:
+      type: object
+      properties:
+        permission:
+          type: string
+          enum:
+            - billing_read
+            - billing_write
+            - invitations_send
+            - invitations_modify
+            - invitations_read
+            - members_read
+            - members_write
+            - groups_read
+            - groups_write
+            - license_read
+            - license_allocate
+            - projects_read
+            - projects_develop
+            - projects_write
+            - projects_create
+            - projects_delete
+            - environments_read
+            - environments_write
+            - develop_access
+            - dbt_adapters_read
+            - dbt_adapters_write
+            - credentials_read
+            - credentials_write
+            - connections_read
+            - connections_write
+            - jobs_read
+            - jobs_write
+            - repositories_read
+            - repositories_write
+            - runs_trigger
+            - runs_write
+            - runs_read
+            - permissions_write
+            - permissions_read
+            - account_settings_write
+            - account_settings_read
+            - auth_provider_write
+            - auth_provider_read
+            - service_tokens_write
+            - service_tokens_read
+            - metadata_read
+            - webhooks_write
+            - custom_environment_variables_read
+            - custom_environment_variables_write
+            - audit_log_read
+        target_resource:
+          type: integer
+        all_resources:
+          type: boolean
+          description: Does this apply to all resources?
+
+    GroupPermission:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The numeric ID for the Group Permission
+        account_id:
+          type: integer
+          description: The associated Account ID
+        project_id:
+          type: integer
+          nullable: true
+          description: The associated Project ID
+        all_projects:
+          type: boolean
+          description: Does this apply to all projects?
+        permission_set:
+          type: string
+          enum:
+            - owner
+            - member
+            - account_admin
+            - admin
+            - database_admin
+            - git_admin
+            - team_admin
+            - job_admin
+            - job_viewer
+            - analyst
+            - developer
+            - stakeholder
+            - readonly
+            - project_creator
+            - account_viewer
+            - metadata_only
+            - webhooks_only
+        permission_level:
+          type: integer
+          nullable: true
+        state:
+          $ref: '#/components/schemas/State'
+
+    # responses
+    AccountsResponse:
+      type: "object"
+      properties:
+        data:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/Account"
+        status:
+          $ref: "#/components/schemas/Status"
+    AccountResponse:
+      type: "object"
+      properties:
+        data:
+          $ref: "#/components/schemas/Account"
+        status:
+          $ref: "#/components/schemas/Status"
+    UsersResponse:
+      type: "object"
+      properties:
+        data:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/User"
+        status:
+          $ref: "#/components/schemas/Status"
+    UpdateLicenseResponse:
+      type: "object"
+      properties:
+        data:
+          $ref: "#/components/schemas/UserLicense"
+        status:
+          $ref: "#/components/schemas/Status"
+    ProjectsResponse:
+      type: "object"
+      properties:
+        data:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/Project"
+        status:
+          $ref: "#/components/schemas/Status"
+    ProjectResponse:
+      type: "object"
+      properties:
+        data:
+          $ref: "#/components/schemas/Project"
+        status:
+          $ref: "#/components/schemas/Status"
+    ConnectionsResponse:
+      type: "object"
+      properties:
+        data:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/Connection"
+        status:
+          $ref: "#/components/schemas/Status"
+    CredentialsResponse:
+      type: "object"
+      properties:
+        data:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/BigqueryCredential"
+        status:
+          $ref: "#/components/schemas/Status"
+    EnvironmentsResponse:
+      type: "object"
+      properties:
+        data:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/Environment"
+        status:
+          $ref: "#/components/schemas/Status"
+    EnvironmentResponse:
+      type: "object"
+      properties:
+        data:
+          $ref: "#/components/schemas/Environment"
+        status:
+          $ref: "#/components/schemas/Status"
+    JobsResponse:
+      type: "object"
+      properties:
+        data:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/Job"
+        status:
+          $ref: "#/components/schemas/Status"
+    JobResponse:
+      type: "object"
+      properties:
+        data:
+          $ref: "#/components/schemas/Job"
+        status:
+          $ref: "#/components/schemas/Status"
+    RepositoriesResponse:
+      type: "object"
+      properties:
+        data:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/Repository"
+        status:
+          $ref: "#/components/schemas/Status"
+    RepositoryResponse:
+      type: "object"
+      properties:
+        data:
+          $ref: "#/components/schemas/Repository"
+        status:
+          $ref: "#/components/schemas/Status"
+    RunsResponse:
+      type: "object"
+      properties:
+        data:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/Run"
+        status:
+          $ref: "#/components/schemas/Status"
+    RunResponse:
+      type: "object"
+      properties:
+        data:
+          $ref: "#/components/schemas/Run"
+        status:
+          $ref: "#/components/schemas/Status"
+    StepResponse:
+      type: "object"
+      properties:
+        data:
+          $ref: "#/components/schemas/Step"
+        status:
+          $ref: "#/components/schemas/Status"
+    ErrorResponse:
+      type: "object"
+      properties:
+        status:
+          $ref: "#/components/schemas/Status"
+    Status:
+      type: "object"
+      properties:
+        code:
+          type: "integer"
+          description: "Same as the HTTP status code returned."
+          example: 200
+        is_success:
+          type: "boolean"
+          description: "Whether or not the request succeeded."
+        user_message:
+          type: "string"
+          description: "End-user-friendly description of the response."
+        developer_message:
+          type: "string"
+          description: "Technical description of the response."
+
+  securitySchemes:
+    TokenAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: "Bearer <Token>"
+
+security:
+  - TokenAuth: []

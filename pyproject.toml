@@ -94,4 +94,4 @@ responses = "responses"
 
 [tool.deptry.per_rule_ignores]
 DEP001 = [ "backports" ]
-DEP002 = [ "backports-datetime-fromisoformat" ]
+DEP002 = [ "backports-datetime-fromisoformat", "requests" ]
