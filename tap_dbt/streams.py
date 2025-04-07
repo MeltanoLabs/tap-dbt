@@ -25,7 +25,7 @@ class AccountBasedStream(DBTStream):
         if "{account_id}" in self.path:
             return [
                 {"account_id": account_id}
-                for account_id in t.cast(list, self.config["account_ids"])
+                for account_id in t.cast("list", self.config["account_ids"])
             ]
 
         errmsg = (
