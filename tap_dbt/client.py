@@ -5,7 +5,7 @@ from __future__ import annotations
 import importlib.resources
 import typing as t
 from abc import abstractmethod
-from functools import cache
+from functools import cache, cached_property
 
 import yaml
 from singer_sdk import RESTStream
@@ -61,8 +61,7 @@ class DBTStream(RESTStream):
         schema["components"] = openapi["components"]
         return resolve_schema_references(schema)
 
-    @property
-    @cache  # noqa: B019
+    @cached_property
     def schema(self) -> dict[str, t.Any]:
         """Return the schema for this stream.
 
