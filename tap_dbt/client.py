@@ -5,7 +5,7 @@ from __future__ import annotations
 import importlib.resources
 import typing as t
 from abc import abstractmethod
-from functools import cachedproperty
+from functools import cache, cachedproperty
 
 import yaml
 from singer_sdk import RESTStream
