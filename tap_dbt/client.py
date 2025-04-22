@@ -9,8 +9,8 @@ from functools import cache, cached_property
 
 import yaml
 from singer_sdk import RESTStream
-from singer_sdk._singerlib import resolve_schema_references
 from singer_sdk.authenticators import APIAuthenticatorBase, SimpleAuthenticator
+from singer_sdk.singerlib import resolve_schema_references
 
 from tap_dbt import schemas
 
