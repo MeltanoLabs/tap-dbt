@@ -134,7 +134,8 @@ class AccountsStream(DBTStream):
 
     name = "accounts"
     path = "/accounts"
-    openapi_ref = "Account"
+    openapi_ref = "AccountResponse"
+
 
 
 class ConnectionsStream(AccountBasedStream):
