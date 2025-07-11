@@ -213,10 +213,11 @@ class AuditLogEventStream(AccountBasedStream):
     openapi_ref = "PublicAuditLogResponse"
     api_version = "v3"
 
-class AuditLogEventStream(AccountBasedStream):
-    """A stream for the audit_log_event endpoint."""
 
-    name = "audit_log_event"
-    path = "/accounts/{account_id}/audit-logs/"
-    openapi_ref = "PublicAuditLogResponse"
-    api_version = "v3"
+class RunStep(AccountBasedStream):
+    """A stream for the run_step endpoint."""
+    name = "run_step"
+    path = "/accounts/{account_id}/steps/{id}/"
+    openapi_ref = "Step"
+
+
