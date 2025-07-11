@@ -16,13 +16,14 @@ from tap_dbt import schemas
 
 
 @cache
-def load_openapi() -> dict[str, t.Any]:
+def load_openapi(api_version: str) -> dict[str, t.Any]:
     """Load the OpenAPI specification from the package.
 
     Returns:
         The OpenAPI specification as a dict.
     """
-    schema_path = importlib.resources.files(schemas) / "openapi_v2.yaml"
+    openapi_spec = f"openapi_{api_version}.yaml"
+    schema_path = importlib.resources.files(schemas) / openapi_spec
     with schema_path.open() as schema:
         return yaml.safe_load(schema)
 
@@ -32,6 +33,7 @@ class DBTStream(RESTStream):
 
     primary_keys: t.ClassVar[list[str]] = ["id"]
     records_jsonpath = "$.data[*]"
+    api_version = "v2"
 
     @property
     def url_base(self) -> str:
@@ -57,7 +59,7 @@ class DBTStream(RESTStream):
 
     def _resolve_openapi_ref(self) -> dict[str, t.Any]:
         schema = {"$ref": f"#/components/schemas/{self.openapi_ref}"}
-        openapi = load_openapi()
+        openapi = load_openapi(self.api_version)
         schema["components"] = openapi["components"]
         return resolve_schema_references(schema)
 
