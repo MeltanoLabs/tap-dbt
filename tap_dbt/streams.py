@@ -197,12 +197,21 @@ class UsersStream(AccountBasedStream):
     openapi_ref = "User"
     selected_by_default = False
 
-class GroupsStream(AccountBasedStream):
+class GroupsResponseStream(AccountBasedStream):
     """A stream for the groups endpoint."""
 
     name = "groups"
     path = "/accounts/{account_id}/groups/"
-    openapi_ref = "Group"
+    openapi_ref = "GroupResponse"
+    api_version = "v3"
+
+class AuditLogEventStream(AccountBasedStream):
+    """A stream for the audit_log_event endpoint."""
+
+    name = "audit_log_event"
+    path = "/accounts/{account_id}/audit-logs/"
+    openapi_ref = "PublicAuditLogResponse"
+    api_version = "v3"
 
 class AuditLogEventStream(AccountBasedStream):
     """A stream for the audit_log_event endpoint."""
