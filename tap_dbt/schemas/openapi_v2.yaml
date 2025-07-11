@@ -917,6 +917,18 @@ components:
         updated_at:
           type: "string"
           format: "date-time"
+        account_migration_events:
+          type: array
+          items: {}
+          readOnly: true
+          description: (Deprecated)
+        groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/Group'
+          readOnly: true
+          default: []
+          description: The user groups in the account
 
     User:
       type: object
