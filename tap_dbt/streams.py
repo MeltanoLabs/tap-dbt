@@ -196,3 +196,10 @@ class UsersStream(AccountBasedStream):
     path = "/accounts/{account_id}/users"
     openapi_ref = "User"
     selected_by_default = False
+
+class GroupsStream(AccountBasedStream):
+    """A stream for the groups endpoint."""
+
+    name = "groups"
+    path = "/accounts/{account_id}/groups/"
+    openapi_ref = "Group"
