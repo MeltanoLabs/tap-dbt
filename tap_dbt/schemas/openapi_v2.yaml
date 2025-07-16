@@ -918,7 +918,7 @@ components:
           type: "string"
           format: "date-time"
         account_migration_events:
-          type: array
+          type: [array, 'null']
           items: {}
           readOnly: true
           description: (Deprecated)
