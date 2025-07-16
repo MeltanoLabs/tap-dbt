@@ -7687,13 +7687,13 @@ components:
         group_id:
           type: integer
         project_id:
-          type: integer
+          type: [integer, 'null']
         all_projects:
           type: boolean
         permission_set:
           $ref: '#/components/schemas/PermissionSetEnum'
         permission_level:
-          type: integer
+          type: [integer, 'null']
         state:
           example: 1
           type: integer
