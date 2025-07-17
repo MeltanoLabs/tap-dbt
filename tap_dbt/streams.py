@@ -8,7 +8,7 @@ import typing as t
 
 from singer_sdk.pagination import BaseOffsetPaginator
 from http import HTTPStatus
-
+from singer_sdk import typing as th
 from tap_dbt.client import DBTStream
 
 if sys.version_info < (3, 11):
@@ -189,6 +189,10 @@ class RunsStream(AccountBasedIncrementalStream):
     openapi_ref = "Run"
     replication_key = "finished_at"
 
+    def get_child_context(self, record, context):
+        return {**context, "run_id":record["id"]}if record["artifacts_saved"] else None
+    
+
 
 class UsersStream(AccountBasedStream):
     """A stream for the users endpoint."""
@@ -230,10 +234,18 @@ class AuditLogEventStream(AccountBasedStream):
 
 
 
-class RunStep(AccountBasedStream):
-    """A stream for the run_step endpoint."""
-    name = "run_step"
-    path = "/accounts/{account_id}/steps/{id}/"
-    openapi_ref = "Step"
 
+class RunArtifact(AccountBasedStream):
+    """A stream for the run_artifacts endpoint."""
 
+    name = "run_artifact"
+    path = "/accounts/{account_id}/runs/{run_id}/artifacts/"
+    openapi_ref = None
+    schema = th.PropertiesList(
+        th.Property("account_id", th.StringType),
+        th.Property("run_id", th.IntegerType),
+        th.Property("path", th.StringType),
+        ).to_dict()
+    parent_stream_type = RunsStream
+    def parse_response(self, response):
+        yield from ({"path": path}for path in super().parse_response(response))
