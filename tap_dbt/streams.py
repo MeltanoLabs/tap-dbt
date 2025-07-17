@@ -7,6 +7,7 @@ import sys
 import typing as t
 
 from singer_sdk.pagination import BaseOffsetPaginator
+from http import HTTPStatus
 
 from tap_dbt.client import DBTStream
 
@@ -212,6 +213,21 @@ class AuditLogEventStream(AccountBasedStream):
     path = "/accounts/{account_id}/audit-logs/"
     openapi_ref = "PublicAuditLogResponse"
     api_version = "v3"
+
+    def validate_response(self, response):
+        if response.status_code == HTTPStatus.BAD_REQUEST:
+            reason = response.json()["data"]["reason"]
+            if reason == "Audit logs are not enabled on this account":
+                self.logger.warning(reason)
+                return 
+        return super().validate_response(response)
+    
+    def parse_response(self, response):
+        if response.status_code == HTTPStatus.BAD_REQUEST:
+            return []
+        return super().parse_response(response)
+    
+
 
 
 class RunStep(AccountBasedStream):
