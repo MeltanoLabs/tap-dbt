@@ -1241,7 +1241,7 @@ components:
         state:
           $ref: '#/components/schemas/State'
     Job:
-      type: "object"
+      type: ["object", "null"]
       required:
         - id
         - account_id
@@ -1506,11 +1506,11 @@ components:
             20: Error
             30: Cancelled
         git_branch:
-          type: "string"
+          type: ["string", "null"]
           example: develop
           description: Optional. If provided, check out this branch or tag before running the job.
         git_sha:
-          type: "string"
+          type: ["string", "null"]
           example: "#abcd123"
           description: Optional. If provided, check out this sha before running the job.
         status_message:
@@ -1528,7 +1528,7 @@ components:
           type: "string"
           format: "date-time"
         dequeued_at:
-          type: "string"
+          type: ["string", "null"]
           format: "date-time"
           description: When the run was picked up by a processor node
         started_at:
@@ -1536,24 +1536,24 @@ components:
           format: "date-time"
           description: When processing of the node actually began
         finished_at:
-          type: "string"
+          type: ["string", "null"]
           format: "date-time"
           description: When the run completed execution
         last_checked_at:
-          type: "string"
+          type: ["string", "null"]
           format: "date-time"
         last_heartbeat_at:
-          type: "string"
+          type: ["string", "null"]
           format: "date-time"
         owner_thread_id:
           type: "string"
           nullable: true
         executed_by_thread_id:
-          type: "string"
+          type: ["string", "null"]
         artifacts_saved:
           type: "boolean"
         artifact_s3_path:
-          type: "string"
+          type: ["string", "null"]
         has_docs_generated:
           type: "boolean"
         trigger:
@@ -1582,8 +1582,31 @@ components:
           enum: ["Queued", "Starting", "Running", "Success", "Error", "Cancelled"]
         created_at_humanized:
           type: "string"
+        run_steps:
+          type: "array"
+          items: 
+            type: "object"
+            properties: 
+              run_id:
+                type: "integer"
+              account_id:
+                type: "integer"
+              index:
+                type: "integer"
+              status:
+                type: "integer"
+              name:
+                type: "string"
+              logs:
+                type: "string"
+              debug_logs:
+                type: "string"
+              log_path:
+                type: "string"
+              debug_log_path:
+                type: "string"
     Trigger:
-      type: "object"
+      type: ["object", "null"]
       properties:
         id:
           type: "integer"
