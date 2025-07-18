@@ -73,8 +73,9 @@ class DBTStream(RESTStream):
         """
         openapi_response = self._resolve_openapi_ref()
 
-        for property_schema in openapi_response["properties"].values():
-            if property_schema.get("nullable"):
+        for property_name, property_schema in openapi_response["properties"].items():
+            nullable = property_schema.get("nullable", True)
+            if property_name != self.replication_key and property_name not in self.primary_keys and nullable:
                 if isinstance(property_schema["type"], list):
                     property_schema["type"].append("null")
                 else:
