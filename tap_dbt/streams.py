@@ -187,7 +187,7 @@ class RunsStream(AccountBasedIncrementalStream):
     name = "runs"
     path = "/accounts/{account_id}/runs"
     openapi_ref = "Run"
-    replication_key = "updated_at"
+    replication_key = "created_at"
 
     def get_child_context(self, record, context):
         return {**context, "run_id":record["id"]}if record["artifacts_saved"] else None
