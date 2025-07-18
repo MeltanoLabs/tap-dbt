@@ -918,7 +918,7 @@ components:
           type: "string"
           format: "date-time"
         account_migration_events:
-          type: [array, 'null']
+          type: "array"
           items: {}
           readOnly: true
           description: (Deprecated)
@@ -1241,7 +1241,7 @@ components:
         state:
           $ref: '#/components/schemas/State'
     Job:
-      type: ["object", "null"]
+      type: "object"
       required:
         - id
         - account_id
@@ -1506,11 +1506,11 @@ components:
             20: Error
             30: Cancelled
         git_branch:
-          type: ["string", "null"]
+          type: "string"
           example: develop
           description: Optional. If provided, check out this branch or tag before running the job.
         git_sha:
-          type: ["string", "null"]
+          type: "string"
           example: "#abcd123"
           description: Optional. If provided, check out this sha before running the job.
         status_message:
@@ -1528,7 +1528,7 @@ components:
           type: "string"
           format: "date-time"
         dequeued_at:
-          type: ["string", "null"]
+          type: "string"
           format: "date-time"
           description: When the run was picked up by a processor node
         started_at:
@@ -1536,24 +1536,24 @@ components:
           format: "date-time"
           description: When processing of the node actually began
         finished_at:
-          type: ["string", "null"]
+          type: "string"
           format: "date-time"
           description: When the run completed execution
         last_checked_at:
-          type: ["string", "null"]
+          type: "string"
           format: "date-time"
         last_heartbeat_at:
-          type: ["string", "null"]
+          type: "string"
           format: "date-time"
         owner_thread_id:
           type: "string"
           nullable: true
         executed_by_thread_id:
-          type: ["string", "null"]
+          type: "string"
         artifacts_saved:
           type: "boolean"
         artifact_s3_path:
-          type: ["string", "null"]
+          type: "string"
         has_docs_generated:
           type: "boolean"
         trigger:
@@ -1606,7 +1606,7 @@ components:
               debug_log_path:
                 type: "string"
     Trigger:
-      type: ["object", "null"]
+      type: "object"
       properties:
         id:
           type: "integer"
