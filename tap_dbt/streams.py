@@ -202,7 +202,7 @@ class UsersStream(AccountBasedStream):
     openapi_ref = "User"
     selected_by_default = False
 
-class GroupsResponseStream(AccountBasedStream):
+class GroupsStream(AccountBasedStream):
     """A stream for the groups endpoint."""
 
     name = "groups"
