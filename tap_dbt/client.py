@@ -38,7 +38,8 @@ class DBTStream(RESTStream):
     @property
     def url_base(self) -> str:
         """Base URL for this stream."""
-        return self.config.get("base_url", "https://cloud.getdbt.com/api/v2")
+        base_url: str =  self.config["base_url"]
+        return f'{(base_url.rsplit("/", 1))[0]}/{self.api_version}'
 
     @property
     def http_headers(self) -> dict:
