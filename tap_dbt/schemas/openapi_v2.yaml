@@ -1334,7 +1334,7 @@ components:
               properties:
                 type:
                   type: string
-                  enum: ["every_day", "days_of_week", "custom_cron"]
+                  enum: ["every_day", "days_of_week", "custom_cron", "interval_cron"]
                 days:
                   type: array
                   nullable: true
