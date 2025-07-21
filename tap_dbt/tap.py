@@ -24,7 +24,6 @@ from tap_dbt.streams import (
     RunArtifact,
     RunsStream,
     UsersStream,
-
 )
 
 TAP_NAME = "tap-dbt"
@@ -40,7 +39,6 @@ STREAM_TYPES = [
     RunArtifact,
     RunsStream,
     UsersStream,
-
 ]
 
 

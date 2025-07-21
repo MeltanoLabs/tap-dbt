@@ -38,8 +38,8 @@ class DBTStream(RESTStream):
     @property
     def url_base(self) -> str:
         """Base URL for this stream."""
-        base_url: str =  self.config["base_url"]
-        return f'{(base_url.rsplit("/", 1))[0]}/{self.api_version}'
+        base_url: str = self.config["base_url"]
+        return f"{(base_url.rsplit('/', 1))[0]}/{self.api_version}"
 
     @property
     def http_headers(self) -> dict:
@@ -75,13 +75,20 @@ class DBTStream(RESTStream):
 
         for property_name, property_schema in openapi_response["properties"].items():
             nullable = property_schema.get("nullable", True)
-            if property_name != self.replication_key and property_name not in self.primary_keys and nullable:
+            if (
+                property_name != self.replication_key
+                and property_name not in self.primary_keys
+                and nullable
+            ):
                 self.logger.info(f"{property_name} {property_schema}")
                 if "anyOf" in property_schema:
-                    if not any(schema.get("type") == "null" for schema in property_schema["anyOf"]):
-                        property_schema["anyOf"].append({"type" : "null"})
+                    if not any(
+                        schema.get("type") == "null"
+                        for schema in property_schema["anyOf"]
+                    ):
+                        property_schema["anyOf"].append({"type": "null"})
                 elif "type" not in property_schema:
-                    continue 
+                    continue
                 elif isinstance(property_schema["type"], list):
                     property_schema["type"].append("null")
                 else:

@@ -1584,9 +1584,9 @@ components:
           type: "string"
         run_steps:
           type: "array"
-          items: 
+          items:
             type: "object"
-            properties: 
+            properties:
               run_id:
                 type: "integer"
               account_id:

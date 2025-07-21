@@ -190,8 +190,9 @@ class RunsStream(AccountBasedIncrementalStream):
     replication_key = "created_at"
 
     def get_child_context(self, record, context):
-        return {**context, "run_id":record["id"]}if record["artifacts_saved"] else None
-    
+        return (
+            {**context, "run_id": record["id"]} if record["artifacts_saved"] else None
+        )
 
 
 class UsersStream(AccountBasedStream):
@@ -202,6 +203,7 @@ class UsersStream(AccountBasedStream):
     openapi_ref = "User"
     selected_by_default = False
 
+
 class GroupsStream(AccountBasedStream):
     """A stream for the groups endpoint."""
 
@@ -209,6 +211,7 @@ class GroupsStream(AccountBasedStream):
     path = "/accounts/{account_id}/groups/"
     openapi_ref = "GroupResponse"
     api_version = "v3"
+
 
 class AuditLogEventStream(AccountBasedStream):
     """A stream for the audit_log_event endpoint."""
@@ -223,16 +226,13 @@ class AuditLogEventStream(AccountBasedStream):
             reason = response.json()["data"]["reason"]
             if reason == "Audit logs are not enabled on this account":
                 self.logger.warning(reason)
-                return 
+                return
         return super().validate_response(response)
-    
+
     def parse_response(self, response):
         if response.status_code == HTTPStatus.BAD_REQUEST:
             return []
         return super().parse_response(response)
-    
-
-
 
 
 class RunArtifact(AccountBasedStream):
@@ -245,7 +245,8 @@ class RunArtifact(AccountBasedStream):
         th.Property("account_id", th.StringType),
         th.Property("run_id", th.IntegerType),
         th.Property("path", th.StringType),
-        ).to_dict()
+    ).to_dict()
     parent_stream_type = RunsStream
+
     def parse_response(self, response):
-        yield from ({"path": path}for path in super().parse_response(response))
+        yield from ({"path": path} for path in super().parse_response(response))
