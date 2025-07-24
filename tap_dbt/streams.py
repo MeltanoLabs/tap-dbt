@@ -6,7 +6,8 @@ import datetime
 import sys
 import typing as t
 
-from singer_sdk.pagination import BaseOffsetPaginator
+
+from singer_sdk.pagination import BaseOffsetPaginator, SinglePagePaginator
 from http import HTTPStatus
 from singer_sdk import typing as th
 from tap_dbt.client import DBTStream
@@ -250,3 +251,6 @@ class RunArtifact(AccountBasedStream):
 
     def parse_response(self, response):
         yield from ({"path": path} for path in super().parse_response(response))
+
+    def get_new_paginator(self):
+        return SinglePagePaginator()
