@@ -1752,6 +1752,41 @@ components:
             - custom_environment_variables_read
             - custom_environment_variables_write
             - audit_log_read
+            - account_connections_read
+            - account_connections_write
+            - platform_metadata_credentials_read
+            - platform_metadata_credentials_write
+            - private_link_read
+            - private_link_write
+            - integrations_read
+            - integrations_write
+            - semantic_layer_configuration_read
+            - semantic_layer_configuration_write
+            - account_features_read
+            - account_features_write
+            - account_write
+            - git_applications_read
+            - git_applications_write
+            - internal_webhooks_read
+            - internal_webhooks_write
+            - job_notifications_read
+            - job_notifications_write
+            - model_notifications_read
+            - model_notifications_write
+            - oauth_configurations_read
+            - oauth_configurations_write
+            - open_ai_key_read
+            - open_ai_key_write
+            - public_models_read
+            - public_models_write
+            - account_migration_eligibility_read
+            - account_migration_eligibility_write
+            - ip_restrictions_read
+            - ip_restrictions_write
+            - reporting_read
+            - reporting_write
+            - cost_management_read
+            - cost_management_write
         target_resource:
           type: integer
         all_resources:
