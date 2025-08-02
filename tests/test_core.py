@@ -1,6 +1,8 @@
 """Integration tests."""
 
 from __future__ import annotations
+from tap_dbt.streams import RunsStream
+from tap_dbt.streams import GroupsStream
 
 import re
 from typing import TYPE_CHECKING, Any
@@ -500,3 +502,45 @@ def test_standard_tap_tests(  # noqa: PLR0913
     tests = get_standard_tap_tests(TapDBT, config=SAMPLE_CONFIG)
     for test in tests:
         test()
+
+
+@pytest.mark.parametrize(
+    ("base_url_config", "stream_cls", "base_url_expected"),
+    [
+        pytest.param(
+            "https://cloud.getdbt.com/api/v2",
+            RunsStream,
+            "https://cloud.getdbt.com/api/v2",
+            id="v2_base, v2_stream",
+        ),
+        pytest.param(
+            "https://cloud.getdbt.com/api/v2",
+            GroupsStream,
+            "https://cloud.getdbt.com/api/v3",
+            id="v2_base, v3_stream",
+        ),
+        pytest.param(
+            "https://cloud.getdbt.com/api/v3",
+            RunsStream,
+            "https://cloud.getdbt.com/api/v2",
+            id="v3_base, v2_stream",
+        ),
+        pytest.param(
+            "https://cloud.getdbt.com/api/v3",
+            GroupsStream,
+            "https://cloud.getdbt.com/api/v3",
+            id="v3_base, v3_stream",
+        ),
+    ],
+)
+def test_dynamic_base_url(base_url_config, stream_cls, base_url_expected):
+    # v2 tap v2 stream
+    tap = TapDBT(
+        config={
+            "base_url": base_url_config,
+            "api_key": "test-api-key",
+            "account_ids": ["test-account-id"],
+        }
+    )
+    stream = stream_cls(tap)
+    assert stream.url_base == base_url_expected

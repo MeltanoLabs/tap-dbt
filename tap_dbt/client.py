@@ -16,13 +16,14 @@ from tap_dbt import schemas
 
 
 @cache
-def load_openapi() -> dict[str, t.Any]:
+def load_openapi(api_version: str) -> dict[str, t.Any]:
     """Load the OpenAPI specification from the package.
 
     Returns:
         The OpenAPI specification as a dict.
     """
-    schema_path = importlib.resources.files(schemas) / "openapi_v2.yaml"
+    openapi_spec = f"openapi_{api_version}.yaml"
+    schema_path = importlib.resources.files(schemas) / openapi_spec
     with schema_path.open() as schema:
         return yaml.safe_load(schema)
 
@@ -32,11 +33,13 @@ class DBTStream(RESTStream):
 
     primary_keys: t.ClassVar[list[str]] = ["id"]
     records_jsonpath = "$.data[*]"
+    api_version = "v2"
 
     @property
     def url_base(self) -> str:
         """Base URL for this stream."""
-        return self.config.get("base_url", "https://cloud.getdbt.com/api/v2")
+        base_url: str = self.config["base_url"]
+        return f"{(base_url.rsplit('/', 1))[0]}/{self.api_version}"
 
     @property
     def http_headers(self) -> dict:
@@ -57,7 +60,7 @@ class DBTStream(RESTStream):
 
     def _resolve_openapi_ref(self) -> dict[str, t.Any]:
         schema = {"$ref": f"#/components/schemas/{self.openapi_ref}"}
-        openapi = load_openapi()
+        openapi = load_openapi(self.api_version)
         schema["components"] = openapi["components"]
         return resolve_schema_references(schema)
 
@@ -70,9 +73,23 @@ class DBTStream(RESTStream):
         """
         openapi_response = self._resolve_openapi_ref()
 
-        for property_schema in openapi_response["properties"].values():
-            if property_schema.get("nullable"):
-                if isinstance(property_schema["type"], list):
+        for property_name, property_schema in openapi_response["properties"].items():
+            nullable = property_schema.get("nullable", True)
+            if (
+                property_name != self.replication_key
+                and property_name not in self.primary_keys
+                and nullable
+            ):
+                self.logger.info(f"{property_name} {property_schema}")
+                if "anyOf" in property_schema:
+                    if not any(
+                        schema.get("type") == "null"
+                        for schema in property_schema["anyOf"]
+                    ):
+                        property_schema["anyOf"].append({"type": "null"})
+                elif "type" not in property_schema:
+                    continue
+                elif isinstance(property_schema["type"], list):
                     property_schema["type"].append("null")
                 else:
                     property_schema["type"] = [property_schema["type"], "null"]

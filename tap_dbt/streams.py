@@ -6,8 +6,10 @@ import datetime
 import sys
 import typing as t
 
-from singer_sdk.pagination import BaseOffsetPaginator
 
+from singer_sdk.pagination import BaseOffsetPaginator, SinglePagePaginator
+from http import HTTPStatus
+from singer_sdk import typing as th
 from tap_dbt.client import DBTStream
 
 if sys.version_info < (3, 11):
@@ -186,7 +188,12 @@ class RunsStream(AccountBasedIncrementalStream):
     name = "runs"
     path = "/accounts/{account_id}/runs"
     openapi_ref = "Run"
-    replication_key = "finished_at"
+    replication_key = "created_at"
+
+    def get_child_context(self, record, context):
+        return (
+            {**context, "run_id": record["id"]} if record["artifacts_saved"] else None
+        )
 
 
 class UsersStream(AccountBasedStream):
@@ -196,3 +203,54 @@ class UsersStream(AccountBasedStream):
     path = "/accounts/{account_id}/users"
     openapi_ref = "User"
     selected_by_default = False
+
+
+class GroupsStream(AccountBasedStream):
+    """A stream for the groups endpoint."""
+
+    name = "groups"
+    path = "/accounts/{account_id}/groups/"
+    openapi_ref = "GroupResponse"
+    api_version = "v3"
+
+
+class AuditLogEventStream(AccountBasedStream):
+    """A stream for the audit_log_event endpoint."""
+
+    name = "audit_log_event"
+    path = "/accounts/{account_id}/audit-logs/"
+    openapi_ref = "PublicAuditLogResponse"
+    api_version = "v3"
+
+    def validate_response(self, response):
+        if response.status_code == HTTPStatus.BAD_REQUEST:
+            reason = response.json()["data"]["reason"]
+            if reason == "Audit logs are not enabled on this account":
+                self.logger.warning(reason)
+                return
+        return super().validate_response(response)
+
+    def parse_response(self, response):
+        if response.status_code == HTTPStatus.BAD_REQUEST:
+            return []
+        return super().parse_response(response)
+
+
+class RunArtifact(AccountBasedStream):
+    """A stream for the run_artifacts endpoint."""
+
+    name = "run_artifact"
+    path = "/accounts/{account_id}/runs/{run_id}/artifacts/"
+    openapi_ref = None
+    schema = th.PropertiesList(
+        th.Property("account_id", th.StringType),
+        th.Property("run_id", th.IntegerType),
+        th.Property("path", th.StringType),
+    ).to_dict()
+    parent_stream_type = RunsStream
+
+    def parse_response(self, response):
+        yield from ({"path": path} for path in super().parse_response(response))
+
+    def get_new_paginator(self):
+        return SinglePagePaginator()
