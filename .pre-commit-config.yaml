@@ -36,18 +36,18 @@ repos:
   - id: check-github-workflows
 
 - repo: https://github.com/astral-sh/ruff-pre-commit
-  rev: v0.12.2
+  rev: v0.12.7
   hooks:
   - id: ruff
   - id: ruff-format
 
 - repo: https://github.com/astral-sh/uv-pre-commit
-  rev: 0.7.19
+  rev: 0.8.4
   hooks:
   - id: uv-lock
 
 - repo: https://github.com/pre-commit/mirrors-mypy
-  rev: v1.16.1
+  rev: v1.17.1
   hooks:
   - id: mypy
     pass_filenames: true
