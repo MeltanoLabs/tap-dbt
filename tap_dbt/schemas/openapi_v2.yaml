@@ -1029,7 +1029,9 @@ components:
           nullable: true
           description: The enterprise login URL, if available
         permissions:
-          $ref: '#/components/schemas/UserLicense'
+          type: array
+          items: 
+            $ref: '#/components/schemas/UserLicense'
     State:
       type: integer
       description: 1 = Active, 2 = Deleted
