@@ -1787,6 +1787,8 @@ components:
             - reporting_write
             - cost_management_read
             - cost_management_write
+            - profiles_read
+            - profiles_write
         target_resource:
           type: integer
         all_resources:
