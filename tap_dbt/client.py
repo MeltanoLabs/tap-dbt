@@ -1,6 +1,7 @@
 """Base class for connecting to th dbt Cloud API."""
 
 from __future__ import annotations
+from singer_sdk.helpers._typing import append_type
 
 import importlib.resources
 import typing as t
@@ -73,27 +74,33 @@ class DBTStream(RESTStream):
         """
         openapi_response = self._resolve_openapi_ref()
 
-        for property_name, property_schema in openapi_response["properties"].items():
-            nullable = property_schema.get("nullable", True)
-            if (
-                property_name != self.replication_key
-                and property_name not in self.primary_keys
-                and nullable
-            ):
-                self.logger.info(f"{property_name} {property_schema}")
-                if "anyOf" in property_schema:
-                    if not any(
-                        schema.get("type") == "null"
-                        for schema in property_schema["anyOf"]
-                    ):
-                        property_schema["anyOf"].append({"type": "null"})
-                elif "type" not in property_schema:
-                    continue
-                elif isinstance(property_schema["type"], list):
-                    property_schema["type"].append("null")
-                else:
-                    property_schema["type"] = [property_schema["type"], "null"]
+        def append_null_nested(schema):
+            new_schema = {}
 
+            if "type" in schema:
+                if schema.get("nullable", True):
+                    new_schema["type"] = append_type(schema, "null")["type"]
+                else:
+                    new_schema["type"] = schema["type"]
+
+            if "properties" in schema:
+                new_schema["properties"] = {}
+                for p_name, p_schema in schema["properties"].items():
+                    if (
+                        p_name != self.replication_key
+                        and p_name not in self.primary_keys
+                    ):
+                        new_schema["properties"][p_name] = append_null_nested(p_schema)
+                    else:
+                        new_schema["properties"][p_name] = p_schema
+
+            if "items" in schema:
+                new_schema["items"] = append_null_nested(schema["items"])
+
+            return new_schema
+                            
+
+        openapi_response = append_null_nested(openapi_response)
         return openapi_response
 
     @property
