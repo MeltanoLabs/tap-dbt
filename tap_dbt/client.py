@@ -98,10 +98,8 @@ class DBTStream(RESTStream):
                 new_schema["items"] = append_null_nested(schema["items"])
 
             return new_schema
-                            
 
-        openapi_response = append_null_nested(openapi_response)
-        return openapi_response
+        return append_null_nested(openapi_response)
 
     @property
     @abstractmethod
