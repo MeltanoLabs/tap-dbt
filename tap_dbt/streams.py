@@ -227,7 +227,7 @@ class AuditLogEventStream(AccountBasedStream):
             reason = response.json()["data"]["reason"]
             if reason == "Audit logs are not enabled on this account":
                 self.logger.warning(reason)
-                return
+                return None
         return super().validate_response(response)
 
     def parse_response(self, response):
