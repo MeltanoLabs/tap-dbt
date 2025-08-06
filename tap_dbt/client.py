@@ -1,7 +1,6 @@
 """Base class for connecting to th dbt Cloud API."""
 
 from __future__ import annotations
-from singer_sdk.helpers._typing import append_type
 
 import importlib.resources
 import typing as t
@@ -11,6 +10,7 @@ from functools import cache, cached_property
 import yaml
 from singer_sdk import RESTStream
 from singer_sdk.authenticators import APIAuthenticatorBase, SimpleAuthenticator
+from singer_sdk.helpers._typing import append_type
 from singer_sdk.singerlib import resolve_schema_references
 
 from tap_dbt import schemas

@@ -5,11 +5,11 @@ from __future__ import annotations
 import datetime
 import sys
 import typing as t
-
-
-from singer_sdk.pagination import BaseOffsetPaginator, SinglePagePaginator
 from http import HTTPStatus
+
 from singer_sdk import typing as th
+from singer_sdk.pagination import BaseOffsetPaginator, SinglePagePaginator
+
 from tap_dbt.client import DBTStream
 
 if sys.version_info < (3, 11):
