@@ -917,6 +917,18 @@ components:
         updated_at:
           type: "string"
           format: "date-time"
+        account_migration_events:
+          type: "array"
+          items: {}
+          readOnly: true
+          description: (Deprecated)
+        groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/Group'
+          readOnly: true
+          default: []
+          description: The user groups in the account
 
     User:
       type: object
@@ -1017,7 +1029,9 @@ components:
           nullable: true
           description: The enterprise login URL, if available
         permissions:
-          $ref: '#/components/schemas/UserLicense'
+          type: array
+          items:
+            $ref: '#/components/schemas/UserLicense'
     State:
       type: integer
       description: 1 = Active, 2 = Deleted
@@ -1316,41 +1330,12 @@ components:
               description: Cron-syntax schedule for the job
               example: "0 7 * * 1"
             date:
-              type: object
-              required:
-                - type
-              properties:
-                type:
-                  type: string
-                  enum: ["every_day", "days_of_week", "custom_cron"]
-                days:
-                  type: array
-                  nullable: true
-                  items:
-                    type: integer
-                  description: The numeric days of the week, required with days_of_week
-                cron:
-                  type: string
-                  nullable: true
-                  description: The custom schedule in crontab format, required with custom_cron
+              type: string
+              enum: ["every_day", "days_of_week", "custom_cron", "interval_cron"]
             time:
-              type: object
-              required:
-                - type
-              properties:
-                type:
-                  type: string
-                  enum: ["every_hour", "at_exact_hours"]
-                interval:
-                  type: integer
-                  nullable: true
-                  description: The number of hours between runs, required with every_hour
-                hours:
-                  type: array
-                  nullable: true
-                  items:
-                    type: integer
-                  description: The specific hours to run in UTC, required with at_exact_hours
+              type: string
+              enum: ["every_hour", "at_exact_hours"]
+            
 
 
     Repository:
@@ -1570,6 +1555,29 @@ components:
           enum: ["Queued", "Starting", "Running", "Success", "Error", "Cancelled"]
         created_at_humanized:
           type: "string"
+        run_steps:
+          type: "array"
+          items:
+            type: "object"
+            properties:
+              run_id:
+                type: "integer"
+              account_id:
+                type: "integer"
+              index:
+                type: "integer"
+              status:
+                type: "integer"
+              name:
+                type: "string"
+              logs:
+                type: "string"
+              debug_logs:
+                type: "string"
+              log_path:
+                type: "string"
+              debug_log_path:
+                type: "string"
     Trigger:
       type: "object"
       properties:
@@ -1717,6 +1725,43 @@ components:
             - custom_environment_variables_read
             - custom_environment_variables_write
             - audit_log_read
+            - account_connections_read
+            - account_connections_write
+            - platform_metadata_credentials_read
+            - platform_metadata_credentials_write
+            - private_link_read
+            - private_link_write
+            - integrations_read
+            - integrations_write
+            - semantic_layer_configuration_read
+            - semantic_layer_configuration_write
+            - account_features_read
+            - account_features_write
+            - account_write
+            - git_applications_read
+            - git_applications_write
+            - internal_webhooks_read
+            - internal_webhooks_write
+            - job_notifications_read
+            - job_notifications_write
+            - model_notifications_read
+            - model_notifications_write
+            - oauth_configurations_read
+            - oauth_configurations_write
+            - open_ai_key_read
+            - open_ai_key_write
+            - public_models_read
+            - public_models_write
+            - account_migration_eligibility_read
+            - account_migration_eligibility_write
+            - ip_restrictions_read
+            - ip_restrictions_write
+            - reporting_read
+            - reporting_write
+            - cost_management_read
+            - cost_management_write
+            - profiles_read
+            - profiles_write
         target_resource:
           type: integer
         all_resources:
