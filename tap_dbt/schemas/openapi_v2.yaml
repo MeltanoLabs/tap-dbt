@@ -1330,41 +1330,12 @@ components:
               description: Cron-syntax schedule for the job
               example: "0 7 * * 1"
             date:
-              type: object
-              required:
-                - type
-              properties:
-                type:
-                  type: string
-                  enum: ["every_day", "days_of_week", "custom_cron", "interval_cron"]
-                days:
-                  type: array
-                  nullable: true
-                  items:
-                    type: integer
-                  description: The numeric days of the week, required with days_of_week
-                cron:
-                  type: string
-                  nullable: true
-                  description: The custom schedule in crontab format, required with custom_cron
+              type: string
+              enum: ["every_day", "days_of_week", "custom_cron", "interval_cron"]
             time:
-              type: object
-              required:
-                - type
-              properties:
-                type:
-                  type: string
-                  enum: ["every_hour", "at_exact_hours"]
-                interval:
-                  type: integer
-                  nullable: true
-                  description: The number of hours between runs, required with every_hour
-                hours:
-                  type: array
-                  nullable: true
-                  items:
-                    type: integer
-                  description: The specific hours to run in UTC, required with at_exact_hours
+              type: string
+              enum: ["every_hour", "at_exact_hours"]
+            
 
 
     Repository:
