@@ -534,7 +534,6 @@ def test_standard_tap_tests(  # noqa: PLR0913
     ],
 )
 def test_dynamic_base_url(base_url_config, stream_cls, base_url_expected):
-    # v2 tap v2 stream
     tap = TapDBT(
         config={
             "base_url": base_url_config,
