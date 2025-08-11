@@ -246,6 +246,9 @@ class RunArtifact(AccountBasedStream):
         th.Property("run_id", th.IntegerType),
         th.Property("path", th.StringType),
     ).to_dict()
+
+    primary_keys: t.ClassVar[list[str]] = ["account_id", "run_id", "path"]
+
     parent_stream_type = RunsStream
 
     def parse_response(self, response):
