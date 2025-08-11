@@ -36,7 +36,7 @@ dependencies = [
   "backports-datetime-fromisoformat~=2.0.1; python_version<'3.11'",
   "pyyaml~=6.0",
   "requests~=2.32.0",
-  "singer-sdk~=0.47.0",
+  "singer-sdk~=0.48.0",
 ]
 
 urls.Documentation = "https://github.com/MeltanoLabs/tap-dbt/blob/main/README.md"
