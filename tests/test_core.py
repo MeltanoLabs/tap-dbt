@@ -1,8 +1,6 @@
 """Integration tests."""
 
 from __future__ import annotations
-from tap_dbt.streams import RunsStream
-from tap_dbt.streams import GroupsStream
 
 import re
 from typing import TYPE_CHECKING, Any
@@ -11,6 +9,7 @@ import pytest
 import responses
 from singer_sdk.testing import get_standard_tap_tests
 
+from tap_dbt.streams import GroupsStream, RepositoriesStream, RunsStream
 from tap_dbt.tap import TapDBT
 
 if TYPE_CHECKING:
