@@ -86,10 +86,7 @@ class DBTStream(RESTStream):
             if "properties" in schema:
                 new_schema["properties"] = {}
                 for p_name, p_schema in schema["properties"].items():
-                    if (
-                        p_name != self.replication_key
-                        and p_name not in self.primary_keys
-                    ):
+                    if p_name not in self.primary_keys:
                         new_schema["properties"][p_name] = append_null_nested(p_schema)
                     else:
                         new_schema["properties"][p_name] = p_schema
