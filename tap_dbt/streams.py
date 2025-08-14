@@ -189,7 +189,6 @@ class RunsStream(AccountBasedIncrementalStream):
     path = "/accounts/{account_id}/runs"
     openapi_ref = "Run"
     replication_key = "finished_at"
-    is_timestamp_replication_key = True
 
     def get_child_context(self, record, context):
         return (

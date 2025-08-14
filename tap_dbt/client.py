@@ -74,14 +74,11 @@ class DBTStream(RESTStream):
         """
         openapi_response = self._resolve_openapi_ref()
 
-        def append_null_nested(schema):
-            new_schema = {}
+        def append_null_nested(schema: dict):
+            new_schema = schema.copy()
 
-            if "type" in schema:
-                if schema.get("nullable", True):
-                    new_schema["type"] = append_type(schema, "null")["type"]
-                else:
-                    new_schema["type"] = schema["type"]
+            if "type" in schema and schema.get("nullable", True):
+                new_schema["type"] = append_type(schema, "null")["type"]
 
             if "properties" in schema:
                 new_schema["properties"] = {}
