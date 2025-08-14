@@ -191,9 +191,11 @@ class RunsStream(AccountBasedIncrementalStream):
     replication_key = "finished_at"
 
     def get_child_context(self, record, context):
-        return (
-            {**context, "run_id": record["id"]} if record["artifacts_saved"] else None
-        )
+        return {
+            **context,
+            "run_id": record["id"],
+            "artifacts_saved": record["artifacts_saved"],
+        }
 
 
 class UsersStream(AccountBasedStream):
@@ -252,6 +254,11 @@ class RunArtifact(AccountBasedStream):
 
     parent_stream_type = RunsStream
 
+    def get_records(self, context):
+        if context["artifacts_saved"]:
+            return super().get_records(context)
+        return []
+    
     def parse_response(self, response):
         yield from ({"path": path} for path in super().parse_response(response))
 
