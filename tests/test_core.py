@@ -534,7 +534,7 @@ def test_standard_tap_tests(  # noqa: PLR0913
 )
 
 def test_dynamic_base_url(
-    base_url_config: str, stream_cls: str, base_url_expected: str
+    base_url_config: str, stream_cls: type, base_url_expected: str
 ) -> None:
     """Returns full url for each of the tests."""
     tap = TapDBT(

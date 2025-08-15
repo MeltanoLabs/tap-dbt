@@ -186,7 +186,7 @@ class RunsStream(AccountBasedIncrementalStream):
     replication_key = "finished_at"
 
     @override
-    def get_child_context(self, record: dict, context: dict) -> dict[int, bool]:
+    def get_child_context(self, record: dict, context: dict) -> dict[str, str]:
         return {
             **context,
             "run_id": record["id"],
@@ -254,7 +254,7 @@ class RunArtifact(AccountBasedStream):
     parent_stream_type = RunsStream
 
     @override
-    def get_records(self, context: dict) -> dict[bool]:
+    def get_records(self, context: None) -> t.Iterable[dict[str, t.Any]]:
         if context["artifacts_saved"]:
             return super().get_records(context)
         return []
