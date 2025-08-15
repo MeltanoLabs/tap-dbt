@@ -9,7 +9,7 @@ import pytest
 import responses
 from singer_sdk.testing import get_standard_tap_tests
 
-from tap_dbt.streams import GroupsStream, RepositoriesStream, RunsStream
+from tap_dbt.streams import GroupsStream, RunsStream
 from tap_dbt.tap import TapDBT
 
 if TYPE_CHECKING:
@@ -532,7 +532,11 @@ def test_standard_tap_tests(  # noqa: PLR0913
         ),
     ],
 )
-def test_dynamic_base_url(base_url_config, stream_cls, base_url_expected):
+
+def test_dynamic_base_url(
+    base_url_config: str, stream_cls: str, base_url_expected: str
+) -> None:
+    """Returns full url for each of the tests."""
     tap = TapDBT(
         config={
             "base_url": base_url_config,

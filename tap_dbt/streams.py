@@ -9,8 +9,12 @@ from http import HTTPStatus
 
 from singer_sdk import typing as th
 from singer_sdk.pagination import BaseOffsetPaginator, SinglePagePaginator
+from typing_extensions import override
 
 from tap_dbt.client import DBTStream
+
+if t.TYPE_CHECKING:
+    import requests
 
 if sys.version_info < (3, 11):
     from backports.datetime_fromisoformat import MonkeyPatch
@@ -93,17 +97,8 @@ class AccountBasedIncrementalStream(AccountBasedStream):
 
         return params
 
+    @override
     def get_records(self, context: dict | None) -> t.Iterable[dict[str, t.Any]]:
-        """Return a generator of record-type dictionary objects.
-
-        Each record emitted should be a dictionary of property names to their values.
-
-        Args:
-            context: Stream partition or context dictionary.
-
-        Yields:
-            One item per (possibly processed) record in the API.
-        """
         starting_replication_key_value = self.get_starting_timestamp(context)
 
         for record in self.request_records(context):
@@ -190,7 +185,8 @@ class RunsStream(AccountBasedIncrementalStream):
     openapi_ref = "Run"
     replication_key = "finished_at"
 
-    def get_child_context(self, record, context):
+    @override
+    def get_child_context(self, record: dict, context: dict) -> dict[int, bool]:
         return {
             **context,
             "run_id": record["id"],
@@ -224,7 +220,9 @@ class AuditLogEventStream(AccountBasedStream):
     openapi_ref = "PublicAuditLogResponse"
     api_version = "v3"
 
-    def validate_response(self, response):
+    @override
+    def validate_response(self, response:requests.Response) -> None:
+
         if response.status_code == HTTPStatus.BAD_REQUEST:
             reason = response.json()["data"]["reason"]
             if reason == "Audit logs are not enabled on this account":
@@ -232,7 +230,8 @@ class AuditLogEventStream(AccountBasedStream):
                 return None
         return super().validate_response(response)
 
-    def parse_response(self, response):
+    @override
+    def parse_response(self, response: requests.Response) -> t.Iterable[dict]:
         if response.status_code == HTTPStatus.BAD_REQUEST:
             return []
         return super().parse_response(response)
@@ -254,13 +253,16 @@ class RunArtifact(AccountBasedStream):
 
     parent_stream_type = RunsStream
 
-    def get_records(self, context):
+    @override
+    def get_records(self, context: dict) -> dict[bool]:
         if context["artifacts_saved"]:
             return super().get_records(context)
         return []
-    
-    def parse_response(self, response):
+
+    @override
+    def parse_response(self, response:requests.Response) ->t.Iterable[dict]:
         yield from ({"path": path} for path in super().parse_response(response))
 
-    def get_new_paginator(self):
+    @override
+    def get_new_paginator(self) -> SinglePagePaginator:
         return SinglePagePaginator()
