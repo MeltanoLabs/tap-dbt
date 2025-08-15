@@ -212,10 +212,10 @@ class GroupsStream(AccountBasedStream):
     api_version = "v3"
 
 
-class AuditLogEventStream(AccountBasedStream):
-    """A stream for the audit_log_event endpoint."""
+class AuditLogEventsStream(AccountBasedStream):
+    """A stream for the audit_log_events endpoint."""
 
-    name = "audit_log_event"
+    name = "audit_log_events"
     path = "/accounts/{account_id}/audit-logs/"
     openapi_ref = "PublicAuditLogResponse"
     api_version = "v3"
@@ -237,10 +237,10 @@ class AuditLogEventStream(AccountBasedStream):
         return super().parse_response(response)
 
 
-class RunArtifact(AccountBasedStream):
+class RunArtifacts(AccountBasedStream):
     """A stream for the run_artifacts endpoint."""
 
-    name = "run_artifact"
+    name = "run_artifacts"
     path = "/accounts/{account_id}/runs/{run_id}/artifacts/"
     openapi_ref = None
     schema = th.PropertiesList(
