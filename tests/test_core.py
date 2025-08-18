@@ -65,11 +65,9 @@ def audit_logs_response():
             "User_message": "The request was invalid. Please double check the provided data and try again.",  # noqa: E501
             "developer_message": "",
         },
-        "data": {
-            "reason": "Audit logs not enabled"
-        },
+        "data": {"reason": "Audit logs not enabled"},
         "extra": {},
-        "error_code": None
+        "error_code": None,
     }
 
 
@@ -699,7 +697,6 @@ def test_standard_tap_tests(  # noqa: PLR0913
         ),
     ],
 )
-
 def test_dynamic_base_url(
     base_url_config: str, stream_cls: type, base_url_expected: str
 ) -> None:

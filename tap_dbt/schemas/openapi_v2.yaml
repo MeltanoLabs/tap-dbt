@@ -1335,7 +1335,7 @@ components:
             time:
               type: string
               enum: ["every_hour", "at_exact_hours"]
-            
+
 
 
     Repository:
