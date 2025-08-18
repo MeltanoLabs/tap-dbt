@@ -56,6 +56,24 @@ def accounts_response(faker: Faker):
 
 
 @pytest.fixture
+def audit_logs_response(faker: Faker):
+    """Return a sample response for the audit_log_events stream."""
+    return {
+        "status": {
+            "code": 400,
+            "is_success": False,
+            "User_message": "The request was invalid. Please double check the provided data and try again.",  # noqa: E501
+            "developer_message": "",
+        },
+        "data": {
+            "reason": "Audit logs not enabled"
+        },
+        "extra": {},
+        "error_code": None
+    }
+
+
+@pytest.fixture
 def connections_response(faker: Faker):
     """Return a sample response for the connections stream."""
     return {
@@ -133,6 +151,99 @@ def environments_response(faker: Faker):
                 "updated_at": fake_date(faker),
             },
         ],
+    }
+
+
+@pytest.fixture
+def groups_response(faker: Faker):
+    """Returns a sample response for the groups stream."""
+    return {
+        "status": {
+            "code": 200,
+            "is_success": True,
+            "user_message": "Success!",
+            "developer_message": "",
+        },
+        "data": [
+            {
+                "id": 1,
+                "account_id": 1000,
+                "name": faker.bs(),
+                "state": faker.random_element([1, 2]),
+                "assign_by_default": True,
+                "sso_mapping_groups": [],
+                "created_at": fake_date(faker),
+                "updated_at": fake_date(faker),
+                "group_permissions": [],
+                "member_count": 13,
+                "scrim_managed": False,
+            },
+            {
+                "id": 2,
+                "account_id": 1000,
+                "name": "Member",
+                "state": faker.random_element([1, 2]),
+                "assign_by_default": True,
+                "sso_mapping_groups": [],
+                "created_at": fake_date(faker),
+                "updated_at": fake_date(faker),
+                "group_permissions": [
+                    {
+                        "id": 2,
+                        "account_id": 1000,
+                        "group_id": 2,
+                        "project_id": None,
+                        "all_projects": True,
+                        "permission_set": "member",
+                        "permission_level": None,
+                        "state": faker.random_element([1, 2]),
+                        "writable_environment_categories": [],
+                        "created_at": fake_date(faker),
+                        "updated_at": fake_date(faker),
+                    }
+                ],
+                "member_count": 13,
+                "scim_managed": False,
+            },
+            {
+                "id": 3,
+                "account_id": 1000,
+                "name": "Owner",
+                "state": faker.random_element([1, 2]),
+                "assign_by_default": False,
+                "sso_mapping_groups": [],
+                "created_at": fake_date(faker),
+                "updated_at": fake_date(faker),
+                "group_permissions": [
+                    {
+                        "id": 1,
+                        "account_id": 1000,
+                        "group_id": 3,
+                        "project_id": None,
+                        "all_projects": True,
+                        "permission_set": "owner",
+                        "permission_level": None,
+                        "state": faker.random_element([1, 2]),
+                        "writable_environment_categories": [],
+                        "created_at": fake_date(faker),
+                        "updated_at": fake_date(faker),
+                    }
+                ],
+                "member_count": 2,
+                "scim_managed": False,
+            },
+        ],
+        "extra": {
+            "filters": {
+                "limit": 100,
+                "offset": 0,
+                "state": "active",
+                "account_id": 1000,
+            },
+            "order_by": "id",
+            "pagnation": {"count": 2, "total_count": 2},
+        },
+        "error_code": None,
     }
 
 
@@ -268,6 +379,37 @@ def repositories_response(faker: Faker):
                 "state": faker.random_element([1, 2]),
             },
         ],
+    }
+
+
+@pytest.fixture
+def run_artifacts_response(faker: Faker):
+    """Return a sample response for the run_artifacts stream."""
+    return {
+        "status": {
+            "code": 200,
+            "is_success": True,
+            "user_message": "Success!",
+            "developer_message": "",
+        },
+        "data": [
+            "compiled/analytics/dbt_project.yml/hooks/analytics-on-run-end-0.sql",
+            "compiled/analytics/dbt_project.yml/hooks/analytics-on-run-end-1.sql",
+            "compiled/analytics/dbt_project.yml/hooks/analytics-on-run-end-2.sql",
+            "compiled/analytics/dbt_project.yml/hooks/analytics-on-run-end-3.sql",
+            "compiled/analytics/dbt_project.yml/hooks/analytics-on-run-end-4.sql",
+            "compiled/analytics/dbt_project.yml/hooks/analytics-on-run-end-5.sql",
+            "graph_summary.json",
+            "manifest.json",
+            "run/analytics/snapshots/epm_playbook_archive.sql",
+            "run/analytics/snapshots/subcategory_subscription_matching_settings_archive.sql",
+            "run/analytics/snapshots/sugarcrm_order_archive.sql",
+            "run/analytics/snapshots/sugarcrm_order_subscription_archive.sql",
+            "run_results.json",
+            "semantic_manifest.json",
+        ],
+        "extra": {},
+        "error_code": None,
     }
 
 
@@ -432,11 +574,14 @@ def users_response(faker: Faker):
 @responses.activate
 def test_standard_tap_tests(  # noqa: PLR0913
     accounts_response: dict,
+    audit_log_events_response: dict,
     connections_response: dict,
     environments_response: dict,
+    groups_response: dict,
     jobs_response: dict,
     projects_response: dict,
     repositories_response: dict,
+    run_artifacts_response: dict,
     runs_response: dict,
     users_response: dict,
 ):
@@ -452,14 +597,29 @@ def test_standard_tap_tests(  # noqa: PLR0913
 
     responses.add(
         responses.GET,
+        "https://cloud.getdbt.com/api/v3/accounts/1000/audit-logs",
+        json=audit_log_events_response,
+        status=200,
+    )
+
+    responses.add(
+        responses.GET,
         "https://cloud.getdbt.com/api/v2/accounts/1000/connections",
         json=connections_response,
         status=200,
     )
+
     responses.add(
         responses.GET,
         "https://cloud.getdbt.com/api/v2/accounts/1000/environments",
         json=environments_response,
+        status=200,
+    )
+
+    responses.add(
+        responses.GET,
+        "https://cloud.getdbt.com/api/v3/accounts/1000/groups",
+        json=groups_response,
         status=200,
     )
 
@@ -481,6 +641,13 @@ def test_standard_tap_tests(  # noqa: PLR0913
         responses.GET,
         "https://cloud.getdbt.com/api/v2/accounts/1000/repositories",
         json=repositories_response,
+        status=200,
+    )
+
+    responses.add(
+        responses.GET,
+        "https://cloud.getdbt.com/api/v2/accounts/1000/runs/*/artifacts",
+        json=run_artifacts_response,
         status=200,
     )
 
