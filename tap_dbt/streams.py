@@ -15,6 +15,7 @@ from tap_dbt.client import DBTStream
 
 if t.TYPE_CHECKING:
     import requests
+    from singer_sdk.helpers.types import Context
 
 if sys.version_info < (3, 11):
     from backports.datetime_fromisoformat import MonkeyPatch
@@ -221,8 +222,7 @@ class AuditLogEventsStream(AccountBasedStream):
     api_version = "v3"
 
     @override
-    def validate_response(self, response:requests.Response) -> None:
-
+    def validate_response(self, response: requests.Response) -> None:
         if response.status_code == HTTPStatus.BAD_REQUEST:
             reason = response.json()["data"]["reason"]
             if reason == "Audit logs are not enabled on this account":
@@ -242,7 +242,7 @@ class RunArtifacts(AccountBasedStream):
 
     name = "run_artifacts"
     path = "/accounts/{account_id}/runs/{run_id}/artifacts/"
-    openapi_ref = None
+    openapi_ref = None  # type: ignore[assignment]
     schema = th.PropertiesList(
         th.Property("account_id", th.StringType),
         th.Property("run_id", th.IntegerType),
@@ -254,13 +254,13 @@ class RunArtifacts(AccountBasedStream):
     parent_stream_type = RunsStream
 
     @override
-    def get_records(self, context: None) -> t.Iterable[dict[str, t.Any]]:
+    def get_records(self, context: Context | None) -> t.Iterable[dict[str, t.Any]]:
         if context["artifacts_saved"]:
             return super().get_records(context)
         return []
 
     @override
-    def parse_response(self, response:requests.Response) ->t.Iterable[dict]:
+    def parse_response(self, response: requests.Response) -> t.Iterable[dict]:
         yield from ({"path": path} for path in super().parse_response(response))
 
     @override
