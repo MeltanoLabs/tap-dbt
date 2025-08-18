@@ -572,7 +572,7 @@ def users_response(faker: Faker):
 @responses.activate
 def test_standard_tap_tests(  # noqa: PLR0913
     accounts_response: dict,
-    audit_log_events_response: dict,
+    audit_logs_response: dict,
     connections_response: dict,
     environments_response: dict,
     groups_response: dict,
@@ -596,7 +596,7 @@ def test_standard_tap_tests(  # noqa: PLR0913
     responses.add(
         responses.GET,
         "https://cloud.getdbt.com/api/v3/accounts/1000/audit-logs",
-        json=audit_log_events_response,
+        json=audit_logs_response,
         status=400,
     )
 
