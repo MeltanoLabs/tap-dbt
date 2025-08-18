@@ -33,10 +33,10 @@ classifiers = [
 ]
 dynamic = [ "version" ]
 dependencies = [
-  "backports-datetime-fromisoformat~=2.0.1; python_version<'3.11'",
+  "backports-datetime-fromisoformat~=2.0.1; python_full_version<'3.11'",
   "pyyaml~=6.0",
-  "requests~=2.32.0",
   "singer-sdk~=0.48.0",
+  "typing-extensions>=4.14.1",
 ]
 
 urls.Documentation = "https://github.com/MeltanoLabs/tap-dbt/blob/main/README.md"
@@ -50,6 +50,7 @@ dev = [
   "faker>=17.6",
   "pytest~=8.0",
   "responses~=0.25.0",
+  "types-requests>=2.32.4.20250809",
 ]
 
 [tool.hatch.version]
@@ -92,13 +93,10 @@ known_first_party = [
 
 [tool.deptry.package_module_name_map]
 "backports-datetime-fromisoformat" = "backports.datetime_fromisoformat"
-faker = "faker"
-pytest = "pytest"
-responses = "responses"
 
 [tool.deptry.per_rule_ignores]
 DEP001 = [ "backports" ]
-DEP002 = [ "backports-datetime-fromisoformat", "requests" ]
+DEP002 = [ "backports-datetime-fromisoformat" ]
 
 [tool.uv]
 required-version = ">=0.5.19"
