@@ -213,10 +213,10 @@ class GroupsStream(AccountBasedStream):
     api_version = "v3"
 
 
-class AuditLogEventsStream(AccountBasedStream):
-    """A stream for the audit_log_events endpoint."""
+class AuditLogsStream(AccountBasedStream):
+    """A stream for the audit-logs endpoint."""
 
-    name = "audit_log_events"
+    name = "audit_logs"
     path = "/accounts/{account_id}/audit-logs/"
     openapi_ref = "PublicAuditLogResponse"
     api_version = "v3"

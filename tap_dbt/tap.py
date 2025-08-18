@@ -14,7 +14,7 @@ from singer_sdk.typing import (
 
 from tap_dbt.streams import (
     AccountsStream,
-    AuditLogEventsStream,
+    AuditLogsStream,
     ConnectionsStream,
     EnvironmentsStream,
     GroupsStream,
@@ -29,7 +29,7 @@ from tap_dbt.streams import (
 TAP_NAME = "tap-dbt"
 STREAM_TYPES = [
     AccountsStream,
-    AuditLogEventsStream,
+    AuditLogsStream,
     ConnectionsStream,
     EnvironmentsStream,
     GroupsStream,
