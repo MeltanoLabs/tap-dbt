@@ -254,7 +254,7 @@ class RunArtifacts(AccountBasedStream):
     parent_stream_type = RunsStream
 
     @override
-    def get_records(self, context: Context | None) -> t.Iterable[dict[str, t.Any]]:
+    def get_records(self, context: Context) -> t.Iterable[dict[str, t.Any]]:
         if context["artifacts_saved"]:
             return super().get_records(context)
         return []
