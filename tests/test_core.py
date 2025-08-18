@@ -65,7 +65,7 @@ def audit_logs_response():
             "User_message": "The request was invalid. Please double check the provided data and try again.",  # noqa: E501
             "developer_message": "",
         },
-        "data": {"reason": "Audit logs not enabled"},
+        "data": {"reason": "Audit logs are not enabled on this account"},
         "extra": {},
         "error_code": None,
     }
@@ -438,6 +438,7 @@ def runs_response(faker: Faker):
                 "account_id": 1000,
                 "project_id": 1000 + i % 3,
                 "finished_at": fake_date(faker),
+                "artifacts_saved": faker.boolean(),
             }
             for i in range(10)
         ],
@@ -644,7 +645,7 @@ def test_standard_tap_tests(  # noqa: PLR0913
 
     responses.add(
         responses.GET,
-        "https://cloud.getdbt.com/api/v2/accounts/1000/runs/*/artifacts",
+        re.compile("https://cloud.getdbt.com/api/v2/accounts/1000/runs/\\d+/artifacts"),
         json=run_artifacts_response,
         status=200,
     )
