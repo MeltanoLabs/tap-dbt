@@ -22,14 +22,14 @@ maintainers = [
 authors = [
   { name = "Edgar Ramírez Mondragón", email = "edgarrm358@sample.com" },
 ]
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 classifiers = [
   "Programming Language :: Python :: 3 :: Only",
-  "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
 ]
 dynamic = [ "version" ]
 dependencies = [
@@ -97,6 +97,9 @@ known_first_party = [
 [tool.deptry.per_rule_ignores]
 DEP001 = [ "backports" ]
 DEP002 = [ "backports-datetime-fromisoformat" ]
+
+[tool.pyproject-fmt]
+max_supported_python = "3.14"
 
 [tool.uv]
 required-version = ">=0.5.19"
