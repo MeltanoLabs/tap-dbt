@@ -56,7 +56,7 @@ def accounts_response(faker: Faker):
 
 
 @pytest.fixture
-def audit_logs_response(faker: Faker):
+def audit_logs_response():
     """Return a sample response for the audit_log_events stream."""
     return {
         "status": {
@@ -383,7 +383,7 @@ def repositories_response(faker: Faker):
 
 
 @pytest.fixture
-def run_artifacts_response(faker: Faker):
+def run_artifacts_response():
     """Return a sample response for the run_artifacts stream."""
     return {
         "status": {
