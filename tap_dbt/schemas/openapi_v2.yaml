@@ -888,9 +888,7 @@ components:
           type: "string"
           description: The name of the dbt Cloud account
         plan:
-          anyOf:
-            - enum: ["developer", "team", "enterprise"]
-            - type: "string"
+          type: "string"
           example: team
           description: The billing tier for the account
         pending_cancel:
