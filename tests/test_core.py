@@ -597,7 +597,7 @@ def test_standard_tap_tests(  # noqa: PLR0913
         responses.GET,
         "https://cloud.getdbt.com/api/v3/accounts/1000/audit-logs",
         json=audit_log_events_response,
-        status=200,
+        status=400,
     )
 
     responses.add(
