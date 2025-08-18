@@ -5,10 +5,17 @@ from __future__ import annotations
 import datetime
 import sys
 import typing as t
+from http import HTTPStatus
 
-from singer_sdk.pagination import BaseOffsetPaginator
+from singer_sdk import typing as th
+from singer_sdk.pagination import BaseOffsetPaginator, SinglePagePaginator
+from typing_extensions import override
 
 from tap_dbt.client import DBTStream
+
+if t.TYPE_CHECKING:
+    import requests
+    from singer_sdk.helpers.types import Context
 
 if sys.version_info < (3, 11):
     from backports.datetime_fromisoformat import MonkeyPatch
@@ -91,17 +98,8 @@ class AccountBasedIncrementalStream(AccountBasedStream):
 
         return params
 
+    @override
     def get_records(self, context: dict | None) -> t.Iterable[dict[str, t.Any]]:
-        """Return a generator of record-type dictionary objects.
-
-        Each record emitted should be a dictionary of property names to their values.
-
-        Args:
-            context: Stream partition or context dictionary.
-
-        Yields:
-            One item per (possibly processed) record in the API.
-        """
         starting_replication_key_value = self.get_starting_timestamp(context)
 
         for record in self.request_records(context):
@@ -188,6 +186,14 @@ class RunsStream(AccountBasedIncrementalStream):
     openapi_ref = "Run"
     replication_key = "finished_at"
 
+    @override
+    def get_child_context(self, record: dict, context: dict) -> dict[str, str]:
+        return {
+            **context,
+            "run_id": record["id"],
+            "artifacts_saved": record["artifacts_saved"],
+        }
+
 
 class UsersStream(AccountBasedStream):
     """A stream for the users endpoint."""
@@ -196,3 +202,67 @@ class UsersStream(AccountBasedStream):
     path = "/accounts/{account_id}/users"
     openapi_ref = "User"
     selected_by_default = False
+
+
+class GroupsStream(AccountBasedStream):
+    """A stream for the groups endpoint."""
+
+    name = "groups"
+    path = "/accounts/{account_id}/groups"
+    openapi_ref = "GroupResponse"
+    api_version = "v3"
+
+
+class AuditLogsStream(AccountBasedStream):
+    """A stream for the audit-logs endpoint."""
+
+    name = "audit_logs"
+    path = "/accounts/{account_id}/audit-logs"
+    openapi_ref = "PublicAuditLogResponse"
+    api_version = "v3"
+
+    @override
+    def validate_response(self, response: requests.Response) -> None:
+        if response.status_code == HTTPStatus.BAD_REQUEST:
+            reason = response.json()["data"]["reason"]
+            if reason == "Audit logs are not enabled on this account":
+                self.logger.warning(reason)
+                return None
+        return super().validate_response(response)
+
+    @override
+    def parse_response(self, response: requests.Response) -> t.Iterable[dict]:
+        if response.status_code == HTTPStatus.BAD_REQUEST:
+            return []
+        return super().parse_response(response)
+
+
+class RunArtifacts(AccountBasedStream):
+    """A stream for the run_artifacts endpoint."""
+
+    name = "run_artifacts"
+    path = "/accounts/{account_id}/runs/{run_id}/artifacts"
+    openapi_ref = None  # type: ignore[assignment]
+    schema = th.PropertiesList(
+        th.Property("account_id", th.StringType),
+        th.Property("run_id", th.IntegerType),
+        th.Property("path", th.StringType),
+    ).to_dict()
+
+    primary_keys: t.ClassVar[list[str]] = ["account_id", "run_id", "path"]
+
+    parent_stream_type = RunsStream
+
+    @override
+    def get_records(self, context: Context) -> t.Iterable[dict[str, t.Any]]:
+        if context["artifacts_saved"]:
+            return super().get_records(context)
+        return []
+
+    @override
+    def parse_response(self, response: requests.Response) -> t.Iterable[dict]:
+        yield from ({"path": path} for path in super().parse_response(response))
+
+    @override
+    def get_new_paginator(self) -> SinglePagePaginator:
+        return SinglePagePaginator()

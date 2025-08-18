@@ -888,9 +888,7 @@ components:
           type: "string"
           description: The name of the dbt Cloud account
         plan:
-          anyOf:
-            - enum: ["developer", "team", "enterprise"]
-            - type: "string"
+          type: "string"
           example: team
           description: The billing tier for the account
         pending_cancel:
@@ -917,6 +915,18 @@ components:
         updated_at:
           type: "string"
           format: "date-time"
+        account_migration_events:
+          type: "array"
+          items: {}
+          readOnly: true
+          description: (Deprecated)
+        groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/Group'
+          readOnly: true
+          default: []
+          description: The user groups in the account
 
     User:
       type: object
@@ -1017,7 +1027,9 @@ components:
           nullable: true
           description: The enterprise login URL, if available
         permissions:
-          $ref: '#/components/schemas/UserLicense'
+          type: array
+          items:
+            $ref: '#/components/schemas/UserLicense'
     State:
       type: integer
       description: 1 = Active, 2 = Deleted
@@ -1316,41 +1328,12 @@ components:
               description: Cron-syntax schedule for the job
               example: "0 7 * * 1"
             date:
-              type: object
-              required:
-                - type
-              properties:
-                type:
-                  type: string
-                  enum: ["every_day", "days_of_week", "custom_cron"]
-                days:
-                  type: array
-                  nullable: true
-                  items:
-                    type: integer
-                  description: The numeric days of the week, required with days_of_week
-                cron:
-                  type: string
-                  nullable: true
-                  description: The custom schedule in crontab format, required with custom_cron
+              type: string
+              enum: ["every_day", "days_of_week", "custom_cron", "interval_cron"]
             time:
-              type: object
-              required:
-                - type
-              properties:
-                type:
-                  type: string
-                  enum: ["every_hour", "at_exact_hours"]
-                interval:
-                  type: integer
-                  nullable: true
-                  description: The number of hours between runs, required with every_hour
-                hours:
-                  type: array
-                  nullable: true
-                  items:
-                    type: integer
-                  description: The specific hours to run in UTC, required with at_exact_hours
+              type: string
+              enum: ["every_hour", "at_exact_hours"]
+
 
 
     Repository:
@@ -1570,6 +1553,29 @@ components:
           enum: ["Queued", "Starting", "Running", "Success", "Error", "Cancelled"]
         created_at_humanized:
           type: "string"
+        run_steps:
+          type: "array"
+          items:
+            type: "object"
+            properties:
+              run_id:
+                type: "integer"
+              account_id:
+                type: "integer"
+              index:
+                type: "integer"
+              status:
+                type: "integer"
+              name:
+                type: "string"
+              logs:
+                type: "string"
+              debug_logs:
+                type: "string"
+              log_path:
+                type: "string"
+              debug_log_path:
+                type: "string"
     Trigger:
       type: "object"
       properties:
@@ -1671,52 +1677,6 @@ components:
       properties:
         permission:
           type: string
-          enum:
-            - billing_read
-            - billing_write
-            - invitations_send
-            - invitations_modify
-            - invitations_read
-            - members_read
-            - members_write
-            - groups_read
-            - groups_write
-            - license_read
-            - license_allocate
-            - projects_read
-            - projects_develop
-            - projects_write
-            - projects_create
-            - projects_delete
-            - environments_read
-            - environments_write
-            - develop_access
-            - dbt_adapters_read
-            - dbt_adapters_write
-            - credentials_read
-            - credentials_write
-            - connections_read
-            - connections_write
-            - jobs_read
-            - jobs_write
-            - repositories_read
-            - repositories_write
-            - runs_trigger
-            - runs_write
-            - runs_read
-            - permissions_write
-            - permissions_read
-            - account_settings_write
-            - account_settings_read
-            - auth_provider_write
-            - auth_provider_read
-            - service_tokens_write
-            - service_tokens_read
-            - metadata_read
-            - webhooks_write
-            - custom_environment_variables_read
-            - custom_environment_variables_write
-            - audit_log_read
         target_resource:
           type: integer
         all_resources:
