@@ -208,7 +208,7 @@ class GroupsStream(AccountBasedStream):
     """A stream for the groups endpoint."""
 
     name = "groups"
-    path = "/accounts/{account_id}/groups/"
+    path = "/accounts/{account_id}/groups"
     openapi_ref = "GroupResponse"
     api_version = "v3"
 
@@ -217,7 +217,7 @@ class AuditLogsStream(AccountBasedStream):
     """A stream for the audit-logs endpoint."""
 
     name = "audit_logs"
-    path = "/accounts/{account_id}/audit-logs/"
+    path = "/accounts/{account_id}/audit-logs"
     openapi_ref = "PublicAuditLogResponse"
     api_version = "v3"
 
@@ -241,7 +241,7 @@ class RunArtifacts(AccountBasedStream):
     """A stream for the run_artifacts endpoint."""
 
     name = "run_artifacts"
-    path = "/accounts/{account_id}/runs/{run_id}/artifacts/"
+    path = "/accounts/{account_id}/runs/{run_id}/artifacts"
     openapi_ref = None  # type: ignore[assignment]
     schema = th.PropertiesList(
         th.Property("account_id", th.StringType),
