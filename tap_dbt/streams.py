@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import datetime
+import json
 import sys
 import typing as t
 from http import HTTPStatus
@@ -185,6 +186,7 @@ class RunsStream(AccountBasedIncrementalStream):
     path = "/accounts/{account_id}/runs"
     openapi_ref = "Run"
     replication_key = "finished_at"
+    is_sorted = True
 
     @override
     def get_child_context(self, record: dict, context: dict) -> dict[str, str]:
@@ -193,6 +195,20 @@ class RunsStream(AccountBasedIncrementalStream):
             "run_id": record["id"],
             "artifacts_saved": record["artifacts_saved"],
         }
+
+    def get_url_params(self, context, next_page_token):
+        params = super().get_url_params(context, next_page_token)
+
+        start = self.get_starting_timestamp(context)
+        if start:
+            start = start.replace(tzinfo = None).isoformat()
+            end = datetime.datetime.max.replace(tzinfo = None).isoformat()
+            params["finished_at__range"] = json.dumps([start, end])
+
+        params["order_by"] = "finished_at"
+
+
+        return params
 
 
 class UsersStream(AccountBasedStream):
