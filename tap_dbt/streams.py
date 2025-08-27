@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import datetime
+import json
 import sys
 import typing as t
 from http import HTTPStatus
@@ -185,6 +186,7 @@ class RunsStream(AccountBasedIncrementalStream):
     path = "/accounts/{account_id}/runs"
     openapi_ref = "Run"
     replication_key = "finished_at"
+    is_sorted = True
 
     @override
     def get_child_context(self, record: dict, context: dict) -> dict[str, str]:
@@ -193,6 +195,23 @@ class RunsStream(AccountBasedIncrementalStream):
             "run_id": record["id"],
             "artifacts_saved": record["artifacts_saved"],
         }
+
+    @override
+    def get_url_params(self, context: Context, next_page_token: int) -> dict:
+        params = super().get_url_params(context, next_page_token)
+        params["order_by"] = "finished_at"
+
+        start = self.get_starting_timestamp(context)
+
+        if start:
+            # strip utc offset by removing timezone info - dbt Cloud API otherwise
+            # returns runs ignoring the range start time component (i.e. date only)
+            start = start.replace(tzinfo=None).isoformat()
+
+            end = datetime.datetime.max.replace(tzinfo=None).isoformat()
+            params["finished_at__range"] = json.dumps([start, end])
+
+        return params
 
 
 class UsersStream(AccountBasedStream):
@@ -252,6 +271,7 @@ class RunArtifacts(AccountBasedStream):
     primary_keys: t.ClassVar[list[str]] = ["account_id", "run_id", "path"]
 
     parent_stream_type = RunsStream
+    state_partitioning_keys = ()
 
     @override
     def get_records(self, context: Context) -> t.Iterable[dict[str, t.Any]]:
