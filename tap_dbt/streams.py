@@ -204,7 +204,10 @@ class RunsStream(AccountBasedIncrementalStream):
         start = self.get_starting_timestamp(context)
 
         if start:
+            # strip utc offset by removing timezone info - dbt Cloud API otherwise
+            # returns runs ignoring the range start time component (i.e. date only)
             start = start.replace(tzinfo=None).isoformat()
+
             end = datetime.datetime.max.replace(tzinfo=None).isoformat()
             params["finished_at__range"] = json.dumps([start, end])
 
