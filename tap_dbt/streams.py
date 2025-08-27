@@ -252,6 +252,7 @@ class RunArtifacts(AccountBasedStream):
     primary_keys: t.ClassVar[list[str]] = ["account_id", "run_id", "path"]
 
     parent_stream_type = RunsStream
+    state_partitioning_keys = ()
 
     @override
     def get_records(self, context: Context) -> t.Iterable[dict[str, t.Any]]:
