@@ -196,17 +196,17 @@ class RunsStream(AccountBasedIncrementalStream):
             "artifacts_saved": record["artifacts_saved"],
         }
 
-    def get_url_params(self, context, next_page_token):
+    @override
+    def get_url_params(self, context: Context, next_page_token: int) -> dict:
         params = super().get_url_params(context, next_page_token)
-
-        start = self.get_starting_timestamp(context)
-        if start:
-            start = start.replace(tzinfo = None).isoformat()
-            end = datetime.datetime.max.replace(tzinfo = None).isoformat()
-            params["finished_at__range"] = json.dumps([start, end])
-
         params["order_by"] = "finished_at"
 
+        start = self.get_starting_timestamp(context)
+
+        if start:
+            start = start.replace(tzinfo=None).isoformat()
+            end = datetime.datetime.max.replace(tzinfo=None).isoformat()
+            params["finished_at__range"] = json.dumps([start, end])
 
         return params
 
