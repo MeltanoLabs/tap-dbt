@@ -288,7 +288,7 @@ class RunArtifacts(AccountBasedStream):
         return SinglePagePaginator()
 
     @override
-    def post_process(self, row, context):
+    def post_process(self, row: dict, context: Context) -> dict:
         row["account_id"] = context["account_id"]
         row["run_id"] = context["run_id"]
         return row
