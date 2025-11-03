@@ -56,6 +56,9 @@ dev = [
 [tool.hatch.version]
 source = "vcs"
 
+[tool.uv]
+required-version = ">=0.5.19"
+
 [tool.ruff]
 line-length = 88
 src = [
@@ -100,6 +103,3 @@ DEP002 = [ "backports-datetime-fromisoformat" ]
 
 [tool.pyproject-fmt]
 max_supported_python = "3.14"
-
-[tool.uv]
-required-version = ">=0.5.19"
