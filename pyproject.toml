@@ -35,7 +35,7 @@ dynamic = [ "version" ]
 dependencies = [
   "backports-datetime-fromisoformat~=2.0.1; python_full_version<'3.11'",
   "pyyaml~=6.0",
-  "singer-sdk~=0.48.0",
+  "singer-sdk~=0.52.0",
   "typing-extensions>=4.14.1",
 ]
 
