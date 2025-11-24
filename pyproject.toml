@@ -48,7 +48,7 @@ scripts.tap-dbt = "tap_dbt.tap:cli"
 dev = [
   "deptry>=0.14.2",
   "faker>=17.6",
-  "pytest~=8.0",
+  "pytest>=8,<10",
   "responses~=0.25.0",
   "types-requests>=2.32.4.20250809",
 ]
