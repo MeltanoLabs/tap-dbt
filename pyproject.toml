@@ -54,6 +54,7 @@ dev = [
 ]
 
 [tool.hatch.version]
+fallback-version = "0.0.0"
 source = "vcs"
 
 [tool.uv]
