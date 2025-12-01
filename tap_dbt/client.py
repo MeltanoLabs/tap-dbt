@@ -3,9 +3,10 @@
 from __future__ import annotations
 
 import importlib.resources
-import typing as t
+import sys
 from abc import abstractmethod
 from functools import cache, cached_property
+from typing import Any
 
 import yaml
 from singer_sdk import RESTStream
@@ -15,9 +16,14 @@ from singer_sdk.singerlib import resolve_schema_references
 
 from tap_dbt import schemas
 
+if sys.version_info >= (3, 12):
+    from typing import override
+else:
+    from typing_extensions import override
+
 
 @cache
-def load_openapi(api_version: str) -> dict[str, t.Any]:
+def load_openapi(api_version: str) -> dict[str, Any]:
     """Load the OpenAPI specification from the package.
 
     Returns:
@@ -32,16 +38,18 @@ def load_openapi(api_version: str) -> dict[str, t.Any]:
 class DBTStream(RESTStream):
     """dbt stream class."""
 
-    primary_keys: t.ClassVar[list[str]] = ["id"]
+    primary_keys = ("id",)
     records_jsonpath = "$.data[*]"
     api_version = "v2"
 
+    @override
     @property
     def url_base(self) -> str:
         """Base URL for this stream."""
         base_url: str = self.config["base_url"]
         return f"{(base_url.rsplit('/', 1))[0]}/{self.api_version}"
 
+    @override
     @property
     def http_headers(self) -> dict:
         """HTTP headers for this stream."""
@@ -49,24 +57,25 @@ class DBTStream(RESTStream):
         headers["Accept"] = "application/json"
         return headers
 
+    @override
     @property
     def authenticator(self) -> APIAuthenticatorBase:
         """Return the authenticator for this stream."""
         return SimpleAuthenticator(
-            stream=self,
             auth_headers={
                 "Authorization": f"Token {self.config.get('api_key')}",
             },
         )
 
-    def _resolve_openapi_ref(self) -> dict[str, t.Any]:
+    def _resolve_openapi_ref(self) -> dict[str, Any]:
         schema = {"$ref": f"#/components/schemas/{self.openapi_ref}"}
         openapi = load_openapi(self.api_version)
         schema["components"] = openapi["components"]
         return resolve_schema_references(schema)
 
+    @override
     @cached_property
-    def schema(self) -> dict[str, t.Any]:
+    def schema(self) -> dict[str, Any]:
         """Return the schema for this stream.
 
         Returns:
@@ -83,7 +92,7 @@ class DBTStream(RESTStream):
             if "properties" in schema:
                 new_schema["properties"] = {}
                 for p_name, p_schema in schema["properties"].items():
-                    if p_name not in self.primary_keys:
+                    if p_name not in self.primary_keys:  # ty: ignore[unsupported-operator]
                         new_schema["properties"][p_name] = append_null_nested(p_schema)
                     else:
                         new_schema["properties"][p_name] = p_schema

@@ -35,7 +35,7 @@ dynamic = [ "version" ]
 dependencies = [
   "backports-datetime-fromisoformat~=2.0.1; python_full_version<'3.11'",
   "pyyaml~=6.0",
-  "singer-sdk>=0.52,<0.54",
+  "singer-sdk~=0.53.4",
   "typing-extensions>=4.14.1",
 ]
 
@@ -48,8 +48,11 @@ scripts.tap-dbt = "tap_dbt.tap:cli"
 dev = [
   "deptry>=0.14.2",
   "faker>=17.6",
-  "pytest>=8,<10",
+  "mypy>=1.19",
+  "pytest>=9",
   "responses~=0.25.0",
+  "ty>=0.0.1a29",
+  "types-pyyaml>=6.0.12.20250915",
   "types-requests>=2.32.4.20250809",
 ]
 
@@ -58,7 +61,7 @@ fallback-version = "0.0.0"
 source = "vcs"
 
 [tool.uv]
-required-version = ">=0.5.19"
+required-version = ">=0.9"
 
 [tool.ruff]
 line-length = 88
@@ -104,3 +107,9 @@ DEP002 = [ "backports-datetime-fromisoformat" ]
 
 [tool.pyproject-fmt]
 max_supported_python = "3.14"
+
+[tool.mypy]
+warn_redundant_casts = true
+warn_unreachable = true
+warn_unused_ignores = true
+warn_unused_configs = true

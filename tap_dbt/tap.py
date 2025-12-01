@@ -63,7 +63,7 @@ class TapDBT(Tap):
             ),
             Property(
                 "account_ids",
-                ArrayType(StringType),
+                ArrayType(StringType),  # ty: ignore[invalid-argument-type]
                 description="dbt Cloud account IDs",
                 required=True,
             ),
@@ -90,7 +90,7 @@ class TapDBT(Tap):
 
     def discover_streams(self) -> list[Stream]:
         """Return a list of discovered streams."""
-        return [stream_class(tap=self) for stream_class in STREAM_TYPES]
+        return [stream_class(tap=self) for stream_class in STREAM_TYPES]  # type: ignore[abstract]
 
 
 cli = TapDBT.cli

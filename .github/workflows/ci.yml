@@ -3,11 +3,11 @@ name: Test Tap
 on:
   pull_request:
     paths-ignore:
-      - '**/README.md'
+      - "**/README.md"
   push:
     branches: [main]
     paths-ignore:
-      - '**/README.md'
+      - "**/README.md"
 
 env:
   FORCE_COLOR: 1
@@ -41,7 +41,7 @@ jobs:
           allow-prereleases: true
       - uses: astral-sh/setup-uv@85856786d1ce8acfbcc2f13a5f3fbd6b938f9f41 # v7.1.2
         with:
-          version: ">=0.5.19"
+          version: ">=0.9"
       - run: >
           uvx
           --with tox-uv
