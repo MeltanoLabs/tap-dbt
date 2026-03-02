@@ -38,7 +38,6 @@ dependencies = [
   "singer-sdk~=0.53.4",
   "typing-extensions>=4.14.1",
 ]
-
 urls.Documentation = "https://github.com/MeltanoLabs/tap-dbt/blob/main/README.md"
 urls.Homepage = "https://github.com/MeltanoLabs/tap-dbt"
 urls.Repository = "https://github.com/MeltanoLabs/tap-dbt"
@@ -56,9 +55,9 @@ dev = [
   "types-requests>=2.32.4.20250809",
 ]
 
-[tool.hatch.version]
-fallback-version = "0.0.0"
-source = "vcs"
+[tool.hatch]
+version.fallback-version = "0.0.0"
+version.source = "vcs"
 
 [tool.uv]
 required-version = ">=0.9"
@@ -77,7 +76,6 @@ lint.ignore = [
   "FIX002", # line-contains-todo
   "ISC001", # single-line-implicit-string-concatenation
 ]
-
 lint.per-file-ignores."tests/*" = [
   "ANN201",
   "S101",
@@ -97,13 +95,9 @@ lint.pydocstyle.convention = "google"
 known_first_party = [
   "tap_dbt",
 ]
-
-[tool.deptry.package_module_name_map]
-"backports-datetime-fromisoformat" = "backports.datetime_fromisoformat"
-
-[tool.deptry.per_rule_ignores]
-DEP001 = [ "backports" ]
-DEP002 = [ "backports-datetime-fromisoformat" ]
+package_module_name_map."backports-datetime-fromisoformat" = "backports.datetime_fromisoformat"
+per_rule_ignores.DEP001 = [ "backports" ]
+per_rule_ignores.DEP002 = [ "backports-datetime-fromisoformat" ]
 
 [tool.pyproject-fmt]
 max_supported_python = "3.14"
