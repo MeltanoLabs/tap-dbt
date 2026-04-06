@@ -95,7 +95,7 @@ lint.pydocstyle.convention = "google"
 known_first_party = [
   "tap_dbt",
 ]
-package_module_name_map."backports-datetime-fromisoformat" = "backports.datetime_fromisoformat"
+package_module_name_map.backports-datetime-fromisoformat = "backports.datetime_fromisoformat"
 per_rule_ignores.DEP001 = [ "backports" ]
 per_rule_ignores.DEP002 = [ "backports-datetime-fromisoformat" ]
 
