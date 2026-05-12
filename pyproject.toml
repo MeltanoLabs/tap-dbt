@@ -35,7 +35,7 @@ dynamic = [ "version" ]
 dependencies = [
   "backports-datetime-fromisoformat~=2.0.1; python_full_version<'3.11'",
   "pyyaml~=6.0",
-  "singer-sdk~=0.53.4",
+  "singer-sdk>=0.53.4,<0.55",
   "typing-extensions>=4.14.1",
 ]
 urls.Documentation = "https://github.com/MeltanoLabs/tap-dbt/blob/main/README.md"
