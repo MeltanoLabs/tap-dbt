@@ -33,6 +33,7 @@ pip install tap-dbt
 Full stream metadata is available in the dbt Labs repository: [openapi_schema]
 
 #### Selected by default
+
 The following will be extracted by default if no catalog is used:
 
 - [x] Stream: accounts
@@ -40,15 +41,14 @@ The following will be extracted by default if no catalog is used:
 - [x] Stream: projects
 - [x] Stream: runs
 
-
 #### Configurable
+
 Can be enabled by setting `selected` in the catalog:
 
 - [x] Stream: connections
 - [x] Stream: environments
 - [x] Stream: repositories
 - [x] Stream: users
-
 
 ### Incremental Run Stream
 
@@ -73,7 +73,6 @@ The incremental sync has been set up so that it works on `replication_key = "fin
 - If the `finished_at` value is not set, the run is assumed to still be running so the record is included, plus the sort order implies that there should be records with populated `finished_at` appearing later in the stream - *Repeated sync operation will yield the same records if the dbt Job Run is still underway, however this adheres to the 'at least once' delivery promise - https://sdk.meltano.com/en/latest/implementation/at_least_once.html*
 - Once the sync operation reaches records with populated `finished_at`, the values are compared with the bookmark and once the `finished_at` value becomes less than the bookmark the stream finishes syncing.
 
-
 ## Configuration
 
 Visit the [API docs][apidocs] for instructions on how to get your API key.
@@ -92,13 +91,13 @@ tap-dbt --config=config.json
 
 ### Inputs
 
-| Field         | Description                                                     | Type           | Required | Default                                          |
+| Field | Description | Type | Required | Default |
 |---------------|-----------------------------------------------------------------|----------------|----------|--------------------------------------------------|
-| `api_key`     | API key for the dbt Cloud API                                   | `string`       | yes      |                                                  |
-| `account_ids` | dbt Cloud account IDs                                           | `list(string)` | yes      |                                                  |
-| `user_agent`  | User-Agent to make requests with                                | `string`       | no       | `tap-dbt/0.1.0 Singer Tap for the dbt Cloud API` |
-| `base_url`    | Base URL for the dbt Cloud API                                  | `string`       | no       | `https://cloud.getdbt.com/api/v2`                |
-| `page_size`   | Number of records per API call, sets the `limit=` url parameter | `integer`      | no       | 5000                                             |
+| `api_key` | API key for the dbt Cloud API | `string` | yes | |
+| `account_ids` | dbt Cloud account IDs | `list(string)` | yes | |
+| `user_agent` | User-Agent to make requests with | `string` | no | `tap-dbt/0.1.0 Singer Tap for the dbt Cloud API` |
+| `base_url` | Base URL for the dbt Cloud API | `string` | no | `https://cloud.getdbt.com/api/v2` |
+| `page_size` | Number of records per API call, sets the `limit=` url parameter | `integer` | no | 5000 |
 
 A full list of supported settings and capabilities for this tap is available by running:
 
@@ -166,7 +165,7 @@ plugins:
 
 ## Usage
 
-You can easily run `tap-dbt` with the CLI or using [Meltano][meltano].
+You can easily run `tap-dbt` with the CLI or using [Meltano].
 
 ### Executing the Tap Directly
 
@@ -182,8 +181,8 @@ tap-dbt --config .secrets/example.json --discover > ./catalog/json
 meltano elt tap-dbt target-snowflake --job_id dbt_snowflake
 ```
 
-[dbtcloud]: https://cloud.getdbt.com
-[sdk]: https://gitlab.com/meltano/singer-sdk
 [apidocs]: https://docs.getdbt.com/dbt-cloud/api#section/Authentication
+[dbtcloud]: https://cloud.getdbt.com
 [meltano]: https://www.meltano.com
 [openapi_schema]: https://github.com/dbt-labs/dbt-cloud-openapi-spec/blob/master/openapi-v3.yaml
+[sdk]: https://gitlab.com/meltano/singer-sdk

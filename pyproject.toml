@@ -16,12 +16,6 @@ keywords = [
   "singer.io",
 ]
 license = "Apache-2.0"
-maintainers = [
-  { name = "Edgar Ramírez Mondragón", email = "edgarrm358@sample.com" },
-]
-authors = [
-  { name = "Edgar Ramírez Mondragón", email = "edgarrm358@sample.com" },
-]
 requires-python = ">=3.10"
 classifiers = [
   "Programming Language :: Python :: 3 :: Only",
@@ -38,10 +32,18 @@ dependencies = [
   "singer-sdk>=0.53.4,<0.55",
   "typing-extensions>=4.14.1",
 ]
-urls.Documentation = "https://github.com/MeltanoLabs/tap-dbt/blob/main/README.md"
-urls.Homepage = "https://github.com/MeltanoLabs/tap-dbt"
-urls.Repository = "https://github.com/MeltanoLabs/tap-dbt"
-scripts.tap-dbt = "tap_dbt.tap:cli"
+[[project.authors]]
+name = "Edgar Ramírez Mondragón"
+email = "edgarrm358@sample.com"
+[[project.maintainers]]
+name = "Edgar Ramírez Mondragón"
+email = "edgarrm358@sample.com"
+[project.scripts]
+tap-dbt = "tap_dbt.tap:cli"
+[project.urls]
+Documentation = "https://github.com/MeltanoLabs/tap-dbt/blob/main/README.md"
+Homepage = "https://github.com/MeltanoLabs/tap-dbt"
+Repository = "https://github.com/MeltanoLabs/tap-dbt"
 
 [dependency-groups]
 dev = [
@@ -55,9 +57,9 @@ dev = [
   "types-requests>=2.32.4.20250809",
 ]
 
-[tool.hatch]
-version.source = "vcs"
-version.fallback-version = "0.0.0"
+[tool.hatch.version]
+source = "vcs"
+fallback-version = "0.0.0"
 
 [tool.uv]
 required-version = ">=0.9"
@@ -68,42 +70,65 @@ src = [
   "tap_dbt",
   "tests",
 ]
-lint.select = [
+[tool.ruff.lint]
+select = [
   "ALL",
 ]
-lint.ignore = [
+ignore = [
   "COM812", # missing-trailing-comma
   "FIX002", # line-contains-todo
   "ISC001", # single-line-implicit-string-concatenation
 ]
-lint.per-file-ignores."tests/*" = [
+per-file-ignores."tests/*" = [
   "ANN201",
   "S101",
 ]
-lint.unfixable = [
+unfixable = [
   "ERA001", # commented-out-code
 ]
-lint.isort.known-first-party = [
+isort.known-first-party = [
   "tap_dbt",
 ]
-lint.isort.required-imports = [
+isort.required-imports = [
   "from __future__ import annotations",
 ]
-lint.pydocstyle.convention = "google"
+pydocstyle.convention = "google"
 
 [tool.deptry]
-per_rule_ignores.DEP001 = [ "backports" ]
-per_rule_ignores.DEP002 = [ "backports-datetime-fromisoformat" ]
 known_first_party = [
   "tap_dbt",
 ]
-package_module_name_map.backports-datetime-fromisoformat = "backports.datetime_fromisoformat"
+[tool.deptry.package_module_name_map]
+backports-datetime-fromisoformat = "backports.datetime_fromisoformat"
+[tool.deptry.per_rule_ignores]
+DEP001 = [ "backports" ]
+DEP002 = [ "backports-datetime-fromisoformat" ]
 
 [tool.pyproject-fmt]
-max_supported_python = "3.14"
+table_format = "long"
 
 [tool.mypy]
 warn_redundant_casts = true
 warn_unused_ignores = true
 warn_unreachable = true
+enable_error_code = [
+  "ignore-without-code",
+  "redundant-expr",
+  "truthy-bool",
+]
+strict = true
 warn_unused_configs = true
+
+[tool.pytest]
+addopts = [ "-ra" ]
+filterwarnings = [
+  "error",
+  """\
+  once:The function singer_sdk.testing.get_standard_tap_tests is deprecated and will be removed in a future release. \
+  Use get_tap_test_class instead:DeprecationWarning\
+  """,
+]
+log_level = "INFO"
+minversion = "9"
+strict = true
+testpaths = [ "tests" ]

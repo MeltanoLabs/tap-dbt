@@ -11,7 +11,7 @@ from typing import TYPE_CHECKING, Any, cast
 from singer_sdk import typing as th
 from singer_sdk.pagination import (
     BaseAPIPaginator,
-    BaseOffsetPaginator,
+    OffsetPaginator,
     SinglePagePaginator,
 )
 from typing_extensions import override
@@ -40,14 +40,14 @@ if TYPE_CHECKING:
 class _AccountBasedStream(DBTStream):
     """A stream that requires an account ID."""
 
-    @override
     @property
-    def partitions(self) -> list[dict]:
+    @override
+    def partitions(self) -> list[dict[str, Any]]:
         """Return a list of partition key dicts (if applicable), otherwise None."""
         if "{account_id}" in self.path:
             return [
                 {"account_id": account_id}
-                for account_id in cast("list", self.config["account_ids"])
+                for account_id in cast("list[str]", self.config["account_ids"])
             ]
 
         errmsg = (
@@ -58,7 +58,7 @@ class _AccountBasedStream(DBTStream):
         raise ValueError(errmsg)
 
     @override
-    def get_new_paginator(self) -> BaseOffsetPaginator:
+    def get_new_paginator(self) -> BaseAPIPaginator:  # type: ignore[type-arg]
         """Return a new paginator instance for this stream."""
         page_size = self.config["page_size"]
 
@@ -67,12 +67,12 @@ class _AccountBasedStream(DBTStream):
             page_size,
         )
 
-        return BaseOffsetPaginator(start_value=0, page_size=page_size)
+        return OffsetPaginator(start_value=0, page_size=page_size)
 
     @override
-    def get_url_params(  # type: ignore[override]
+    def get_url_params(
         self,
-        context: Context,
+        context: Context | None,
         next_page_token: int | None,
     ) -> dict[str, Any]:
         """Return offset as the next page token."""
@@ -102,9 +102,9 @@ class AccountBasedIncrementalStream(_AccountBasedStream):
     """
 
     @override
-    def get_url_params(  # type: ignore[override]
+    def get_url_params(
         self,
-        context: Context,
+        context: Context | None,
         next_page_token: int | None,
     ) -> dict[str, Any]:
         """Reverse-sort the list by id if performing INCREMENTAL sync."""
@@ -216,9 +216,9 @@ class RunsStream(AccountBasedIncrementalStream):
         }
 
     @override
-    def get_url_params(  # type: ignore[override]
+    def get_url_params(
         self,
-        context: Context,
+        context: Context | None,
         next_page_token: int | None,
     ) -> dict[str, Any]:
         params = super().get_url_params(context, next_page_token)
@@ -294,7 +294,7 @@ class RunArtifacts(_AccountBasedStream):
     primary_keys = ("account_id", "run_id", "path")  # type: ignore[assignment]
 
     parent_stream_type = RunsStream
-    state_partitioning_keys = ()  # type: ignore[assignment]
+    state_partitioning_keys = ()
 
     @override
     def get_records(self, context: Context | None) -> Iterable[Record]:
@@ -309,7 +309,7 @@ class RunArtifacts(_AccountBasedStream):
         yield from ({"path": path} for path in super().parse_response(response))
 
     @override
-    def get_new_paginator(self) -> BaseAPIPaginator:  # type: ignore[override]
+    def get_new_paginator(self) -> BaseAPIPaginator:  # type: ignore[type-arg]
         return SinglePagePaginator()
 
     @override
