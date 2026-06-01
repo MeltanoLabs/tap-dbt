@@ -56,8 +56,8 @@ dev = [
 ]
 
 [tool.hatch]
-version.fallback-version = "0.0.0"
 version.source = "vcs"
+version.fallback-version = "0.0.0"
 
 [tool.uv]
 required-version = ">=0.9"
@@ -92,18 +92,18 @@ lint.isort.required-imports = [
 lint.pydocstyle.convention = "google"
 
 [tool.deptry]
+per_rule_ignores.DEP001 = [ "backports" ]
+per_rule_ignores.DEP002 = [ "backports-datetime-fromisoformat" ]
 known_first_party = [
   "tap_dbt",
 ]
 package_module_name_map.backports-datetime-fromisoformat = "backports.datetime_fromisoformat"
-per_rule_ignores.DEP001 = [ "backports" ]
-per_rule_ignores.DEP002 = [ "backports-datetime-fromisoformat" ]
 
 [tool.pyproject-fmt]
 max_supported_python = "3.14"
 
 [tool.mypy]
 warn_redundant_casts = true
-warn_unreachable = true
 warn_unused_ignores = true
+warn_unreachable = true
 warn_unused_configs = true
