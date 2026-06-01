@@ -32,7 +32,7 @@ def load_openapi(api_version: str) -> dict[str, Any]:
     openapi_spec = f"openapi_{api_version}.yaml"
     schema_path = importlib.resources.files(schemas) / openapi_spec
     with schema_path.open() as schema:
-        return yaml.safe_load(schema)
+        return yaml.safe_load(schema)  # type: ignore[no-any-return]
 
 
 class DBTStream(RESTStream):
@@ -51,7 +51,7 @@ class DBTStream(RESTStream):
 
     @override
     @property
-    def http_headers(self) -> dict:
+    def http_headers(self) -> dict[str, str]:
         """HTTP headers for this stream."""
         headers = super().http_headers
         headers["Accept"] = "application/json"
@@ -83,7 +83,7 @@ class DBTStream(RESTStream):
         """
         openapi_response = self._resolve_openapi_ref()
 
-        def append_null_nested(schema: dict) -> dict:
+        def append_null_nested(schema: dict[str, Any]) -> dict[str, Any]:
             new_schema = schema.copy()
 
             if "type" in schema and schema.get("nullable", True):
