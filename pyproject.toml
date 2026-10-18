@@ -24,6 +24,7 @@ classifiers = [
   "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.13",
   "Programming Language :: Python :: 3.14",
+  "Programming Language :: Python :: 3.15",
 ]
 dynamic = [ "version" ]
 dependencies = [
@@ -32,18 +33,18 @@ dependencies = [
   "singer-sdk>=0.53.4,<0.55",
   "typing-extensions>=4.14.1",
 ]
-[[project.authors]]
-name = "Edgar Ramírez Mondragón"
-email = "edgarrm358@sample.com"
 [[project.maintainers]]
 name = "Edgar Ramírez Mondragón"
 email = "edgarrm358@sample.com"
-[project.scripts]
-tap-dbt = "tap_dbt.tap:cli"
+[[project.authors]]
+name = "Edgar Ramírez Mondragón"
+email = "edgarrm358@sample.com"
 [project.urls]
 Documentation = "https://github.com/MeltanoLabs/tap-dbt/blob/main/README.md"
 Homepage = "https://github.com/MeltanoLabs/tap-dbt"
 Repository = "https://github.com/MeltanoLabs/tap-dbt"
+[project.scripts]
+tap-dbt = "tap_dbt.tap:cli"
 
 [dependency-groups]
 dev = [
@@ -98,11 +99,11 @@ pydocstyle.convention = "google"
 known_first_party = [
   "tap_dbt",
 ]
-[tool.deptry.package_module_name_map]
-backports-datetime-fromisoformat = "backports.datetime_fromisoformat"
 [tool.deptry.per_rule_ignores]
 DEP001 = [ "backports" ]
 DEP002 = [ "backports-datetime-fromisoformat" ]
+[tool.deptry.package_module_name_map]
+backports-datetime-fromisoformat = "backports.datetime_fromisoformat"
 
 [tool.pyproject-fmt]
 table_format = "long"
